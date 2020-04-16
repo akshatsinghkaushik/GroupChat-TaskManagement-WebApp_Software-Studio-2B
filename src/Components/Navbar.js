@@ -7,7 +7,7 @@ class Navbar extends Component {
     return (
       <div id="navbar">
         <div className="nav">
-          <img src="/favicon.ico"></img>
+          <img src="/favicon.ico" alt="icon"></img>
           <div>Chat App</div>
         </div>
 

@@ -16,6 +16,7 @@ class Login extends Component {
             <div className="input-wrap">
               <TextField required id="standard-required" label="Email" defaultValue="" />
               <TextField required id="standard-required" label="Password" type="password" defaultValue="" />
+              <a href="/forgot-password">Forgot Password?</a>
               <button className="ghost">Login</button>
             </div>
           </div>
