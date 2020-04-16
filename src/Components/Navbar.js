@@ -6,7 +6,11 @@ class Navbar extends Component {
   render() {
     return (
       <div id="navbar">
-        <div className="nav">Chat App</div>
+        <div className="nav">
+          <img src="/favicon.ico"></img>
+          <div>Chat App</div>
+        </div>
+
         <div className="links">
           <ul>
             <li>
