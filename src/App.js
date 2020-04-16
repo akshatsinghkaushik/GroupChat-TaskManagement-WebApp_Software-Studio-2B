@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Navbar from "./Components/Navbar";
@@ -6,15 +6,14 @@ import Home from "./Components/Pages/Home";
 import Register from "./Components/Pages/Register";
 import Login from "./Components/Pages/Login";
 import Chat from "./Components/Pages/Chat";
-import './App.scss';
+import "./App.scss";
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <Navbar />
-
         <Router>
+          <Navbar />
           <Switch>
             <Route exact path="/">
               <Home />
