@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/teams-ui/static/css/main.b526c05f.chunk.css",
+    "main.js": "/teams-ui/static/js/main.20c36412.chunk.js",
+    "main.js.map": "/teams-ui/static/js/main.20c36412.chunk.js.map",
+    "runtime-main.js": "/teams-ui/static/js/runtime-main.2d2fc203.js",
+    "runtime-main.js.map": "/teams-ui/static/js/runtime-main.2d2fc203.js.map",
+    "static/js/2.13f18cba.chunk.js": "/teams-ui/static/js/2.13f18cba.chunk.js",
+    "static/js/2.13f18cba.chunk.js.map": "/teams-ui/static/js/2.13f18cba.chunk.js.map",
+    "index.html": "/teams-ui/index.html",
+    "precache-manifest.ea3452c437e8fc408a1b6f53174a0788.js": "/teams-ui/precache-manifest.ea3452c437e8fc408a1b6f53174a0788.js",
+    "service-worker.js": "/teams-ui/service-worker.js",
+    "static/css/main.b526c05f.chunk.css.map": "/teams-ui/static/css/main.b526c05f.chunk.css.map",
+    "static/js/2.13f18cba.chunk.js.LICENSE.txt": "/teams-ui/static/js/2.13f18cba.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.2d2fc203.js",
+    "static/js/2.13f18cba.chunk.js",
+    "static/css/main.b526c05f.chunk.css",
+    "static/js/main.20c36412.chunk.js"
+  ]
+}
