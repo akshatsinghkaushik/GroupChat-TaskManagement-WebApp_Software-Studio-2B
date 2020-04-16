@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-// import { BrowserRouter as Router, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./Navbar.scss";
 
 class Navbar extends Component {
@@ -7,29 +7,29 @@ class Navbar extends Component {
     return (
       <div id="navbar">
         <div className="nav">
-          <img src="/favicon.ico"></img>
+          <img src="/favicon.ico" alt="Chat Bubble"></img>
           <div>Chat App</div>
         </div>
 
         <div className="links">
           <ul>
             <li>
-              <a href="/">Home</a>
+              <Link to="/">Home</Link>
             </li>
             <li>
-              <a href="/chat">Chat</a>
+              <Link to="/chat">Chat</Link>
             </li>
             <li>
-              <a href="/login">Login</a>
+              <Link to="/login">Login</Link>
             </li>
             <li>
-              <a href="/register">Register</a>
+              <Link to="/registry">Register</Link>
             </li>
           </ul>
         </div>
       </div>
     );
   }
-};
+}
 
 export default Navbar;
