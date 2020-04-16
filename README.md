@@ -15,4 +15,4 @@ To install dependencies, run `npm install`
 
 ## Running Locally
 
-Once you have installed the dependendieces, you can run the application locally, via: `npm run start`
+Once you have installed the dependencies, you can run the application locally, via: `npm run start`
