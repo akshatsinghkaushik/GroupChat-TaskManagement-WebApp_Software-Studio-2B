@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 // import { Link } from "react-router-dom";
 import "./Navbar.scss";
+import Icon from "../img/icon.png";
 
 class Navbar extends Component {
   render() {
     return (
       <div id="navbar">
         <div className="nav">
-          <img src="/icon.png" alt="Chat Bubble"></img>
+          <img src={Icon} alt="Chat Bubble"></img>
           <div>Chat App</div>
         </div>
 

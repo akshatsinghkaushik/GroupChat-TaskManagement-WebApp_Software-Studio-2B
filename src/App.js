@@ -16,10 +16,10 @@ class App extends Component {
         <Router>
           <Navbar />
           <Switch>
-            <Route exact path="/">
+            <Route exact path="/teams-ui">
               <Login />
             </Route>
-            <Route path="/chat">
+            <Route path="/teams-ui/chat">
               <Chat />
             </Route>
             <Route path="/forgot-password">
