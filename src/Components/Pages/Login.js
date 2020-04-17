@@ -48,6 +48,9 @@ class Login extends Component {
                   type="password"
                   defaultValue=""
                 />
+                <span className="sign-up-span" onClick={this.onLogin}>
+                  Already have an account?
+                </span>
                 <button className="ghost">Register</button>
               </div>
             </div>
@@ -56,18 +59,18 @@ class Login extends Component {
               <h1>Forgot Password</h1>
               <div className="input-wrap">
                 <TextField
-                  required
                   id="standard-required"
                   label="Email"
+                  type="email"
                   defaultValue=""
                 />
                 <TextField
-                  required
                   id="standard-required"
                   label="New Password"
                   type="password"
                   defaultValue=""
                 />
+                <span onClick={this.onLogin}>Remember password?</span>
                 <button className="ghost">Change password</button>
               </div>
             </div>
@@ -89,7 +92,12 @@ class Login extends Component {
                 type="password"
                 defaultValue=""
               />
-              <span onClick={this.onForgot}>Forgot Password?</span>
+              <span className="forgot" onClick={this.onForgot}>
+                Forgot Password?
+              </span>
+              <span className="sign-in-span" onClick={this.onRegister}>
+                Don't have an account?
+              </span>
               <button className="ghost">Login</button>
             </div>
           </div>
@@ -99,7 +107,7 @@ class Login extends Component {
               <div className="overlay-panel overlay-left">
                 <h1>
                   {this.state.showForgot
-                    ? "Remembered password?"
+                    ? "Remember password?"
                     : "Already have an account?"}
                 </h1>
                 <button onClick={this.onLogin} className="ghost">

@@ -4,6 +4,18 @@
   align-items: center;
   overflow: hidden;
   flex: 1;
+  span {
+    display: none;
+  }
+  span.forgot {
+    display: block;
+  }
+  .sign-in-span {
+    margin-bottom: 12px;
+  }
+  .sign-up-span {
+    margin-bottom: 18px;
+  }
   .bg {
     position: absolute;
     width: 100%;
@@ -79,7 +91,7 @@
     margin-top: -64px;
   }
   .form-container.sign-in-container .ghost {
-    margin-top: 26px;
+    margin-top: 28px;
   }
   .form-container {
     position: absolute;
@@ -124,6 +136,13 @@
       margin-top: 80px;
       font-size: 38px;
       margin-bottom: 30px;
+    }
+    span {
+      margin-bottom: 14px;
+      cursor: pointer;
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
   .login-wrapper {
@@ -180,16 +199,16 @@
     height: 100%;
     transition: all 0.6s ease-in-out;
   }
+  span {
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
   .sign-in-container {
     left: 0;
     width: 50%;
     z-index: 2;
-    span {
-      cursor: pointer;
-      &:hover {
-        text-decoration: underline;
-      }
-    }
   }
   .forgot-pw-container {
     left: 0;
@@ -303,6 +322,9 @@
     text-transform: uppercase;
   }
   @media screen and (max-width: 768px) {
+    span {
+      display: block;
+    }
     .bg {
       display: none;
     }
