@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "4a49ffc5be59858f36e1a40cf1671479",
+    "revision": "1b7ff5ad6bb3a38ac1adb91ca3b09a7c",
     "url": "/teams-ui/index.html"
   },
   {
-    "revision": "11f3ab274cffbc897d9c",
-    "url": "/teams-ui/static/css/main.22932984.chunk.css"
+    "revision": "8db5de809920384d4614",
+    "url": "/teams-ui/static/css/main.bd763c2c.chunk.css"
   },
   {
-    "revision": "4f5e138747b95ce2103c",
-    "url": "/teams-ui/static/js/2.32e86f61.chunk.js"
+    "revision": "2661e54bc5a32d2ef1ed",
+    "url": "/teams-ui/static/js/2.61449dfe.chunk.js"
   },
   {
     "revision": "0749163b59fbee32225059cb60c18af6",
-    "url": "/teams-ui/static/js/2.32e86f61.chunk.js.LICENSE.txt"
+    "url": "/teams-ui/static/js/2.61449dfe.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "11f3ab274cffbc897d9c",
-    "url": "/teams-ui/static/js/main.bb1745c5.chunk.js"
+    "revision": "8db5de809920384d4614",
+    "url": "/teams-ui/static/js/main.2710a983.chunk.js"
   },
   {
     "revision": "92ab18a5b469776489c3",
