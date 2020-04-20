@@ -13,13 +13,13 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Router>
+        <Router basename={process.env.PUBLIC_URL}>
           <Navbar />
           <Switch>
-            <Route exact path="/teams-ui">
+            <Route exact path="/login">
               <Login />
             </Route>
-            <Route path="/teams-ui/chat">
+            <Route path="/chat">
               <Chat />
             </Route>
             <Route path="/forgot-password">

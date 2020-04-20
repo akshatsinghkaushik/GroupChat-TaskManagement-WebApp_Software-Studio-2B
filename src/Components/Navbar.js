@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./Navbar.scss";
 import Icon from "../img/icon.png";
 
@@ -13,7 +13,7 @@ class Navbar extends Component {
         </div>
 
         <div className="links">
-          {/* <ul>
+          <ul>
             <li>
               <Link to="/">Home</Link>
             </li>
@@ -26,7 +26,7 @@ class Navbar extends Component {
             <li>
               <Link to="/register">Register</Link>
             </li>
-          </ul> */}
+          </ul>
         </div>
       </div>
     );
