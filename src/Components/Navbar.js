@@ -9,7 +9,7 @@ class Navbar extends Component {
       <div id="navbar">
         <div className="nav">
           <img src={Icon} alt="Chat Bubble"></img>
-          <div>Chat App test</div>
+          <div>Chat App</div>
         </div>
 
         <div className="links">
