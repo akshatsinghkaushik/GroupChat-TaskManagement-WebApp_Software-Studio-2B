@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./Profile.scss";
 
-class Chat extends Component {
+class Profile extends Component {
   render() {
     return (
       <div id="profile">
@@ -10,5 +10,4 @@ class Chat extends Component {
     );
   }
 }
-
-export default Chat;
+export default Profile;

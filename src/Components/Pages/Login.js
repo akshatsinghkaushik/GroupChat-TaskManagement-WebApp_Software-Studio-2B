@@ -23,6 +23,7 @@ class Login extends Component {
       email: "",
       password: "",
       newpass: "",
+      username: "",
       showForgot: false,
     };
     this.handleChange = this.handleChange.bind(this);
@@ -81,7 +82,7 @@ class Login extends Component {
     event.preventDefault();
     this.setState({ error: "" });
     try {
-      await signup(this.state.email, this.state.password);
+      await signup(this.state.email, this.state.password, this.state.username);
     } catch (error) {
       this.setState({ error: error.message });
     }
@@ -130,7 +131,13 @@ class Login extends Component {
               <h1>Sign Up</h1>
               <div className="input-wrap">
                 <form autoComplete="off" onSubmit={this.handleSignUp}>
-                  <TextField id="standard" label="Username" defaultValue="" />
+                  <TextField
+                    id="standard"
+                    label="Username"
+                    name="username"
+                    onChange={this.handleChange}
+                    InputProps={{ value: this.state.username }}
+                  />
                   <TextField
                     required
                     id="standard-required"

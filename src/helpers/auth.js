@@ -1,10 +1,17 @@
 import { auth } from "../services/firebase";
+import { db } from "../services/firebase";
 
-export function signup(email, password) {
+export function signup(email, password, userName) {
   return auth()
     .createUserWithEmailAndPassword(email, password)
-    .then(function () {
-      auth().currentUser.sendEmailVerification();
+    .then(async function () {
+      const user = auth().currentUser;
+      user.sendEmailVerification();
+
+      await db.ref("users/" + user.uid).set({
+        name: userName,
+        email: user.email,
+      });
     });
 }
 
@@ -22,20 +29,31 @@ export function forgotpass(emailAddress) {
     .then(function () {
       // Email sent.
       console.log("Email Sent");
-    })
-    .catch(function (error) {
-      // An error happened.
     });
 }
 
 export function signInWithGoogle() {
   const provider = new auth.GoogleAuthProvider();
-  return auth().signInWithPopup(provider);
+  return auth()
+    .signInWithPopup(provider)
+    .then(async function () {
+      const user = auth().currentUser;
+      await db.ref("users/" + user.uid).set({
+        email: user.email,
+      });
+    });
 }
 
 export function signInWithGitHub() {
   const provider = new auth.GithubAuthProvider();
-  return auth().signInWithPopup(provider);
+  return auth()
+    .signInWithPopup(provider)
+    .then(async function () {
+      const user = auth().currentUser;
+      await db.ref("users/" + user.uid).set({
+        email: user.email,
+      });
+    });
 }
 
 export function logout() {
