@@ -1,25 +1,125 @@
 import React, { Component } from "react";
 import TextField from "@material-ui/core/TextField";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGithub, faGoogle } from "@fortawesome/free-brands-svg-icons";
+
 import "./Login.scss";
 
+import {
+  signin,
+  signup,
+  signInWithGoogle,
+  signInWithGitHub,
+  forgotpass,
+  updatepass,
+} from "../../helpers/auth";
+
 class Login extends Component {
-  state = {
-    showForgot: false,
-  };
-  onLogin = () => {
+  constructor() {
+    super();
+    this.state = {
+      error: null,
+      email: "",
+      password: "",
+      newpass: "",
+      showForgot: false,
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSignIn = this.handleSignIn.bind(this);
+    this.handleSignUp = this.handleSignUp.bind(this);
+    this.handleForgotPass = this.handleForgotPass.bind(this);
+    this.handleUpdatePass = this.handleUpdatePass.bind(this);
+    this.googleSignIn = this.googleSignIn.bind(this);
+    this.githubSignIn = this.githubSignIn.bind(this);
+    this.onLogin = this.onLogin.bind(this);
+    this.onRegister = this.onRegister.bind(this);
+    this.onForgot = this.onForgot.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
+  }
+
+  async handleSignIn(event) {
+    event.preventDefault();
+    this.setState({ error: "" });
+    try {
+      await signin(this.state.email, this.state.password);
+    } catch (error) {
+      this.setState({ error: error.message });
+    }
+  }
+
+  async handleUpdatePass(event) {
+    event.preventDefault();
+    this.setState({ error: "" });
+    try {
+      await signin(this.state.email, this.state.password).then(
+        async function () {
+          await updatepass(this.state.newpass);
+        }
+      );
+    } catch (error) {
+      this.setState({ error: error.message });
+    }
+  }
+
+  async handleForgotPass(event) {
+    event.preventDefault();
+    this.setState({ error: "" });
+    try {
+      await forgotpass(this.state.email);
+    } catch (error) {
+      this.setState({ error: error.message });
+    }
+  }
+
+  async handleSignUp(event) {
+    event.preventDefault();
+    this.setState({ error: "" });
+    try {
+      await signup(this.state.email, this.state.password);
+    } catch (error) {
+      this.setState({ error: error.message });
+    }
+  }
+
+  async googleSignIn() {
+    try {
+      await signInWithGoogle();
+    } catch (error) {
+      this.setState({ error: error.message });
+    }
+  }
+
+  async githubSignIn() {
+    try {
+      await signInWithGitHub();
+    } catch (error) {
+      this.setState({ error: error.message });
+    }
+  }
+
+  onLogin() {
     document.getElementById("container").classList.remove("right-panel-active");
     setTimeout(() => {
       this.setState({ showForgot: false });
     }, 500);
-  };
-  onRegister = () => {
+  }
+
+  onRegister() {
     document.getElementById("container").classList.add("right-panel-active");
     this.setState({ showForgot: false });
-  };
-  onForgot = () => {
+  }
+
+  onForgot() {
     document.getElementById("container").classList.add("right-panel-active");
     this.setState({ showForgot: true });
-  };
+  }
+
   render() {
     return (
       <div id="login">
@@ -29,69 +129,120 @@ class Login extends Component {
             <div className="form-container sign-up-container">
               <h1>Sign Up</h1>
               <div className="input-wrap">
-                <TextField
-                  required
-                  id="standard-required"
-                  label="Username"
-                  defaultValue=""
+                <form autoComplete="off" onSubmit={this.handleSignUp}>
+                  <TextField id="standard" label="Username" defaultValue="" />
+                  <TextField
+                    required
+                    id="standard-required"
+                    label="Email"
+                    name="email"
+                    onChange={this.handleChange}
+                    InputProps={{ value: this.state.email }}
+                  />
+                  <TextField
+                    required
+                    id="standard-required"
+                    label="Password"
+                    type="password"
+                    name="password"
+                    onChange={this.handleChange}
+                    InputProps={{ value: this.state.password }}
+                  />
+                  {this.state.error ? (
+                    <p className="text-danger">{this.state.error}</p>
+                  ) : null}
+                  <button type="submit" className="ghost">
+                    Register
+                  </button>
+                </form>
+              </div>
+              <div className="icons">
+                <FontAwesomeIcon
+                  icon={faGithub}
+                  size="2x"
+                  onClick={this.githubSignIn}
                 />
+                <FontAwesomeIcon
+                  icon={faGoogle}
+                  size="2x"
+                  onClick={this.googleSignIn}
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="form-container sign-up-container forgot">
+              <form
+                style={{ height: "auto" }}
+                autoComplete="off"
+                onSubmit={this.handleForgotPass}
+              >
+                <h1>Forgot Password</h1>
+                <div className="input-wrap">
+                  <TextField
+                    required
+                    id="standard-required"
+                    label="Email"
+                    name="email"
+                    onChange={this.handleChange}
+                    InputProps={{ value: this.state.email }}
+                  />
+                  {this.state.error ? (
+                    <p className="text-danger">{this.state.error}</p>
+                  ) : null}
+                  <button
+                    type="submit"
+                    style={{ padding: 0 }}
+                    className="ghost"
+                  >
+                    Reset Password
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
+
+          <div className="form-container sign-in-container">
+            <form autoComplete="off" onSubmit={this.handleSignIn}>
+              <h1>Sign In</h1>
+              <div className="input-wrap">
                 <TextField
                   required
                   id="standard-required"
                   label="Email"
-                  defaultValue=""
+                  name="email"
+                  onChange={this.handleChange}
+                  InputProps={{ value: this.state.email }}
                 />
                 <TextField
                   required
                   id="standard-required"
                   label="Password"
                   type="password"
-                  defaultValue=""
+                  name="password"
+                  onChange={this.handleChange}
+                  InputProps={{ value: this.state.password }}
                 />
-                <button className="ghost">Register</button>
+                <span onClick={this.onForgot}>Forgot Password?</span>
+                {this.state.error ? (
+                  <p className="text-danger">{this.state.error}</p>
+                ) : null}
+                <button type="submit" className="ghost">
+                  Login
+                </button>
+                <div className="icons">
+                  <FontAwesomeIcon
+                    icon={faGithub}
+                    size="2x"
+                    onClick={this.githubSignIn}
+                  />
+                  <FontAwesomeIcon
+                    icon={faGoogle}
+                    size="2x"
+                    onClick={this.googleSignIn}
+                  />
+                </div>
               </div>
-            </div>
-          ) : (
-            <div className="form-container sign-up-container forgot">
-              <h1>Forgot Password</h1>
-              <div className="input-wrap">
-                <TextField
-                  required
-                  id="standard-required"
-                  label="Email"
-                  defaultValue=""
-                />
-                <TextField
-                  required
-                  id="standard-required"
-                  label="New Password"
-                  type="password"
-                  defaultValue=""
-                />
-                <button className="ghost">Change password</button>
-              </div>
-            </div>
-          )}
-
-          <div className="form-container sign-in-container">
-            <h1>Sign In</h1>
-            <div className="input-wrap">
-              <TextField
-                required
-                id="standard-required"
-                label="Email"
-                defaultValue=""
-              />
-              <TextField
-                required
-                id="standard-required"
-                label="Password"
-                type="password"
-                defaultValue=""
-              />
-              <span onClick={this.onForgot}>Forgot Password?</span>
-              <button className="ghost">Login</button>
-            </div>
+            </form>
           </div>
 
           <div className="overlay-container">
