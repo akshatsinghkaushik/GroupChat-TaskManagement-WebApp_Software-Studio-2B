@@ -6,6 +6,9 @@ import { logout } from "../helpers/auth";
 
 class Navbar extends Component {
   render() {
+    // console.log(window.location.pathname === "/teams-ui/chat")
+    // if (window.location.pathname === "/teams-ui/login"
+    //   || window.location.pathname === "/teams-ui") {
     return (
       <div id="navbar">
         <div className="nav">

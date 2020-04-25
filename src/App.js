@@ -12,7 +12,6 @@ import Navbar from "./Components/Navbar";
 // import Home from "./Components/Pages/Home";
 // import Register from "./Components/Pages/Register";
 import Login from "./Components/Pages/Login";
-import ForgotPw from "./Components/Pages/ForgotPw";
 import Chat from "./Components/Pages/Chat";
 import Profile from "./Components/Pages/Profile";
 import "./App.scss";
@@ -93,11 +92,6 @@ class App extends Component {
               path="/login"
               authenticated={this.state.authenticated}
               component={Login}
-            ></PublicRoute>
-            <PublicRoute
-              path="/forgot-password"
-              authenticated={this.state.authenticated}
-              component={ForgotPw}
             ></PublicRoute>
             <PrivateRoute
               path="/profile"

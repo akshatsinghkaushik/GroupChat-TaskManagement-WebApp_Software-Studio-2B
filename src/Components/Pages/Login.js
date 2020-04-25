@@ -20,6 +20,9 @@ class Login extends Component {
     super();
     this.state = {
       error: null,
+      loginError: null,
+      signupError: null,
+      forgotpwError: null,
       email: "",
       password: "",
       newpass: "",
@@ -46,17 +49,17 @@ class Login extends Component {
 
   async handleSignIn(event) {
     event.preventDefault();
-    this.setState({ error: "" });
+    this.setState({ loginError: "" });
     try {
       await signin(this.state.email, this.state.password);
     } catch (error) {
-      this.setState({ error: error.message });
+      this.setState({ loginError: error.message });
     }
   }
 
   async handleUpdatePass(event) {
     event.preventDefault();
-    this.setState({ error: "" });
+    this.setState({ forgotpwError: "" });
     try {
       await signin(this.state.email, this.state.password).then(
         async function () {
@@ -64,27 +67,27 @@ class Login extends Component {
         }
       );
     } catch (error) {
-      this.setState({ error: error.message });
+      this.setState({ forgotpwError: error.message });
     }
   }
 
   async handleForgotPass(event) {
     event.preventDefault();
-    this.setState({ error: "" });
+    this.setState({ forgotpwError: "" });
     try {
       await forgotpass(this.state.email);
     } catch (error) {
-      this.setState({ error: error.message });
+      this.setState({ forgotpwError: error.message });
     }
   }
 
   async handleSignUp(event) {
     event.preventDefault();
-    this.setState({ error: "" });
+    this.setState({ signupError: "" });
     try {
       await signup(this.state.email, this.state.password, this.state.username);
     } catch (error) {
-      this.setState({ error: error.message });
+      this.setState({ signupError: error.message });
     }
   }
 
@@ -92,7 +95,7 @@ class Login extends Component {
     try {
       await signInWithGoogle();
     } catch (error) {
-      this.setState({ error: error.message });
+      this.setState({ loginError: error.message });
     }
   }
 
@@ -100,7 +103,7 @@ class Login extends Component {
     try {
       await signInWithGitHub();
     } catch (error) {
-      this.setState({ error: error.message });
+      this.setState({ loginError: error.message });
     }
   }
 
@@ -155,8 +158,8 @@ class Login extends Component {
                     onChange={this.handleChange}
                     InputProps={{ value: this.state.password }}
                   />
-                  {this.state.error ? (
-                    <p className="text-danger">{this.state.error}</p>
+                  {this.state.signupError ? (
+                    <p className="text-danger">{this.state.signupError}</p>
                   ) : null}
                   <button type="submit" className="ghost">
                     Register
@@ -193,8 +196,8 @@ class Login extends Component {
                     onChange={this.handleChange}
                     InputProps={{ value: this.state.email }}
                   />
-                  {this.state.error ? (
-                    <p className="text-danger">{this.state.error}</p>
+                  {this.state.forgotpwError ? (
+                    <p className="text-danger">{this.state.forgotpwError}</p>
                   ) : null}
                   <button
                     type="submit"
@@ -227,9 +230,14 @@ class Login extends Component {
                   onChange={this.handleChange}
                   InputProps={{ value: this.state.password }}
                 />
-                <span onClick={this.onForgot}>Forgot Password?</span>
-                {this.state.error ? (
-                  <p className="text-danger">{this.state.error}</p>
+                <span
+                  style={{ display: "block", textAlign: "left" }}
+                  onClick={this.onForgot}
+                >
+                  Forgot Password?
+                </span>
+                {this.state.loginError ? (
+                  <p className="text-danger">{this.state.loginError}</p>
                 ) : null}
                 <button type="submit" className="ghost">
                   Login

@@ -1,7 +1,9 @@
 @import "~bootstrap/scss/bootstrap";
 
 .App {
+  max-height: 100vh;
   min-height: 100vh;
+  overflow-y: hidden;
   display: flex;
   flex-direction: column;
   color: #202124;

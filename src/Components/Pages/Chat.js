@@ -90,8 +90,7 @@ class Chat extends Component {
 
   render() {
     return (
-      <div id="chat" className="container">
-        <h1>Chat</h1>
+      <div id="chat" className="">
         <div className="messaging">
           <div className="inbox_msg">
             <div className="inbox_people">
@@ -166,64 +165,68 @@ class Chat extends Component {
               )}
               {/* chat area */}
               <div className="msg_history">
-                <div className="pb-1 mx-3">
-                  Logged in as:{" "}
-                  <strong className="text-info">{this.state.user.email}</strong>
+                <div className="msg-top">
+                  {/* Logged in as:{" "}
+                  <strong className="text-info">{this.state.user.email}</strong> */}
+                  <strong className="text-info">Group 1</strong>
                 </div>
-                <hr />
-                {this.state.chats.map((chat) => {
-                  return (
-                    <div
-                      key={chat.timestamp}
-                      className={
-                        this.state.user.uid === chat.uid
-                          ? "outgoing_msg"
-                          : "incoming_msg"
-                      }
-                    >
-                      {this.state.user.uid === chat.uid ? (
-                        ""
-                      ) : (
-                        <div className="incoming_msg_img">
-                          {" "}
-                          <img
-                            src="https://ptetutorials.com/images/user-profile.png"
-                            alt="sunil"
-                          />{" "}
-                        </div>
-                      )}
-                      {this.state.user.uid === chat.uid ? (
-                        <div className="sent_msg">
-                          <p>{chat.content}</p>
-                          <span className="time_date">
-                            {this.formatTime(chat.timestamp)}
-                          </span>
-                        </div>
-                      ) : (
-                        <div className="received_msg">
-                          <div className="received_withd_msg">
-                            <div className="name-header">
-                              {this.state.users.has(chat.uid)
-                                ? this.state.users.get(chat.uid).name ===
-                                  undefined
-                                  ? this.state.users.get(chat.uid).email
-                                  : this.state.users.get(chat.uid).name
-                                : "Anonymous"}
-                            </div>
+                <div className="msg-mid">
+                  {this.state.chats.map((chat) => {
+                    return (
+                      <div
+                        key={chat.timestamp}
+                        className={
+                          this.state.user.uid === chat.uid
+                            ? "outgoing_msg"
+                            : "incoming_msg"
+                        }
+                      >
+                        {this.state.user.uid === chat.uid ? (
+                          ""
+                        ) : (
+                          <div className="incoming_msg_img">
+                            {" "}
+                            <img
+                              src="https://ptetutorials.com/images/user-profile.png"
+                              alt="sunil"
+                            />{" "}
+                          </div>
+                        )}
+                        {this.state.user.uid === chat.uid ? (
+                          <div className="sent_msg">
                             <p>{chat.content}</p>
                             <span className="time_date">
                               {this.formatTime(chat.timestamp)}
                             </span>
                           </div>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+                        ) : (
+                          <div className="received_msg">
+                            <div className="received_withd_msg">
+                              <div className="name-header">
+                                {this.state.users.has(chat.uid)
+                                  ? this.state.users.get(chat.uid).name ===
+                                    undefined
+                                    ? this.state.users.get(chat.uid).email
+                                    : this.state.users.get(chat.uid).name
+                                  : "Anonymous"}
+                              </div>
+                              <p>{chat.content}</p>
+                              <span className="time_date">
+                                {this.formatTime(chat.timestamp)}
+                              </span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
 
-              <form onSubmit={this.handleSubmit} className="type_msg">
-                <div className="input_msg_write">
+                <form
+                  onKeyDown={this._handleKeyDown}
+                  onSubmit={this.handleSubmit}
+                  className="type_msg"
+                >
                   <textarea
                     type="text"
                     placeholder="Type a message"
@@ -232,15 +235,14 @@ class Chat extends Component {
                     onChange={this.handleChange}
                     value={this.state.content}
                   ></textarea>
-                  <input />
                   {this.state.error ? (
                     <p className="text-danger">{this.state.error}</p>
                   ) : null}
                   <button className="msg_send_btn" type="submit">
                     <FontAwesomeIcon icon={faPaperPlane} aria-hidden="true" />
                   </button>
-                </div>
-              </form>
+                </form>
+              </div>
             </div>
           </div>
         </div>
