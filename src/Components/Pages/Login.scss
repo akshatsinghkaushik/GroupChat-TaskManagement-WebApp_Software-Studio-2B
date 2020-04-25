@@ -189,7 +189,7 @@
     overflow: hidden;
     width: 768px;
     max-width: 100%;
-    min-height: 480px;
+    min-height: 550px;
   }
   .form-container {
     bottom: 0;
@@ -321,6 +321,18 @@
     letter-spacing: 1px;
     text-transform: uppercase;
   }
+
+  .icons {
+    display: flex;
+    justify-content: center;
+    padding-top: 1.5em;
+    padding-bottom: 0.25em;
+  }
+  .icons svg {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+  }
+
   @media screen and (max-width: 768px) {
     span {
       display: block;
