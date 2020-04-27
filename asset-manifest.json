@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/teams-ui/static/css/main.bdb62fd4.chunk.css",
-    "main.js": "/teams-ui/static/js/main.1c98bd7f.chunk.js",
-    "main.js.map": "/teams-ui/static/js/main.1c98bd7f.chunk.js.map",
+    "main.js": "/teams-ui/static/js/main.01a1b84e.chunk.js",
+    "main.js.map": "/teams-ui/static/js/main.01a1b84e.chunk.js.map",
     "runtime-main.js": "/teams-ui/static/js/runtime-main.2d2fc203.js",
     "runtime-main.js.map": "/teams-ui/static/js/runtime-main.2d2fc203.js.map",
     "static/js/2.073ecb90.chunk.js": "/teams-ui/static/js/2.073ecb90.chunk.js",
     "static/js/2.073ecb90.chunk.js.map": "/teams-ui/static/js/2.073ecb90.chunk.js.map",
     "index.html": "/teams-ui/index.html",
-    "precache-manifest.fce4aed946c8e635717e34eb42b0f68f.js": "/teams-ui/precache-manifest.fce4aed946c8e635717e34eb42b0f68f.js",
+    "precache-manifest.6d86b6163384200be4f72d31270d9ef8.js": "/teams-ui/precache-manifest.6d86b6163384200be4f72d31270d9ef8.js",
     "service-worker.js": "/teams-ui/service-worker.js",
     "static/css/main.bdb62fd4.chunk.css.map": "/teams-ui/static/css/main.bdb62fd4.chunk.css.map",
     "static/js/2.073ecb90.chunk.js.LICENSE.txt": "/teams-ui/static/js/2.073ecb90.chunk.js.LICENSE.txt",
@@ -19,6 +19,6 @@
     "static/js/runtime-main.2d2fc203.js",
     "static/js/2.073ecb90.chunk.js",
     "static/css/main.bdb62fd4.chunk.css",
-    "static/js/main.1c98bd7f.chunk.js"
+    "static/js/main.01a1b84e.chunk.js"
   ]
 }
