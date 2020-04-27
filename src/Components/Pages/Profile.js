@@ -1,13 +1,49 @@
 import React, { Component } from "react";
 import "./Profile.scss";
 
+import { db } from "../../services/firebase";
+import { auth } from "../../services/firebase";
+
 class Profile extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: auth().currentUser,
+      email: null,
+      username: null,
+      readError: null,
+      writeError: null,
+    };
+    //this.handleChange = this.handleChange.bind(this);
+    //this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    this.setState({ readError: null });
+
+    try {
+      db.ref(`users/${this.state.user.uid}`).once("value", (snapshot) => {
+        this.setState({
+          email: snapshot.val().email,
+          username: snapshot.val().name ? snapshot.val().name : null,
+        });
+      });
+    } catch (error) {
+      this.setState({ readError: error.message });
+    }
+  }
+
   render() {
     return (
       <div id="profile">
         <div className="content-wrap">
           <div className="name-icon">D</div>
-          <h1>Welcome, Davidbr4gg</h1>
+          <h1>
+            Welcome,{" "}
+            {this.state.username != null
+              ? this.state.username
+              : this.state.email}
+          </h1>
           <h2>Manage your information to make Chat App work better for you</h2>
           <div className="card">
             <div className="inner-heading">Profile</div>
@@ -43,7 +79,7 @@ class Profile extends Component {
             </div>
             <div className="info">
               <h3>EMAIL</h3>
-              <div className="content">davidbr4gg@outlook.com</div>
+              <div className="content">{this.state.email}</div>
               <div className="popup">
                 <svg
                   data-v-d223ba98=""
@@ -67,7 +103,11 @@ class Profile extends Component {
             </div>
             <div className="info">
               <h3>USERNAME</h3>
-              <div className="content">davidbr4gg</div>
+              <div className="content">
+                {this.state.username != null
+                  ? this.state.username
+                  : this.state.email}
+              </div>
               <div className="popup">
                 <svg
                   data-v-d223ba98=""
@@ -91,7 +131,9 @@ class Profile extends Component {
             </div>
             <div className="info" style={{ borderBottom: "none" }}>
               <h3>PASSWORD</h3>
-              <div className="content">************</div>
+              <div className="content" type="password">
+                ************
+              </div>
               <div className="popup">
                 <svg
                   style={{ width: "20px", fontSize: "20px", height: "20px" }}
