@@ -28,7 +28,7 @@ class Chat extends Component {
     this.setState({ readError: null, loadingChats: true });
     //const chatArea = this.myRef.current;
     try {
-      db.ref("chats").once("value", (snapshot) => {
+      db.ref("chats").on("value", (snapshot) => {
         let chats = [];
         snapshot.forEach((snap) => {
           chats.push(snap.val());
@@ -44,7 +44,7 @@ class Chat extends Component {
       this.setState({ readError: error.message, loadingChats: false });
     }
     try {
-      db.ref("users").once("value", (snapshot) => {
+      db.ref("users").on("value", (snapshot) => {
         let users = new Map();
         snapshot.forEach((snap) => {
           users.set(snap.key, snap.val());
@@ -55,6 +55,10 @@ class Chat extends Component {
     } catch (error) {
       this.setState({ readError: error.message });
     }
+  }
+  async componentWillUnmount() {
+      db.ref("users").off('value');
+      db.ref("chats").off('value');
   }
 
   handleChange(event) {
