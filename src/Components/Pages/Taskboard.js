@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Taskboard.scss";
 import TaskColumn from "../Presentational/TaskColumn/TaskColumn";
 import NewTaskColumn from "../Presentational/NewTaskColumn/NewTaskColumn";
+import { db } from "../../services/firebase";
 
 /*
 taskboard:
@@ -21,6 +22,7 @@ tasks:
   assignees: string[] // User IDs
 */
 
+// These are just example tasks, we should be reading these from the database...
 const exampleTasks = [
   {
     name: "Assign a leader to a subgroup",
@@ -36,15 +38,48 @@ const exampleTasks = [
 ];
 
 const Taskboard = () => {
+  const [columns, setColumns] = React.useState([]);
+  const [readError, setReadError] = React.useState(false); // TODO: use this
+  useEffect(() => {
+    try {
+      const columns = db.ref("columns");
+      columns.on("value", (snapshot) => {
+        const tmpCols = [];
+        snapshot.forEach((col) => {
+          tmpCols.push({
+            id: col.key,
+            ...col.val(),
+          });
+        });
+        setColumns(tmpCols);
+        setReadError(false);
+      });
+    } catch (err) {
+      setReadError(true);
+      alert(`An error occurred when reading data... ${err.message}`); // TODO: Dont use an alert, do this properly...
+    }
+    return () => db.ref("columns").off("value");
+  }, []);
+
+  console.log("Readerror is ", readError); // Just keeping this here until we look at using readError
   return (
     <div id="taskboard-container">
       <div className="taskboard-navbar">
         <p>Board Title Here</p>
       </div>
-      <div className="taskboard">
-        <TaskColumn name="col 1" tasks={exampleTasks} />
-        <TaskColumn name="col 1" tasks={exampleTasks} />
-        <NewTaskColumn />
+      <div className="taskboard-canvas">
+        <div className="taskboard">
+          {columns.map((column) => {
+            return (
+              <TaskColumn
+                key={column.id}
+                name={column.name}
+                tasks={exampleTasks}
+              />
+            );
+          })}
+          <NewTaskColumn />
+        </div>
       </div>
     </div>
   );

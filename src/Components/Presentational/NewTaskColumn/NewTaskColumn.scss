@@ -1,6 +1,13 @@
 #new-task-column-container {
   width: 15em;
+  margin: 0 4px;
+  box-sizing: border-box;
+  display: inline-block;
+  vertical-align: top;
+  white-space: pre-wrap;
   background-color: #ebecf0;
+  border-radius: 15px;
+  padding: 0.25em 0.75em;
   #add-column-selected {
     input {
       width: 100%;

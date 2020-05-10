@@ -3,27 +3,36 @@ import "./NewTaskColumn.scss";
 import { faTimes, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Typography } from "@material-ui/core";
+import { createTaskColumn } from "../../../helpers/db";
 
 const NewTaskColumn = () => {
   const [isEditing, setIsEditing] = React.useState(false);
-  const [title, setTitle] = React.useState("");
+  const [name, setName] = React.useState("");
 
   const handleSetIsEditing = () => {
     setIsEditing(!isEditing);
   };
 
-  const handleTitleChange = (e) => {
-    setTitle(e.target.value);
+  const handleNameChange = (e) => {
+    setName(e.target.value);
   };
 
   const handleCancelEditing = () => {
     setIsEditing(false);
-    setTitle("");
+    setName("");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("sumbitted");
+    try {
+      await createTaskColumn({
+        name,
+        createdTimestamp: Date.now(),
+      });
+      handleCancelEditing();
+    } catch (err) {
+      alert(`An error occurred when creating a new column ${err.message}`);
+    }
   };
   return (
     <div id="new-task-column-container">
@@ -31,22 +40,18 @@ const NewTaskColumn = () => {
         {isEditing ? (
           <div id="add-column-selected">
             <input
-              onChange={handleTitleChange}
-              value={title}
-              placeholder="Enter list title..."
+              onChange={handleNameChange}
+              value={name}
+              placeholder="Enter list name..."
             />
             <div id="button-lockup">
-              <Button>Add List</Button>
+              <Button type="submit">Add List</Button>
               <Button onClick={handleCancelEditing}>
                 <FontAwesomeIcon icon={faTimes} size="2x" />
               </Button>
             </div>
           </div>
         ) : (
-          // <button onClick={handleSetIsEditing}>
-          //   <FontAwesomeIcon icon={faGithub} size="1x" />
-          //   <Typography component="p">Add another list</Typography>
-          // </button>
           <div id="add-column">
             <button onClick={handleSetIsEditing}>
               <FontAwesomeIcon icon={faPlus} size="1x" />

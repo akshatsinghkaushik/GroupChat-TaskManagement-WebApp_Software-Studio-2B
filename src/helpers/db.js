@@ -17,3 +17,14 @@ export function writeChats(message) {
     uid: message.uid,
   });
 }
+
+/**
+ * Create a new column in the database.
+ * The return value is void in all cases.
+ * @param column - Information of the column
+ * @param {string} column.name - The name of the column
+ * @param {number} column.createdTimestamp - The timestamp when the column was created (can just do Date.now())
+ */
+export function createTaskColumn(column) {
+  return db.ref("columns").push(column);
+}

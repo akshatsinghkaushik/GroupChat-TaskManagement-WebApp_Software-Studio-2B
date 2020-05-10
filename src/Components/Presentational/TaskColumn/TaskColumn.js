@@ -8,17 +8,24 @@ const TaskColumn = ({ name, tasks }) => {
       <Typography variant="h5" component="h2">
         {name}
       </Typography>
-      {tasks.map((task, index) => {
-        return (
-          <Card key={index} variant="outlined">
-            <CardContent>
-              <Typography color="textPrimary" gutterBottom>
-                {task.name}
-              </Typography>
-            </CardContent>
-          </Card>
-        );
-      })}
+      <div className="task-list">
+        <ul>
+          {tasks.map((task, index) => {
+            return (
+              // TODO: Dont use index as key, use task id when we have it..
+              <li key={index}>
+                <Card variant="outlined">
+                  <CardContent>
+                    <Typography color="textPrimary" gutterBottom>
+                      {task.name}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
 };
