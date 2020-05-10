@@ -25,10 +25,7 @@ const NewTaskColumn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await createTaskColumn({
-        name,
-        createdTimestamp: Date.now(),
-      });
+      await createTaskColumn(name);
       handleCancelEditing();
     } catch (err) {
       alert(`An error occurred when creating a new column ${err.message}`);

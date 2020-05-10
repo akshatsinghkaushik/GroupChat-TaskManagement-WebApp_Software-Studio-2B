@@ -46,9 +46,11 @@ const Taskboard = () => {
       columns.on("value", (snapshot) => {
         const tmpCols = [];
         snapshot.forEach((col) => {
+          const val = col.val();
+          if (val.deletedTimestamp) return; // Don't display deleted columns
           tmpCols.push({
             id: col.key,
-            ...col.val(),
+            ...val,
           });
         });
         setColumns(tmpCols);
@@ -70,13 +72,7 @@ const Taskboard = () => {
       <div className="taskboard-canvas">
         <div className="taskboard">
           {columns.map((column) => {
-            return (
-              <TaskColumn
-                key={column.id}
-                name={column.name}
-                tasks={exampleTasks}
-              />
-            );
+            return <TaskColumn column={column} tasks={exampleTasks} />;
           })}
           <NewTaskColumn />
         </div>
