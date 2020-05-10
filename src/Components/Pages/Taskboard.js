@@ -1,6 +1,7 @@
 import React from "react";
 import "./Taskboard.scss";
 import TaskColumn from "../Presentational/TaskColumn/TaskColumn";
+import NewTaskColumn from "../Presentational/NewTaskColumn/NewTaskColumn";
 
 /*
 taskboard:
@@ -43,6 +44,7 @@ const Taskboard = () => {
       <div className="taskboard">
         <TaskColumn name="col 1" tasks={exampleTasks} />
         <TaskColumn name="col 1" tasks={exampleTasks} />
+        <NewTaskColumn />
       </div>
     </div>
   );
