@@ -17,3 +17,22 @@ export function writeChats(message) {
     uid: message.uid,
   });
 }
+
+/**
+ * Create a new column in the database.
+ * The return value is void in all cases.
+ * @param {string} name - The name of the column
+ */
+// TODO: This will also need to push into groups.<group-id>.taskboards when that exists
+export function createTaskColumn(name) {
+  return db.ref("columns").push({
+    name,
+    createdTimestamp: Date.now(),
+  });
+}
+
+export function deleteTaskColumn(id) {
+  return db.ref(`columns/${id}`).update({
+    deletedTimestamp: Date.now(),
+  });
+}

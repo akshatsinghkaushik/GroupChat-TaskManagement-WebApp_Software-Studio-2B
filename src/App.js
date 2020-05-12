@@ -13,6 +13,7 @@ import Navbar from "./Components/Navbar";
 // import Register from "./Components/Pages/Register";
 import Login from "./Components/Pages/Login";
 import Chat from "./Components/Pages/Chat";
+import Taskboard from "./Components/Pages/Taskboard";
 import Profile from "./Components/Pages/Profile";
 import "./App.scss";
 
@@ -87,17 +88,22 @@ class App extends Component {
               path="/chat"
               authenticated={this.state.authenticated}
               component={Chat}
-            ></PrivateRoute>
+            />
             <PublicRoute
               path="/login"
               authenticated={this.state.authenticated}
               component={Login}
-            ></PublicRoute>
+            />
             <PrivateRoute
               path="/profile"
               authenticated={this.state.authenticated}
               component={Profile}
-            ></PrivateRoute>
+            />
+            <PrivateRoute
+              path="/taskboard"
+              authenticated={this.state.authenticated}
+              component={Taskboard}
+            />
           </Switch>
         </Router>
       </div>

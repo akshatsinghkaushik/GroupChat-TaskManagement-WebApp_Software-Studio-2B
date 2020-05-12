@@ -1,0 +1,29 @@
+.task-column-container {
+  width: 15em;
+  margin: 0 4px;
+  height: 100%;
+  box-sizing: border-box;
+  display: inline-block;
+  vertical-align: top;
+  white-space: pre-wrap;
+  background-color: #ebecf0;
+  border-radius: 15px;
+  padding: 0.25em 0.75em;
+  overflow-y: auto;
+  .header-lockup {
+    position: relative;
+    width: 100%;
+    svg {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+    svg:hover {
+      cursor: pointer;
+    }
+  }
+  .task-list {
+    display: flex;
+    flex-flow: column nowrap;
+  }
+}
