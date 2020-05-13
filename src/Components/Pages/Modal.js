@@ -54,10 +54,10 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     position: "absolute",
-    width: 650,
-    height: 770,
+    width: "40%",
+    height: "auto",
     backgroundColor: theme.palette.background.paper,
-    padding: "60px 100px 0px 100px",
+    padding: "10px 5em 10px 5em",
     borderRadius: "10px",
     boxShadow:
       "0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22)",
@@ -106,7 +106,6 @@ export default function AnimatedModal() {
       >
         <Fade in={open}>
           <form className={classes.paper}>
-            <h1 style={{ color: "black" }}> New Group</h1>
             <div className="new_group_details">
               <h6 style={{ color: "#05728f", marginTop: "46px" }}>
                 {" "}
