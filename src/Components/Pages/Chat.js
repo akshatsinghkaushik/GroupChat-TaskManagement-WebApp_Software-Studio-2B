@@ -2,13 +2,10 @@ import React, { Component } from "react";
 import { db } from "../../services/firebase";
 import { auth } from "../../services/firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPaperPlane,
-  faSearch,
-  faPlus,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPaperPlane, faSearch } from "@fortawesome/free-solid-svg-icons";
 import AnimatedModal from "./Modal";
 import "./Chat.scss";
+import AddSubGroup from "./AddSubGroup";
 
 class Chat extends Component {
   constructor(props) {
@@ -182,11 +179,8 @@ class Chat extends Component {
                   <div className="group_header">
                     <strong className="text-info">Group 1</strong>
                   </div>
-                  <div className="create_subgroup_btn">
-                    <button type="button">
-                      {" "}
-                      <FontAwesomeIcon icon={faPlus} />{" "}
-                    </button>
+                  <div className="addSubGroup">
+                    <AddSubGroup className="addSubGroup" />
                   </div>
                 </div>
                 <div className="msg-mid">
