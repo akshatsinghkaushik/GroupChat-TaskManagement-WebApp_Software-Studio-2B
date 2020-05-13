@@ -139,6 +139,11 @@ export default function AnimatedModal() {
               </TextField>
             </div>
             <div>
+              <h6 style={{ color: "#05728f" }}> Assign Group Leader(s) </h6>
+              <AddGroupParticipant />
+              <hr />
+            </div>
+            <div>
               <h6 style={{ color: "#05728f" }}> Invite People </h6>
               <AddGroupParticipant />
             </div>
