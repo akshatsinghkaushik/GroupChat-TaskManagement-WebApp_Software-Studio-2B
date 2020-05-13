@@ -12,8 +12,8 @@ import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faPlus } from "@fortawesome/free-solid-svg-icons";
 const AddGroupParticipant = memo((props) => {
   const { inputValue, changeInput, clearInput, keyInput } = useInputValue();
   const {
@@ -80,8 +80,7 @@ export default function AddSubGroup() {
   return (
     <div>
       <div className="addSubGroup">
-        <button type="button" onClick={handleOpen}>
-          <FontAwesomeIcon icon={faPlus} />
+        <button type="button" onClick={handleOpen} className="primary-button">
           {"Add Sub Group"}
         </button>
       </div>
@@ -142,6 +141,8 @@ export default function AddSubGroup() {
             </div>
             <div style={{ Display: "block" }}>
               <Button
+                className="secondary-button"
+                type="button"
                 variant="outlined"
                 color="inherit"
                 fullWidth="true"
@@ -157,7 +158,7 @@ export default function AddSubGroup() {
                   justifyContent: "center",
                 }}
               >
-                Create New Group
+                {"Create New Sub Group"}
               </Button>
               <Button
                 autoFocus
