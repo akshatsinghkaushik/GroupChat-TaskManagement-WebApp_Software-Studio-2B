@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import { db } from "../../services/firebase";
 import { auth } from "../../services/firebase";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPaperPlane, faSearch } from "@fortawesome/free-solid-svg-icons";
-
+import {
+  faPaperPlane,
+  faSearch,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
+import AnimatedModal from "./Modal";
 import "./Chat.scss";
 
 class Chat extends Component {
@@ -57,8 +60,8 @@ class Chat extends Component {
     }
   }
   async componentWillUnmount() {
-      db.ref("users").off('value');
-      db.ref("chats").off('value');
+    db.ref("users").off("value");
+    db.ref("chats").off("value");
   }
 
   handleChange(event) {
@@ -157,6 +160,9 @@ class Chat extends Component {
                   </div>
                 </div>
               </div>
+              <div className="fab">
+                <AnimatedModal className="fab" />
+              </div>
             </div>
             <div className="mesgs">
               {/*ref={this.myRef}*/}
@@ -173,7 +179,15 @@ class Chat extends Component {
                 <div className="msg-top">
                   {/* Logged in as:{" "}
                   <strong className="text-info">{this.state.user.email}</strong> */}
-                  <strong className="text-info">Group 1</strong>
+                  <div className="group_header">
+                    <strong className="text-info">Group 1</strong>
+                  </div>
+                  <div className="create_subgroup_btn">
+                    <button type="button">
+                      {" "}
+                      <FontAwesomeIcon icon={faPlus} />{" "}
+                    </button>
+                  </div>
                 </div>
                 <div className="msg-mid">
                   {this.state.chats.map((chat) => {
