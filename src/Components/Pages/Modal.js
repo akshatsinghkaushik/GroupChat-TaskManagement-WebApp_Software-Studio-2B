@@ -54,10 +54,10 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     position: "absolute",
-    width: 650,
-    height: 770,
+    width: "40%",
+    height: "auto",
     backgroundColor: theme.palette.background.paper,
-    padding: "60px 100px 0px 100px",
+    padding: "0px, 0px 0px 0px",
     borderRadius: "10px",
     boxShadow:
       "0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22)",
@@ -81,14 +81,8 @@ export default function AnimatedModal() {
   return (
     <div>
       <div className="fab">
-        <Fab
-          variant="new group"
-          color="primary"
-          aria-label="add"
-          className="fab"
-          onClick={handleOpen}
-        >
-          <GroupAddIcon className="fab" />
+        <Fab color="primary" aria-label="add" onClick={handleOpen}>
+          <GroupAddIcon />
         </Fab>
       </div>
 
@@ -106,19 +100,30 @@ export default function AnimatedModal() {
       >
         <Fade in={open}>
           <form className={classes.paper}>
-            <h1 style={{ color: "black" }}> New Group</h1>
-            <div className="new_group_details">
-              <h6 style={{ color: "#05728f", marginTop: "46px" }}>
+            <div className="new_group_header" style={{ background: "#05728f" }}>
+              <h2
+                style={{
+                  color: "#fff",
+                  borderBottom: "1px solid #05728f",
+                  padding: "80px 100px 30px 100px",
+                }}
+              >
+                {" "}
+                New Group
+              </h2>
+            </div>
+            <div
+              className="new_group_details"
+              style={{ padding: "0px 100px 0px 100px" }}
+            >
+              <h6 style={{ color: "#05728f", marginTop: "50px" }}>
                 {" "}
                 Group Name{" "}
               </h6>
               <TextField
-                id="outlined-basic"
-                label="Group Name"
-                variant="outlined"
+                className="group_name"
                 inputProps={{ style: { fontSize: 20 } }}
-                InputLabelProps={{ style: { fontSize: 15 } }}
-                style={{}}
+                style={{ size: "small" }}
               >
                 {" "}
               </TextField>
@@ -127,32 +132,35 @@ export default function AnimatedModal() {
                 Group Description{" "}
               </h6>
               <TextField
-                id="outlined-basic"
-                label="Description"
-                variant="outlined"
-                fullWidth="true"
-                inputProps={{ style: { fontSize: 20 } }}
-                InputLabelProps={{ style: { fontSize: 15 } }}
-                style={{ marginBottom: "55px" }}
+                className="group_description"
+                fullWidth={true}
+                inputProps={{ style: { fontSize: 16 } }}
+                style={{ marginBottom: "55px", size: "small" }}
               >
                 {" "}
               </TextField>
             </div>
-            <div>
+            <div
+              className="add_group_participant"
+              style={{ padding: "0px 100px 0px 100px" }}
+            >
               <h6 style={{ color: "#05728f" }}> Invite People </h6>
               <AddGroupParticipant />
             </div>
-            <div style={{ Display: "block" }}>
+            <div
+              className="create_new_group_button"
+              style={{ Display: "block", padding: "0px 95px 0px 95px" }}
+            >
               <Button
                 variant="outlined"
                 color="inherit"
-                fullWidth="true"
+                fullWidth={true}
                 style={{
-                  marginTop: "70px",
+                  marginTop: "65px",
                   backgroundColor: "#05728f",
                   color: "#fff",
                   fontWeight: "bold",
-                  height: "50px",
+                  height: "45px",
                   border: "2px solid",
                   borderRadius: 20,
                   borderColor: "#05728f",
@@ -166,12 +174,13 @@ export default function AnimatedModal() {
                 onClick={handleClose}
                 variant="outlined"
                 color="inherit"
-                fullWidth="true"
+                fullWidth={true}
                 style={{
                   marginTop: "30px",
+                  marginBottom: "60px",
                   color: "#05728f",
                   fontWeight: "bold",
-                  height: "50px",
+                  height: "45px",
                   border: "2px solid",
                   borderRadius: 20,
                   justifyContent: "center",
