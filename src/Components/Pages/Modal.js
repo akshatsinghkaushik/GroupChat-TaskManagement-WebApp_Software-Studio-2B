@@ -205,6 +205,11 @@ export default function AnimatedModal(props) {
               displayName: displayName,
               groupAccess: "member",
             });
+
+            db.ref(`users/${participants[i].uid}/groups/${groupID}`).update({
+              displayName: displayName,
+              groupAccess: "member",
+            });
           }
         }
 
@@ -218,6 +223,10 @@ export default function AnimatedModal(props) {
             db.ref(`groups/${groupID}/members/${leaders[i].uid}`).update({
               displayName: displayName,
               groupAccess: "leader",
+            });
+            db.ref(`users/${leaders[i].uid}/groups/${groupID}`).update({
+              displayName: displayName,
+              groupAccess: "member",
             });
           }
         }
