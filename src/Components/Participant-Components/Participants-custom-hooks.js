@@ -18,23 +18,27 @@ export const useInputValue = (initialValue = "") => {
   };
 };
 
-export const useParticipants = (initialValue = []) => {
-  const [participants, setParticipants] = useState(initialValue);
+export const useParticipants = (props) => {
+  //const [participants, setParticipants] = useState(initialValue);
+  let participants = props.participants;
 
   return {
-    participants: participants,
-    addParticipants: (text) => {
+    //participants: participants,
+    addParticipants: (text, regist) => {
+      //console.log(regist);
       if (text !== "") {
-        setParticipants(
+        props.setParticipants(
           participants.concat({
             text,
             checked: false,
+            registered: regist.userExists,
+            uid: regist.userID,
           })
         );
       }
     },
     checkParticipants: (idx) => {
-      setParticipants(
+      props.setParticipants(
         participants.map((participant, index) => {
           if (idx === index) {
             participant.checked = !participant.checked;
@@ -45,7 +49,7 @@ export const useParticipants = (initialValue = []) => {
       );
     },
     removeParticipants: (idx) => {
-      setParticipants(
+      props.setParticipants(
         participants.filter((participant, index) => idx !== index)
       );
     },
