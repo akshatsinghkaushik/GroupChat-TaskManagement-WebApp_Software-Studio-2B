@@ -267,4 +267,23 @@
     top: 15px;
     width: 33px;
   }
+  .group_header {
+    flex: auto;
+    display: flex;
+    justify-content: flex-start;
+  }
+  .create_subgroup_btn button {
+    flex: auto;
+    border: medium none;
+    color: #05728f;
+    font-size: 26px;
+    display: flex;
+  }
+  .fab button {
+    bottom: 18px;
+    left: 20px;
+    position: absolute;
+    background: #05728f none repeat scroll 0 0;
+    color: #fff;
+  }
 }

@@ -19,7 +19,7 @@ class Navbar extends Component {
         <div className="links">
           <ul>
             <li>
-              <Link to="/chat">Chat</Link>
+              <Link to="/chat">Groups</Link>
             </li>
             {!this.props.authenticated ? (
               <li>
