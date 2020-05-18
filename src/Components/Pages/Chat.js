@@ -13,6 +13,7 @@ class Chat extends Component {
     this.state = {
       user: auth().currentUser,
       chats: [],
+      groups: new Map(),
       users: new Map(),
       content: "",
       readError: null,
@@ -44,6 +45,18 @@ class Chat extends Component {
       this.setState({ readError: error.message, loadingChats: false });
     }
     try {
+      db.ref("groups").on("value", (snapshot) => {
+        let groups = new Map();
+        snapshot.forEach((snap) => {
+          groups.set(snap.key, snap.val());
+        });
+
+        this.setState({ groups });
+      });
+    } catch (error) {
+      this.setState({ readError: error.message });
+    }
+    try {
       db.ref("users").on("value", (snapshot) => {
         let users = new Map();
         snapshot.forEach((snap) => {
@@ -59,6 +72,7 @@ class Chat extends Component {
   async componentWillUnmount() {
     db.ref("users").off("value");
     db.ref("chats").off("value");
+    db.ref("groups").off("value");
   }
 
   handleChange(event) {
@@ -158,19 +172,16 @@ class Chat extends Component {
                 </div>
               </div>
               <div className="fab">
-                <AnimatedModal className="fab" />
+                <AnimatedModal
+                  className="fab"
+                  users={this.state.users}
+                  groups={this.state.groups}
+                />
               </div>
             </div>
             <div className="mesgs">
               {/*ref={this.myRef}*/}
-              {/* loading indicator */}
-              {this.state.loadingChats ? (
-                <div className="spinner-border text-success" role="status">
-                  <span className="sr-only">Loading...</span>
-                </div>
-              ) : (
-                ""
-              )}
+
               {/* chat area */}
               <div className="msg_history">
                 <div className="msg-top">
@@ -183,57 +194,77 @@ class Chat extends Component {
                     <AddSubGroup className="addSubGroup" />
                   </div>
                 </div>
-                <div className="msg-mid">
-                  {this.state.chats.map((chat) => {
-                    return (
-                      <div
-                        key={chat.timestamp}
-                        className={
-                          this.state.user.uid === chat.uid
-                            ? "outgoing_msg"
-                            : "incoming_msg"
-                        }
-                      >
-                        {this.state.user.uid === chat.uid ? (
-                          ""
-                        ) : (
-                          <div className="incoming_msg_img">
-                            {" "}
-                            <img
-                              src="https://ptetutorials.com/images/user-profile.png"
-                              alt="sunil"
-                            />{" "}
-                          </div>
-                        )}
-                        {this.state.user.uid === chat.uid ? (
-                          <div className="sent_msg">
-                            <p>{chat.content}</p>
-                            <span className="time_date">
-                              {this.formatTime(chat.timestamp)}
-                            </span>
-                          </div>
-                        ) : (
-                          <div className="received_msg">
-                            <div className="received_withd_msg">
-                              <div className="name-header">
-                                {this.state.users.has(chat.uid)
-                                  ? this.state.users.get(chat.uid).name ===
-                                    undefined
-                                    ? this.state.users.get(chat.uid).email
-                                    : this.state.users.get(chat.uid).name
-                                  : "Anonymous"}
-                              </div>
+
+                {/* loading indicator */}
+                {this.state.loadingChats ? (
+                  <div
+                    className="spinner-border text-success"
+                    role="status"
+                    style={{
+                      display: "flex",
+                      marginLeft: "auto",
+                      marginRight: "auto",
+                      marginTop: "1em",
+                      marginBottom: "1em",
+                    }}
+                  >
+                    <span className="sr-only" style={{}}>
+                      Loading...
+                    </span>
+                  </div>
+                ) : (
+                  <div className="msg-mid">
+                    {this.state.chats.map((chat) => {
+                      return (
+                        <div
+                          key={chat.timestamp}
+                          className={
+                            this.state.user.uid === chat.uid
+                              ? "outgoing_msg"
+                              : "incoming_msg"
+                          }
+                        >
+                          {this.state.user.uid === chat.uid ? (
+                            ""
+                          ) : (
+                            <div className="incoming_msg_img">
+                              {" "}
+                              <img
+                                src="https://ptetutorials.com/images/user-profile.png"
+                                alt="sunil"
+                              />{" "}
+                            </div>
+                          )}
+                          {this.state.user.uid === chat.uid ? (
+                            <div className="sent_msg">
                               <p>{chat.content}</p>
                               <span className="time_date">
                                 {this.formatTime(chat.timestamp)}
                               </span>
                             </div>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
+                          ) : (
+                            <div className="received_msg">
+                              <div className="received_withd_msg">
+                                <div className="name-header">
+                                  {this.state.users.has(chat.uid)
+                                    ? this.state.users.get(chat.uid).name ===
+                                      undefined
+                                      ? this.state.users.get(chat.uid).email
+                                      : this.state.users.get(chat.uid).name
+                                    : "Anonymous"}
+                                </div>
+                                <p>{chat.content}</p>
+                                <span className="time_date">
+                                  {this.formatTime(chat.timestamp)}
+                                </span>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
 
                 <form
                   onKeyDown={this._handleKeyDown}
