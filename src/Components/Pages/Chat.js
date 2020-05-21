@@ -17,6 +17,8 @@ class Chat extends Component {
       user: auth().currentUser,
       chats: [],
       groups: new Map(),
+      selectedGroupID: "",
+      selectedGroupName: "",
       users: new Map(),
       content: "",
       readError: null,
@@ -31,34 +33,7 @@ class Chat extends Component {
   async componentDidMount() {
     this.setState({ readError: null, loadingChats: true });
     //const chatArea = this.myRef.current;
-    try {
-      db.ref("chats").on("value", (snapshot) => {
-        let chats = [];
-        snapshot.forEach((snap) => {
-          chats.push(snap.val());
-        });
-        chats.sort(function (a, b) {
-          return a.timestamp - b.timestamp;
-        });
-        this.setState({ chats });
-        //chatArea.scrollBy(0, chatArea.scrollHeight);
-        this.setState({ loadingChats: false });
-      });
-    } catch (error) {
-      this.setState({ readError: error.message, loadingChats: false });
-    }
-    try {
-      db.ref("groups").on("value", (snapshot) => {
-        let groups = new Map();
-        snapshot.forEach((snap) => {
-          groups.set(snap.key, snap.val());
-        });
 
-        this.setState({ groups });
-      });
-    } catch (error) {
-      this.setState({ readError: error.message });
-    }
     try {
       db.ref("users").on("value", (snapshot) => {
         let users = new Map();
@@ -71,11 +46,58 @@ class Chat extends Component {
     } catch (error) {
       this.setState({ readError: error.message });
     }
+
+    let groups_list = new Map();
+    try {
+      db.ref(`users/${this.state.user.uid}/groups`).on("value", (snapshot) => {
+        snapshot.forEach((snap) => {
+          groups_list.set(snap.key, snap.val());
+        });
+      });
+    } catch (error) {
+      this.setState({ readError: error.message });
+    }
+
+    try {
+      db.ref(`groups`).on("value", (snapshot) => {
+        let groups_temp = new Map();
+        snapshot.forEach((snap) => {
+          if (groups_list.has(snap.key)) {
+            groups_temp.set(snap.key, snap.val());
+          }
+        });
+        this.setState({ groups: groups_temp });
+        this.setState({
+          selectedGroupID: this.state.groups.keys().next().value,
+        });
+
+        db.ref(`groups/${this.state.selectedGroupID}/chats`).on(
+          "value",
+          (snapshot) => {
+            let chats = [];
+            snapshot.forEach((snap) => {
+              chats.push(snap.val());
+            });
+
+            chats.sort(function (a, b) {
+              return a.timestamp - b.timestamp;
+            });
+
+            this.setState({ chats });
+          }
+        );
+        db.ref(`groups/${this.state.selectedGroupID}/chats`).off("value");
+        this.setState({ loadingChats: false });
+      });
+    } catch (error) {
+      this.setState({ readError: error.message });
+    }
   }
   async componentWillUnmount() {
     db.ref("users").off("value");
     db.ref("chats").off("value");
-    db.ref("groups").off("value");
+    db.ref(`users/${this.state.user.uid}/groups`).off("value");
+    db.ref(`groups`).off("value");
   }
 
   handleChange(event) {
@@ -84,12 +106,57 @@ class Chat extends Component {
     });
   }
 
+  handleSelectGroup = (event) => {
+    if (event.target.id !== "") {
+      this.setState({
+        selectedGroupID: event.target.id,
+        selectedGroupName: this.state.groups.get(event.target.id).name,
+      });
+
+      db.ref(`groups/${event.target.id}/chats`).on("value", (snapshot) => {
+        let chats = [];
+        snapshot.forEach((snap) => {
+          chats.push(snap.val());
+        });
+
+        chats.sort(function (a, b) {
+          return a.timestamp - b.timestamp;
+        });
+
+        this.setState({ chats });
+      });
+      db.ref(`groups/${this.state.selectedGroupID}/chats`).off("value");
+    } else {
+      this.setState({
+        selectedGroupID: event.currentTarget.id,
+        selectedGroupName: this.state.groups.get(event.currentTarget.id).name,
+      });
+
+      db.ref(`groups/${event.currentTarget.id}/chats`).on(
+        "value",
+        (snapshot) => {
+          let chats = [];
+          snapshot.forEach((snap) => {
+            chats.push(snap.val());
+          });
+
+          chats.sort(function (a, b) {
+            return a.timestamp - b.timestamp;
+          });
+
+          this.setState({ chats });
+        }
+      );
+      db.ref(`groups/${this.state.selectedGroupID}/chats`).off("value");
+    }
+  };
+
   async handleSubmit(event) {
     event.preventDefault();
     this.setState({ writeError: null });
     //const chatArea = this.myRef.current;
     try {
-      await db.ref("chats").push({
+      await db.ref(`groups/${this.state.selectedGroupID}/chats`).push({
         content: this.state.content,
         timestamp: Date.now(),
         uid: this.state.user.uid,
@@ -139,40 +206,42 @@ class Chat extends Component {
                 </div>
               </div>
               <div className="inbox_chat">
-                <div className="chat_list active_chat">
-                  <div className="chat_people">
-                    <div className="chat_img">
-                      {" "}
-                      <img
-                        src="https://ptetutorials.com/images/user-profile.png"
-                        alt="group-no"
-                      />{" "}
+                {Array.from(this.state.groups.values()).map((result, index) => {
+                  return (
+                    <div
+                      key={index}
+                      id={result.id}
+                      className={
+                        result.id === this.state.selectedGroupID
+                          ? "chat_list active_chat"
+                          : "chat_list"
+                      }
+                      onClick={this.handleSelectGroup}
+                    >
+                      <div className="chat_people">
+                        <div className="chat_img">
+                          {" "}
+                          <img
+                            src="https://ptetutorials.com/images/user-profile.png"
+                            alt="group-no"
+                          />{" "}
+                        </div>
+                        <div className="chat_ib">
+                          <h5>
+                            {result.name}{" "}
+                            <span
+                              className="chat_date"
+                              style={{ display: "none" }}
+                            >
+                              Dec 25
+                            </span>
+                          </h5>
+                          <p>{result.description}</p>
+                        </div>
+                      </div>
                     </div>
-                    <div className="chat_ib">
-                      <h5>
-                        Group 1 <span className="chat_date">Dec 25</span>
-                      </h5>
-                      <p>Description / Last Message</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="chat_list">
-                  <div className="chat_people">
-                    <div className="chat_img">
-                      {" "}
-                      <img
-                        src="https://ptetutorials.com/images/user-profile.png"
-                        alt="group-no"
-                      />{" "}
-                    </div>
-                    <div className="chat_ib">
-                      <h5>
-                        Group 2 <span className="chat_date">Dec 25</span>
-                      </h5>
-                      <p>Description / Last Message </p>
-                    </div>
-                  </div>
-                </div>
+                  );
+                })}
               </div>
               <div className="fab">
                 <AnimatedModal
@@ -191,7 +260,11 @@ class Chat extends Component {
                   {/* Logged in as:{" "}
                   <strong className="text-info">{this.state.user.email}</strong> */}
                   <div className="group_header">
-                    <strong className="text-info">Group 1</strong>
+                    <strong className="text-info">
+                      {this.state.selectedGroupName
+                        ? this.state.selectedGroupName
+                        : "Group Name"}
+                    </strong>
                   </div>
                   <div className="create_subgroup_btn">
                     <button type="button">
