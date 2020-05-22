@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import "./TaskColumn.scss";
-import { Card, CardContent, Typography } from "@material-ui/core";
+import { Button, Card, CardContent, Typography } from "@material-ui/core";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { deleteTaskColumn, createTask } from "../../../helpers/db";
@@ -62,44 +62,44 @@ const TaskColumn = ({ column, user }) => {
 
   return (
     <div className="task-column-container">
-      <div className="header-lockup">
-        <Typography variant="h5" component="h2">
-          {column.name}
-        </Typography>
-        <FontAwesomeIcon
-          onClick={handleDeleteColumn}
-          icon={faTimes}
-          size="1x"
-        />
-      </div>
-      <div className="task-list">
-        <ul>
-          {tasks.map((task) => {
-            return (
-              <li key={task.id}>
-                <Card variant="outlined">
-                  <CardContent>
-                    <Typography color="textPrimary" gutterBottom>
-                      {task.name}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </li>
-            );
-          })}
-          <li className="new-task-lockup">
-            <form onSubmit={handleCreateTask}>
-              <input
-                onChange={handleNewTaskChange}
-                value={newTask}
-                placeholder="Enter a title for this card..."
-              />
-              <button type="submit">
-                <Typography component="p">Add task</Typography>
-              </button>
-            </form>
-          </li>
-        </ul>
+      <div className="task-column-lockup">
+        <div className="header-lockup">
+          <Typography variant="h5" component="h2">
+            {column.name}
+          </Typography>
+          <FontAwesomeIcon
+            onClick={handleDeleteColumn}
+            icon={faTimes}
+            size="1x"
+          />
+        </div>
+        <div className="task-list">
+          <ul>
+            {tasks.map((task) => {
+              return (
+                <li key={task.id}>
+                  <Card variant="outlined">
+                    <CardContent>
+                      <Typography color="textPrimary" gutterBottom>
+                        {task.name}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+        <div className="new-task-lockup">
+          <form onSubmit={handleCreateTask}>
+            <input
+              onChange={handleNewTaskChange}
+              value={newTask}
+              placeholder="Enter a title for this card..."
+            />
+            <Button type="submit">Add Task</Button>
+          </form>
+        </div>
       </div>
     </div>
   );
