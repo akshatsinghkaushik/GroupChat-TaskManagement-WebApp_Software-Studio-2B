@@ -25,5 +25,17 @@
   .task-list {
     display: flex;
     flex-flow: column nowrap;
+
+    .new-task-lockup {
+      input {
+        height: 4em;
+        width: 100%;
+      }
+      button {
+        background-color: #5aac44;
+        color: white;
+        padding: 0.25em 0.5em;
+      }
+    }
   }
 }

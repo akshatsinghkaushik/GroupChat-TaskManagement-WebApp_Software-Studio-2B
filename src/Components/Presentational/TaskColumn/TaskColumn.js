@@ -1,11 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./TaskColumn.scss";
 import { Card, CardContent, Typography } from "@material-ui/core";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { deleteTaskColumn } from "../../../helpers/db";
+import { deleteTaskColumn, createTask } from "../../../helpers/db";
+import { db } from "../../../services/firebase";
 
-const TaskColumn = ({ column, tasks }) => {
+const TaskColumn = ({ column, user }) => {
+  const [tasks, setTasks] = React.useState([]);
+  const [newTask, setNewTask] = React.useState("");
+  useEffect(() => {
+    try {
+      const tasks = db.ref(`tasks/${column.id}`);
+      tasks.on("value", (snapshot) => {
+        const tmpTasks = [];
+        snapshot.forEach((col) => {
+          const val = col.val();
+          if (val.deletedTimestamp) return; // Don't display deleted tasks
+          tmpTasks.push({
+            id: col.key,
+            ...val,
+          });
+        });
+        setTasks(tmpTasks);
+      });
+    } catch (err) {
+      alert(`An error occurred when reading data... ${err.message}`); // TODO: Dont use an alert, do this properly...
+    }
+    return () => db.ref(`tasks/${column.id}`).off("value");
+  }, [column.id]);
+
   const handleDeleteColumn = async () => {
     try {
       await deleteTaskColumn(column.id);
@@ -13,6 +37,29 @@ const TaskColumn = ({ column, tasks }) => {
       alert(`An error occurred when deleting column ${err.message}`); // TODO: Dont use alerts for error messages..
     }
   };
+
+  const handleCreateTask = async (e) => {
+    e.preventDefault();
+    const task = {
+      name: newTask,
+      description: "",
+      createdTimeStamp: Date.now(),
+      createdBy: user.uid,
+      deletedTimestamp: null,
+    };
+
+    try {
+      await createTask(column.id, task);
+      setNewTask("");
+    } catch (err) {
+      alert(`An error occurred when deleting column ${err.message}`);
+    }
+  };
+
+  const handleNewTaskChange = (e) => {
+    setNewTask(e.target.value);
+  };
+
   return (
     <div className="task-column-container">
       <div className="header-lockup">
@@ -27,10 +74,9 @@ const TaskColumn = ({ column, tasks }) => {
       </div>
       <div className="task-list">
         <ul>
-          {tasks.map((task, index) => {
+          {tasks.map((task) => {
             return (
-              // TODO: Dont use index as key, use task id when we have it..
-              <li key={index}>
+              <li key={task.id}>
                 <Card variant="outlined">
                   <CardContent>
                     <Typography color="textPrimary" gutterBottom>
@@ -41,6 +87,18 @@ const TaskColumn = ({ column, tasks }) => {
               </li>
             );
           })}
+          <li className="new-task-lockup">
+            <form onSubmit={handleCreateTask}>
+              <input
+                onChange={handleNewTaskChange}
+                value={newTask}
+                placeholder="Enter a title for this card..."
+              />
+              <button type="submit">
+                <Typography component="p">Add task</Typography>
+              </button>
+            </form>
+          </li>
         </ul>
       </div>
     </div>

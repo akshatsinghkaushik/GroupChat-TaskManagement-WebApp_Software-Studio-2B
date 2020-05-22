@@ -36,3 +36,7 @@ export function deleteTaskColumn(id) {
     deletedTimestamp: Date.now(),
   });
 }
+
+export function createTask(columnId, task) {
+  return db.ref(`tasks/${columnId}`).push(task);
+}
