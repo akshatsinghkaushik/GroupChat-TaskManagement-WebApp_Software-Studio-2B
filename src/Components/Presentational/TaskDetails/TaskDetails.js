@@ -71,7 +71,7 @@ const TaskDetails = ({ columnId, taskDetails, close }) => {
           <TaskActivity />
         </div>
         <div className="sidebar">
-          <p>Hello</p>
+          <p>This is the sidebar</p>
         </div>
       </div>
     </div>
