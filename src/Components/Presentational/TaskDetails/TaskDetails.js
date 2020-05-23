@@ -12,6 +12,10 @@ const TaskDetails = ({ columnId, taskDetails, close }) => {
   const [newTaskName, setNewTaskName] = React.useState("");
   const [isEditingTaskName, setIsEditingTaskName] = React.useState(false);
   const submitNewTaskName = async () => {
+    if (taskName === newTaskName) {
+      stopEditing();
+      return;
+    }
     try {
       await updateTask(columnId, taskDetails.id, {
         name: newTaskName,

@@ -11,7 +11,10 @@ const TaskDescription = ({ columnId, taskDetails }) => {
   const [isEditing, setIsEditing] = React.useState(description.length === 0);
 
   const submitNewDescription = async () => {
-    console.log("saving new description", newDescription);
+    if (description === newDescription) {
+      stopEditing();
+      return;
+    }
     try {
       await updateTask(columnId, taskDetails.id, {
         description: newDescription,
