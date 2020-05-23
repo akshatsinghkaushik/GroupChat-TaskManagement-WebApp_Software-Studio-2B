@@ -1,23 +1,27 @@
 import React, { useEffect } from "react";
 import "./TaskColumn.scss";
-import { Card, CardContent, Typography } from "@material-ui/core";
+import { Button, Card, CardContent, Typography } from "@material-ui/core";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { deleteTaskColumn, createTask } from "../../../helpers/db";
 import { db } from "../../../services/firebase";
+import TaskDetails from "../TaskDetails/TaskDetails";
+import Modal from "../Modal/Modal";
 
 const TaskColumn = ({ column, user }) => {
-  const [tasks, setTasks] = React.useState([]);
+  const [tasks, setTasks] = React.useState(new Map());
   const [newTask, setNewTask] = React.useState("");
+  const [selectedTaskId, setSelectedTaskId] = React.useState("");
+
   useEffect(() => {
     try {
       const tasks = db.ref(`tasks/${column.id}`);
       tasks.on("value", (snapshot) => {
-        const tmpTasks = [];
+        const tmpTasks = new Map();
         snapshot.forEach((col) => {
           const val = col.val();
           if (val.deletedTimestamp) return; // Don't display deleted tasks
-          tmpTasks.push({
+          tmpTasks.set(col.key, {
             id: col.key,
             ...val,
           });
@@ -60,47 +64,60 @@ const TaskColumn = ({ column, user }) => {
     setNewTask(e.target.value);
   };
 
+  const handleCloseModal = () => {
+    setSelectedTaskId("");
+  };
+
   return (
     <div className="task-column-container">
-      <div className="header-lockup">
-        <Typography variant="h5" component="h2">
-          {column.name}
-        </Typography>
-        <FontAwesomeIcon
-          onClick={handleDeleteColumn}
-          icon={faTimes}
-          size="1x"
-        />
+      <div className="task-column-lockup">
+        <div className="header-lockup">
+          <Typography variant="h5" component="h2">
+            {column.name}
+          </Typography>
+          <FontAwesomeIcon
+            onClick={handleDeleteColumn}
+            icon={faTimes}
+            size="1x"
+          />
+        </div>
+        <div className="task-list">
+          <ul>
+            {Array.from(tasks.values()).map((task) => {
+              return (
+                <li key={task.id} onClick={(e) => setSelectedTaskId(task.id)}>
+                  <Card variant="outlined">
+                    <CardContent>
+                      <Typography color="textPrimary" gutterBottom>
+                        {task.name}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+        <div className="new-task-lockup">
+          <form onSubmit={handleCreateTask}>
+            <input
+              onChange={handleNewTaskChange}
+              value={newTask}
+              placeholder="Enter a title for this card..."
+            />
+            <Button type="submit">Add Task</Button>
+          </form>
+        </div>
       </div>
-      <div className="task-list">
-        <ul>
-          {tasks.map((task) => {
-            return (
-              <li key={task.id}>
-                <Card variant="outlined">
-                  <CardContent>
-                    <Typography color="textPrimary" gutterBottom>
-                      {task.name}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </li>
-            );
-          })}
-          <li className="new-task-lockup">
-            <form onSubmit={handleCreateTask}>
-              <input
-                onChange={handleNewTaskChange}
-                value={newTask}
-                placeholder="Enter a title for this card..."
-              />
-              <button type="submit">
-                <Typography component="p">Add task</Typography>
-              </button>
-            </form>
-          </li>
-        </ul>
-      </div>
+      {!!selectedTaskId && (
+        <Modal closeModal={handleCloseModal}>
+          <TaskDetails
+            columnId={column.id}
+            taskDetails={tasks.get(selectedTaskId)}
+            close={handleCloseModal}
+          />
+        </Modal>
+      )}
     </div>
   );
 };

@@ -1,0 +1,32 @@
+.task-details-lockup {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: #f4f5f7;
+
+  .header {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 5em;
+    input {
+      border: 2px solid #0079bf;
+      border-radius: 5px;
+    }
+    button {
+      width: 5em;
+      height: 100%;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+  }
+  .grid-lockup {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 80% 20%;
+    .main-col {
+    }
+    .sidebar {
+    }
+  }
+}
