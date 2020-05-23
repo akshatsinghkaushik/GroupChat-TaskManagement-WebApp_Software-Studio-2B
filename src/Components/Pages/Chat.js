@@ -70,9 +70,6 @@ class Chat extends Component {
         if (this.state.selectedGroupID === "") {
           this.setState({
             selectedGroupID: this.state.groups.keys().next().value,
-            selectedGroupName: this.state.groups.get(
-              this.state.groups.keys().next().value
-            ).name,
           });
         }
 
