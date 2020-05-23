@@ -6,6 +6,7 @@ import { TextInput } from "react-native";
 import { db } from "../../services/firebase";
 import { auth } from "../../services/firebase";
 import { faTimes } from "@fortawesome/free-solid-svg-icons/faTimes";
+import { storage } from "../../services/firebase";
 
 class TextField extends Component {
   render() {
@@ -21,11 +22,15 @@ class Profile extends Component {
       user: auth().currentUser,
       email: null,
       username: null,
+      photoUrl: null,
       readError: null,
       writeError: null,
+      image: null,
+      progress: 0,
       usernameEditable: false,
       emailEditable: false,
       passwordEditable: false,
+      photoEditable: false,
       error: null,
     };
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -34,8 +39,10 @@ class Profile extends Component {
     this.handleEmailCancel = this.handleEmailCancel.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handlePasswordCancel = this.handlePasswordCancel.bind(this);
-
+    this.handlePhotoChange = this.handlePhotoChange.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleimageChange = this.handleimageChange.bind(this);
+    this.handlePhotoStateChange = this.handlePhotoStateChange.bind(this);
   }
 
   async writeUserData(userId, name, email) {
@@ -98,7 +105,43 @@ class Profile extends Component {
       usernameEditable: !this.state.usernameEditable,
     });
   }
-
+  handleimageChange = (e) => {
+    if (e.target.files[0]) {
+      const image = e.target.files[0];
+      this.setState(() => ({ image }));
+    }
+  };
+  handlePhotoChange = () => {
+    const { image } = this.state;
+    const uploadTask = storage
+      .ref("ProfilePhoto/" + this.state.user.uid)
+      .put(image);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        // progrss function ....
+        const progress = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        this.setState({ progress });
+      },
+      (error) => {
+        // error function ....
+        console.log(error);
+      },
+      () => {
+        // complete function ....
+        storage
+          .ref("ProfilePhoto")
+          .child(this.state.user.uid)
+          .getDownloadURL()
+          .then((url) => {
+            console.log(url);
+            this.setState({ url });
+          });
+      }
+    );
+  };
   //Email Callback
   handleEmailCancel(e) {
     e.preventDefault();
@@ -201,8 +244,14 @@ class Profile extends Component {
     const { text } = evt.nativeEvent;
     this.setState(() => ({ [name]: text }));
   }
-
+  handlePhotoStateChange(e) {
+    e.preventDefault();
+    this.setState({
+      photoEditable: !this.state.photoEditable,
+    });
+  }
   //Refreshes the user details by pulling new data from the database
+
   refreshUserDetails() {
     this.setState({ readError: null });
 
@@ -213,6 +262,14 @@ class Profile extends Component {
           username: snapshot.val().name ? snapshot.val().name : null,
         });
       });
+      storage
+        .ref("ProfilePhoto")
+        .child(this.state.user.uid)
+        .getDownloadURL()
+        .then((url) => {
+          console.log(url);
+          this.setState({ url });
+        });
     } catch (error) {
       this.setState({ readError: error.message });
     }
@@ -229,8 +286,9 @@ class Profile extends Component {
       crossRender,
       errorText,
       confirmPassword,
-      passwordConfirmTextbox;
-
+      passwordConfirmTextbox,
+      photo,
+      photoRender;
     crossRender = <FontAwesomeIcon icon={faTimes} aria-hidden="true" />;
     errorText = <TextField text={this.state.error} />;
     confirmPassword = "CONFIRM PASSWORD";
@@ -336,13 +394,45 @@ class Profile extends Component {
       passwordConfirmTextbox = "";
       confirmPassword = <h3>PASSWORD</h3>;
     }
+    //Profile photo
+    if (this.state.photoEditable) {
+      photoRender = (
+        <div>
+          <progress value={this.state.progress} max="100" />
+          <br />
+          <input type="file" onChange={this.handleimageChange} />
+          <button onClick={this.handlePhotoChange}>Upload</button>
+          <br />
+        </div>
+      );
+    } else {
+      photoRender = (
+        <div className="content">
+          <h4>Add a photo to personalise your account</h4>
+        </div>
+      );
+    }
+
+    if (this.state.url != null) {
+      photo = (
+        <img
+          className="photo-icon"
+          src={this.state.url}
+          alt="Uploaded images"
+        />
+      );
+    } else {
+      photo = (
+        <div className="name-icon">
+          {this.state.username != null ? this.state.username.charAt(0) : ""}
+        </div>
+      );
+    }
 
     return (
       <div id="profile">
         <div className="content-wrap">
-          <div className="name-icon">
-            {this.state.username != null ? this.state.username.charAt(0) : ""}
-          </div>
+          {photo}
           <h1>
             Welcome,{" "}
             {this.state.username != null
@@ -354,10 +444,8 @@ class Profile extends Component {
             <div className="inner-heading">Profile</div>
             <div className="info">
               <h3>PHOTO</h3>
-              <div className="content">
-                <h4>Add a photo to personalise your account</h4>
-              </div>
-              <div className="icon" onClick={this.handleProfileChange}>
+              <div className="content">{photoRender}</div>
+              <div className="icon" onClick={this.handlePhotoStateChange}>
                 {this.state.username != null
                   ? this.state.username.charAt(0)
                   : ""}
