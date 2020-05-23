@@ -9,19 +9,19 @@ import TaskDetails from "../TaskDetails/TaskDetails";
 import Modal from "../Modal/Modal";
 
 const TaskColumn = ({ column, user }) => {
-  const [tasks, setTasks] = React.useState([]);
+  const [tasks, setTasks] = React.useState(new Map());
   const [newTask, setNewTask] = React.useState("");
-  const [selectedTask, setSelectedTask] = React.useState(null);
+  const [selectedTaskId, setSelectedTaskId] = React.useState("");
 
   useEffect(() => {
     try {
       const tasks = db.ref(`tasks/${column.id}`);
       tasks.on("value", (snapshot) => {
-        const tmpTasks = [];
+        const tmpTasks = new Map();
         snapshot.forEach((col) => {
           const val = col.val();
           if (val.deletedTimestamp) return; // Don't display deleted tasks
-          tmpTasks.push({
+          tmpTasks.set(col.key, {
             id: col.key,
             ...val,
           });
@@ -65,7 +65,7 @@ const TaskColumn = ({ column, user }) => {
   };
 
   const handleCloseModal = () => {
-    setSelectedTask(null);
+    setSelectedTaskId("");
   };
 
   return (
@@ -83,9 +83,9 @@ const TaskColumn = ({ column, user }) => {
         </div>
         <div className="task-list">
           <ul>
-            {tasks.map((task) => {
+            {Array.from(tasks.values()).map((task) => {
               return (
-                <li key={task.id} onClick={(e) => setSelectedTask(task)}>
+                <li key={task.id} onClick={(e) => setSelectedTaskId(task.id)}>
                   <Card variant="outlined">
                     <CardContent>
                       <Typography color="textPrimary" gutterBottom>
@@ -109,11 +109,11 @@ const TaskColumn = ({ column, user }) => {
           </form>
         </div>
       </div>
-      {!!selectedTask && (
+      {!!selectedTaskId && (
         <Modal closeModal={handleCloseModal}>
           <TaskDetails
             columnId={column.id}
-            taskDetails={selectedTask}
+            taskDetails={tasks.get(selectedTaskId)}
             close={handleCloseModal}
           />
         </Modal>

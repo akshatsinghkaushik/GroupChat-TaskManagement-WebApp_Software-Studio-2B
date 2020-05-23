@@ -8,11 +8,10 @@ import TaskActivity from "../TaskActivity/TaskActivity";
 import { updateTask } from "../../../helpers/db";
 
 const TaskDetails = ({ columnId, taskDetails, close }) => {
-  const [taskName, setTaskName] = React.useState(taskDetails.name);
   const [newTaskName, setNewTaskName] = React.useState("");
   const [isEditingTaskName, setIsEditingTaskName] = React.useState(false);
   const submitNewTaskName = async () => {
-    if (taskName === newTaskName) {
+    if (taskDetails.name === newTaskName) {
       stopEditing();
       return;
     }
@@ -20,7 +19,6 @@ const TaskDetails = ({ columnId, taskDetails, close }) => {
       await updateTask(columnId, taskDetails.id, {
         name: newTaskName,
       });
-      setTaskName(newTaskName);
       stopEditing();
     } catch (err) {
       console.log("err is ", err);
@@ -28,7 +26,7 @@ const TaskDetails = ({ columnId, taskDetails, close }) => {
   };
 
   const handleStartEditing = () => {
-    setNewTaskName(taskName);
+    setNewTaskName(taskDetails.name);
     setIsEditingTaskName(true);
   };
 
@@ -59,7 +57,7 @@ const TaskDetails = ({ columnId, taskDetails, close }) => {
           />
         ) : (
           <Typography variant="h5" component="h1" onClick={handleStartEditing}>
-            {taskName}
+            {taskDetails.name}
           </Typography>
         )}
         <Button onClick={close}>

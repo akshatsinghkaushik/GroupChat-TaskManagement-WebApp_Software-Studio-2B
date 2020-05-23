@@ -6,12 +6,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { updateTask } from "../../../helpers/db";
 
 const TaskDescription = ({ columnId, taskDetails }) => {
-  const [description, setDescription] = React.useState(taskDetails.description); // See if not using description as state breaks
   const [newDescription, setNewDescription] = React.useState("");
-  const [isEditing, setIsEditing] = React.useState(description.length === 0);
+  const [isEditing, setIsEditing] = React.useState(
+    taskDetails.description.length === 0
+  );
 
   const submitNewDescription = async () => {
-    if (description === newDescription) {
+    if (taskDetails.description === newDescription) {
       stopEditing();
       return;
     }
@@ -19,7 +20,6 @@ const TaskDescription = ({ columnId, taskDetails }) => {
       await updateTask(columnId, taskDetails.id, {
         description: newDescription,
       });
-      setDescription(newDescription);
       stopEditing();
     } catch (err) {
       console.log("an error occured when saving new description", err);
@@ -27,7 +27,7 @@ const TaskDescription = ({ columnId, taskDetails }) => {
   };
 
   const handleStartEditing = () => {
-    setNewDescription(description);
+    setNewDescription(taskDetails.description);
     setIsEditing(true);
   };
 
@@ -68,7 +68,7 @@ const TaskDescription = ({ columnId, taskDetails }) => {
         </div>
       ) : (
         <Typography>
-          {description || "Add a more detailed description... "}
+          {taskDetails.description || "Add a more detailed description... "}
         </Typography>
       )}
     </div>
