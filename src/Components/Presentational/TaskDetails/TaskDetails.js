@@ -19,7 +19,7 @@ const TaskDetails = ({ taskDetails, close }) => {
       </div>
       <div className="grid-lockup">
         <div className="main-col">
-          <div className="card-detail"></div>
+          <div className="task-detail"></div>
           <TaskDescription />
           <TaskActivity />
         </div>

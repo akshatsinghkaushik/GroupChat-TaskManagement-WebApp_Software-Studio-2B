@@ -5,9 +5,11 @@ import { Typography } from "@material-ui/core";
 const TaskActivity = () => {
   return (
     <div className="task-activity">
-      <Typography variant="h5" component="h2">
-        Activity:
-      </Typography>
+      <div className="title-lockup">
+        <Typography variant="h5" component="h2">
+          Activity:
+        </Typography>
+      </div>
     </div>
   );
 };
