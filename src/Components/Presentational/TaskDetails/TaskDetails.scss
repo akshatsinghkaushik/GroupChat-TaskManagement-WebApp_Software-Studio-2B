@@ -6,7 +6,14 @@
   .header {
     position: relative;
     background-color: rgba(77, 40, 40, 0.2);
+    display: grid;
+    grid-template-columns: 1fr 5em;
+    input {
+      border: 2px solid #0079bf;
+      border-radius: 5px;
+    }
     button {
+      width: 5em;
       position: absolute;
       right: 0;
       top: 0;

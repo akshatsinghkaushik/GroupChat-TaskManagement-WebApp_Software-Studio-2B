@@ -30,6 +30,10 @@
       overflow-y: scroll;
       display: flex;
       flex-flow: column nowrap;
+
+      li {
+        cursor: pointer;
+      }
     }
     .new-task-lockup {
       input {

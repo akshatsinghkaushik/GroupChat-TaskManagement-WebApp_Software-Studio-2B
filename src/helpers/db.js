@@ -40,3 +40,7 @@ export function deleteTaskColumn(id) {
 export function createTask(columnId, task) {
   return db.ref(`tasks/${columnId}`).push(task);
 }
+
+export function updateTask(columnId, taskId, updatedFields) {
+  return db.ref(`tasks/${columnId}/${taskId}`).update(updatedFields);
+}

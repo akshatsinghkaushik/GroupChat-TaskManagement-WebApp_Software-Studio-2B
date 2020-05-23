@@ -111,7 +111,11 @@ const TaskColumn = ({ column, user }) => {
       </div>
       {!!selectedTask && (
         <Modal closeModal={handleCloseModal}>
-          <TaskDetails taskDetails={selectedTask} close={handleCloseModal} />
+          <TaskDetails
+            columnId={column.id}
+            taskDetails={selectedTask}
+            close={handleCloseModal}
+          />
         </Modal>
       )}
     </div>
