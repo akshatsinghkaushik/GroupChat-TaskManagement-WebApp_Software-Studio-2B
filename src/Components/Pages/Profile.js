@@ -7,25 +7,6 @@ import { db } from "../../services/firebase";
 import { auth } from "../../services/firebase";
 import { faTimes } from "@fortawesome/free-solid-svg-icons/faTimes";
 
-// class TextInput extends Component{
-//   handleInput = () => {
-//     var input = React.findDOMNode(this.refs.userInput);
-//     this.props.saveInput(input.value);
-//   }
-
-//   render(){
-//     return (
-//       <div className="content">
-//         <input
-//           type="text"
-//           className="content"
-//           id="input-{ label }"
-//          />
-//       </div>
-//     )
-//   }
-// }
-
 class TextField extends Component {
   render() {
     var text = this.props.text || "";
@@ -45,6 +26,7 @@ class Profile extends Component {
       usernameEditable: false,
       emailEditable: false,
       passwordEditable: false,
+      error: null,
     };
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
     this.handleUsernameCancel = this.handleUsernameCancel.bind(this);
@@ -149,23 +131,31 @@ class Profile extends Component {
   }
   handlePasswordChange(e) {
     e.preventDefault();
-
+    var errorMes;
     if (this.state.passwordEditable) {
       if (
         typeof this.state.passwordTemp !== "undefined" &&
         this.state.passwordTemp !== ""
       ) {
-        this.state.user
-          .updatePassword(this.state.passwordTemp)
-          .then(function () {
-            console.log("Password update success");
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        if (this.state.passwordTemp === this.state.confirmPassTemp) {
+          this.state.user
+            .updatePassword(this.state.passwordTemp)
+            .then(function () {
+              console.log("Password update success");
+            })
+            .catch(function (error) {
+              errorMes = error;
+              console.log(error);
+            });
+        } else {
+          console.log("Both fields aren't equal.");
+        }
+      } else {
+        console.log("Password cannot be empty");
       }
     }
     this.setState({
+      error: errorMes,
       passwordTemp: "",
       passwordEditable: !this.state.passwordEditable,
     });
@@ -198,9 +188,18 @@ class Profile extends Component {
   }
 
   render() {
-    var usernameTextRender, emailTextRender, passwordTextRender, crossRender;
+    var usernameTextRender,
+      emailTextRender,
+      passwordTextRender,
+      crossRender,
+      errorText,
+      confirmPassword,
+      passwordConfirmTextbox;
 
     crossRender = <FontAwesomeIcon icon={faTimes} aria-hidden="true" />;
+    errorText = <TextField text={this.state.error} />;
+    confirmPassword = "CONFIRM PASSWORD";
+
     //username
     if (this.state.usernameEditable) {
       usernameTextRender = (
@@ -259,17 +258,48 @@ class Profile extends Component {
               height: 35,
               borderColor: "gray",
               borderWidth: 1,
+              marginBottom: 5,
+              marginTop: 5,
             }}
             onChange={(event) => this.handleChange(event, "passwordTemp")}
           />
         </div>
       );
+      passwordConfirmTextbox = (
+        <div>
+          <TextInput
+            style={{
+              fontSize: 16,
+              height: 35,
+              borderColor: "gray",
+              borderWidth: 1,
+              marginBottom: 5,
+              marginTop: 5,
+            }}
+            onChange={(event) => this.handleChange(event, "confirmPassTemp")}
+          />
+        </div>
+      );
+      confirmPassword = (
+        <h3>
+          PASSWORD <br />
+          CONFIRM PASSWORD
+        </h3>
+      );
     } else {
       passwordTextRender = (
         <div>
-          <TextField text="************" />
+          <TextField
+            style={{
+              marginBottom: 5,
+              marginTop: 5,
+            }}
+            text="************"
+          />
         </div>
       );
+      passwordConfirmTextbox = "";
+      confirmPassword = <h3>PASSWORD</h3>;
     }
 
     return (
@@ -374,9 +404,12 @@ class Profile extends Component {
               </div>
             </div>
             <div className="info" style={{ borderBottom: "none" }}>
-              <h3>PASSWORD</h3>
-              <div className="content" type="password">
-                {passwordTextRender}
+              {confirmPassword}
+              <div className="content">
+                <div className="content" type="password">
+                  {passwordTextRender}
+                  {passwordConfirmTextbox}
+                </div>
               </div>
               <div onClick={this.handlePasswordCancel}>
                 <b>{this.state.passwordEditable ? crossRender : ""}</b>
@@ -403,6 +436,8 @@ class Profile extends Component {
                 </svg>
               </div>
             </div>
+
+            <div>{errorText}</div>
           </div>
         </div>
       </div>
