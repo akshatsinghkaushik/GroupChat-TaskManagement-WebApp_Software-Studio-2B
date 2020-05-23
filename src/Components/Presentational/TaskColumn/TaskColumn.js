@@ -5,10 +5,14 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { deleteTaskColumn, createTask } from "../../../helpers/db";
 import { db } from "../../../services/firebase";
+import TaskDetails from "../TaskDetails/TaskDetails";
+import Modal from "../Modal/Modal";
 
 const TaskColumn = ({ column, user }) => {
   const [tasks, setTasks] = React.useState([]);
   const [newTask, setNewTask] = React.useState("");
+  const [selectedTask, setSelectedTask] = React.useState(null);
+
   useEffect(() => {
     try {
       const tasks = db.ref(`tasks/${column.id}`);
@@ -60,6 +64,10 @@ const TaskColumn = ({ column, user }) => {
     setNewTask(e.target.value);
   };
 
+  const handleCloseModal = () => {
+    setSelectedTask(null);
+  };
+
   return (
     <div className="task-column-container">
       <div className="task-column-lockup">
@@ -77,7 +85,7 @@ const TaskColumn = ({ column, user }) => {
           <ul>
             {tasks.map((task) => {
               return (
-                <li key={task.id}>
+                <li key={task.id} onClick={(e) => setSelectedTask(task)}>
                   <Card variant="outlined">
                     <CardContent>
                       <Typography color="textPrimary" gutterBottom>
@@ -101,6 +109,11 @@ const TaskColumn = ({ column, user }) => {
           </form>
         </div>
       </div>
+      {!!selectedTask && (
+        <Modal closeModal={handleCloseModal}>
+          <TaskDetails taskDetails={selectedTask} close={handleCloseModal} />
+        </Modal>
+      )}
     </div>
   );
 };

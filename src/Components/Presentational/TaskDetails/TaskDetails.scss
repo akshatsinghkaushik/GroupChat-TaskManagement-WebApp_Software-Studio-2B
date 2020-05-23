@@ -1,0 +1,30 @@
+.task-details-lockup {
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  h2 {
+    margin: 0.5em 0;
+  }
+
+  .header {
+    position: relative;
+    background-color: rgba(77, 40, 40, 0.2);
+    button {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+  }
+  .grid-lockup {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 80% 20%;
+    .main-col {
+      background-color: rgba(0, 250, 0, 0.2);
+    }
+    .sidebar {
+      background-color: rgba(0, 0, 255, 0.2);
+    }
+  }
+}
