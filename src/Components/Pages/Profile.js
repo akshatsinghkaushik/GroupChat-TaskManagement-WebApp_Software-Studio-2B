@@ -38,16 +38,18 @@ class Profile extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  writeUserData(userId, name, email) {
-    db.ref("users/" + userId)
-      .set({
+  async writeUserData(userId, name, email) {
+    try {
+      await db.ref("users/" + userId).set({
         email: email,
         name: name,
-      })
-      .then(function () {
-        console.log("Data successfully written to db");
       });
-    this.refreshUserDetails();
+      this.refreshUserDetails();
+      return true;
+    } catch (error) {
+      this.refreshUserDetails();
+      return false;
+    }
   }
 
   //Username Callback
@@ -58,19 +60,38 @@ class Profile extends Component {
       usernameEditable: !this.state.usernameEditable,
     });
   }
-  handleUsernameChange(e) {
+  async handleUsernameChange(e) {
     e.preventDefault();
     if (this.state.usernameEditable) {
       if (
         typeof this.state.usernameTemp !== "undefined" &&
         this.state.emailTemp !== ""
       ) {
-        this.writeUserData(
-          this.state.user.uid,
-          this.state.usernameTemp,
-          this.state.email
-        );
+        try {
+          var success = await this.writeUserData(
+            this.state.user.uid,
+            this.state.usernameTemp,
+            this.state.email
+          );
+
+          if (success) {
+            this.setState({
+              error: "Successfully changed Username",
+            });
+          } else {
+            throw new Error("Could not set Username, try again later.");
+          }
+        } catch (error) {
+          console.log(error);
+          this.setState({
+            error: error,
+          });
+        }
         this.setState({ usernameTemp: "" });
+      } else {
+        this.setState({
+          error: "Username cannot be empty.",
+        });
       }
     }
     this.setState({
@@ -86,32 +107,38 @@ class Profile extends Component {
       emailEditable: !this.state.emailEditable,
     });
   }
-  handleEmailChange(e) {
+  async handleEmailChange(e) {
     e.preventDefault();
     if (this.state.emailEditable) {
       if (
         typeof this.state.emailTemp !== "undefined" &&
         this.state.emailTemp !== ""
       ) {
-        var self = this;
-        var emailTemporary = this.state.emailTemp;
-        this.state.user
-          .updateEmail(this.state.emailTemp)
-          .then(function () {
-            self.writeUserData(
-              self.state.user.uid,
-              self.state.username,
-              emailTemporary
-            );
-            console.log("Email changed successfully");
-          })
-          .catch(function (error) {
-            console.log(error);
+        try {
+          await this.state.user.updateEmail(this.state.emailTemp);
+          this.writeUserData(
+            this.state.user.uid,
+            this.state.username,
+            this.state.emailTemp
+          );
+          this.setState({
+            error: "Successfully changed Email.",
           });
+        } catch (error) {
+          this.setState({
+            error: error.message + " Email was not changed.",
+          });
+          console.log(error);
+        }
 
         this.setState({ emailTemp: "" });
+      } else {
+        this.setState({
+          error: "Email cannot be empty.",
+        });
       }
     }
+
     this.setState({
       emailEditable: !this.state.emailEditable,
     });
@@ -129,33 +156,41 @@ class Profile extends Component {
       passwordEditable: !this.state.passwordEditable,
     });
   }
-  handlePasswordChange(e) {
+  async handlePasswordChange(e) {
     e.preventDefault();
-    var errorMes;
+
     if (this.state.passwordEditable) {
       if (
         typeof this.state.passwordTemp !== "undefined" &&
         this.state.passwordTemp !== ""
       ) {
         if (this.state.passwordTemp === this.state.confirmPassTemp) {
-          this.state.user
-            .updatePassword(this.state.passwordTemp)
-            .then(function () {
-              console.log("Password update success");
-            })
-            .catch(function (error) {
-              errorMes = error;
-              console.log(error);
+          try {
+            await this.state.user.updatePassword(this.state.passwordTemp);
+            this.setState({
+              error: "Successfully changed Password.",
             });
+          } catch (error) {
+            console.log(error);
+            var errorMessage = error.message + ". Password was not changed.";
+            this.setState({
+              error: errorMessage,
+            });
+          }
         } else {
+          this.setState({
+            error: "Password and Confirmation fields aren't equal.",
+          });
           console.log("Both fields aren't equal.");
         }
       } else {
+        this.setState({
+          error: "Password cannot be empty",
+        });
         console.log("Password cannot be empty");
       }
     }
     this.setState({
-      error: errorMes,
       passwordTemp: "",
       passwordEditable: !this.state.passwordEditable,
     });
@@ -436,9 +471,8 @@ class Profile extends Component {
                 </svg>
               </div>
             </div>
-
-            <div>{errorText}</div>
           </div>
+          <div>{errorText}</div>
         </div>
       </div>
     );
