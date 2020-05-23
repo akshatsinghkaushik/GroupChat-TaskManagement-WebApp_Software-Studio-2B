@@ -67,11 +67,16 @@ class Chat extends Component {
           }
         });
         this.setState({ groups: groups_temp });
-        this.setState({
-          selectedGroupID: this.state.groups.keys().next().value,
-        });
+        if (this.state.selectedGroupID === "") {
+          this.setState({
+            selectedGroupID: this.state.groups.keys().next().value,
+            selectedGroupName: this.state.groups.get(
+              this.state.groups.keys().next().value
+            ).name,
+          });
+        }
 
-        db.ref(`groups/${this.state.selectedGroupID}/chats`).on(
+        db.ref(`groups/${this.state.selectedGroupID}/chats`).once(
           "value",
           (snapshot) => {
             let chats = [];
@@ -86,7 +91,7 @@ class Chat extends Component {
             this.setState({ chats });
           }
         );
-        db.ref(`groups/${this.state.selectedGroupID}/chats`).off("value");
+        //db.ref(`groups/${this.state.selectedGroupID}/chats`).off("value");
         this.setState({ loadingChats: false });
       });
     } catch (error) {
@@ -132,7 +137,7 @@ class Chat extends Component {
         selectedGroupName: this.state.groups.get(event.currentTarget.id).name,
       });
 
-      db.ref(`groups/${event.currentTarget.id}/chats`).on(
+      db.ref(`groups/${event.currentTarget.id}/chats`).once(
         "value",
         (snapshot) => {
           let chats = [];
@@ -147,7 +152,7 @@ class Chat extends Component {
           this.setState({ chats });
         }
       );
-      db.ref(`groups/${this.state.selectedGroupID}/chats`).off("value");
+      //db.ref(`groups/${this.state.selectedGroupID}/chats`).off("value");
     }
   };
 
