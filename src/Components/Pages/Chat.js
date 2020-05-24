@@ -16,6 +16,7 @@ class Chat extends Component {
     this.state = {
       user: auth().currentUser,
       chats: [],
+      usrGroups: new Map(),
       groups: new Map(),
       selectedGroupID: "",
       selectedGroupName: "",
@@ -53,6 +54,7 @@ class Chat extends Component {
         snapshot.forEach((snap) => {
           groups_list.set(snap.key, snap.val());
         });
+        this.setState({ usrGroups: groups_list });
       });
     } catch (error) {
       this.setState({ readError: error.message });
@@ -62,7 +64,7 @@ class Chat extends Component {
       db.ref(`groups`).on("value", (snapshot) => {
         let groups_temp = new Map();
         snapshot.forEach((snap) => {
-          if (groups_list.has(snap.key)) {
+          if (this.state.usrGroups.has(snap.key)) {
             groups_temp.set(snap.key, snap.val());
           }
         });
