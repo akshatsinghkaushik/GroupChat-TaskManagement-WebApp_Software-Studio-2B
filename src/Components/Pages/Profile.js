@@ -137,7 +137,10 @@ class Profile extends Component {
           .getDownloadURL()
           .then((url) => {
             console.log(url);
-            this.setState({ url });
+            this.setState({
+              url,
+              error: "The profile image was uploaded successfully.",
+            });
           });
       }
     );
