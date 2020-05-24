@@ -138,10 +138,13 @@ class Profile extends Component {
           .then((url) => {
             console.log(url);
             this.setState({
-              url,
+              url: url,
               error: "The profile image was uploaded successfully.",
             });
           });
+        db.ref(`users/${this.state.user.uid}`).update({
+          profilePic: this.state.url,
+        });
       }
     );
   };
