@@ -68,10 +68,10 @@ const TaskDetails = ({ columnId, taskDetails, close }) => {
         <div className="main-col">
           <div className="task-detail"></div>
           <TaskDescription columnId={columnId} taskDetails={taskDetails} />
-          <TaskActivity />
+          <TaskActivity columnId={columnId} taskDetails={taskDetails} />
         </div>
         <div className="sidebar">
-          <p>This is the sidebar</p>
+          <Typography>This is the sidebar</Typography>
         </div>
       </div>
     </div>

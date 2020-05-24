@@ -53,3 +53,15 @@ export function createTask(columnId, task) {
 export function updateTask(columnId, taskId, updatedFields) {
   return db.ref(`tasks/${columnId}/${taskId}`).update(updatedFields);
 }
+
+export function createComment(taskId, comment) {
+  return db.ref(`taskComments/${taskId}`).push(comment);
+}
+
+export function deleteComment(taskId, commentId) {
+  return db.ref(`taskComments/${taskId}/${commentId}`).remove();
+}
+
+export async function getUserById(userId) {
+  return db.ref(`users/${userId}`).once("value");
+}

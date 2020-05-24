@@ -51,13 +51,11 @@ const TaskDescription = ({ columnId, taskDetails }) => {
       {isEditing ? (
         <div className="editing-lockup">
           <textarea
-            id="standard-multiline-static"
             label="Description"
             value={newDescription}
             onChange={handleChangeDescription}
             placeholder="Add a more detailed description"
             rows={5}
-            variant="outlined"
           />
           <div className="button-lockup">
             <Button onClick={submitNewDescription}>Save</Button>
