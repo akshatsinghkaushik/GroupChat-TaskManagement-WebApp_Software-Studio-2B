@@ -303,6 +303,7 @@ class Profile extends Component {
               height: 35,
               borderColor: "gray",
               borderWidth: 1,
+              width: "95%",
             }}
             defaultValue={this.state.username}
             onChange={(event) => this.handleChange(event, "usernameTemp")}
@@ -327,6 +328,7 @@ class Profile extends Component {
               height: 35,
               borderColor: "gray",
               borderWidth: 1,
+              width: "95%",
             }}
             defaultValue={this.state.email}
             onChange={(event) => this.handleChange(event, "emailTemp")}
@@ -353,6 +355,7 @@ class Profile extends Component {
               borderWidth: 1,
               marginBottom: 5,
               marginTop: 5,
+              width: "95%",
             }}
             onChange={(event) => this.handleChange(event, "passwordTemp")}
           />
@@ -368,6 +371,7 @@ class Profile extends Component {
               borderWidth: 1,
               marginBottom: 5,
               marginTop: 5,
+              width: "95%",
             }}
             onChange={(event) => this.handleChange(event, "confirmPassTemp")}
           />
