@@ -8,7 +8,7 @@ import { db } from "../../../services/firebase";
 import TaskDetails from "../TaskDetails/TaskDetails";
 import Modal from "../Modal/Modal";
 
-const TaskColumn = ({ column, user }) => {
+const TaskColumn = ({ boardId, column, user }) => {
   const [tasks, setTasks] = React.useState(new Map());
   const [newTask, setNewTask] = React.useState("");
   const [selectedTaskId, setSelectedTaskId] = React.useState("");
@@ -36,7 +36,7 @@ const TaskColumn = ({ column, user }) => {
 
   const handleDeleteColumn = async () => {
     try {
-      await deleteTaskColumn(column.id);
+      await deleteTaskColumn(boardId, column.id);
     } catch (err) {
       alert(`An error occurred when deleting column ${err.message}`); // TODO: Dont use alerts for error messages..
     }

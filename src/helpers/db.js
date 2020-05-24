@@ -18,21 +18,30 @@ export function writeChats(message) {
   });
 }
 
+export async function createTaskboard(userId) {
+  return db.ref("taskboards").push({
+    name: "New Taskboard",
+    description: "This is a new taskboard",
+    createdBy: userId,
+    createdTimestamp: Date.now(),
+  });
+}
+
 /**
  * Create a new column in the database.
  * The return value is void in all cases.
+ * @param {string} columnsKey - The unique key that all columns are created under
  * @param {string} name - The name of the column
  */
-// TODO: This will also need to push into groups.<group-id>.taskboards when that exists
-export function createTaskColumn(name) {
-  return db.ref("columns").push({
+export function createTaskColumn(boardId, name) {
+  return db.ref(`columns/${boardId}`).push({
     name,
     createdTimestamp: Date.now(),
   });
 }
 
-export function deleteTaskColumn(id) {
-  return db.ref(`columns/${id}`).update({
+export function deleteTaskColumn(boardId, id) {
+  return db.ref(`columns/${boardId}/${id}`).update({
     deletedTimestamp: Date.now(),
   });
 }
