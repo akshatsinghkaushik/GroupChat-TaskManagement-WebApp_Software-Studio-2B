@@ -45,6 +45,7 @@ class Chat extends Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.refreshGroups = this.refreshGroups.bind(this);
     //this.myRef = React.createRef();
   }
 
@@ -73,43 +74,43 @@ class Chat extends Component {
         });
         this.setState({ usrGroups: groups_list });
       });
-    } catch (error) {
-      this.setState({ readError: error.message });
-    }
 
-    try {
-      db.ref(`groups`).on("value", (snapshot) => {
-        let groups_temp = new Map();
-        snapshot.forEach((snap) => {
-          if (this.state.usrGroups.has(snap.key)) {
-            groups_temp.set(snap.key, snap.val());
-          }
-        });
-        this.setState({ groups: groups_temp });
-        if (this.state.selectedGroupID === "") {
-          this.setState({
-            selectedGroupID: this.state.groups.keys().next().value,
+      try {
+        db.ref(`groups`).once("value", (snapshot) => {
+          let groups_temp = new Map();
+          snapshot.forEach((snap) => {
+            if (this.state.usrGroups.has(snap.key)) {
+              groups_temp.set(snap.key, snap.val());
+            }
           });
-        }
-
-        db.ref(`groups/${this.state.selectedGroupID}/chats`).once(
-          "value",
-          (snapshot) => {
-            let chats = [];
-            snapshot.forEach((snap) => {
-              chats.push(snap.val());
+          this.setState({ groups: groups_temp });
+          if (this.state.selectedGroupID === "") {
+            this.setState({
+              selectedGroupID: this.state.groups.keys().next().value,
             });
-
-            chats.sort(function (a, b) {
-              return a.timestamp - b.timestamp;
-            });
-
-            this.setState({ chats });
           }
-        );
-        //db.ref(`groups/${this.state.selectedGroupID}/chats`).off("value");
-        this.setState({ loadingChats: false });
-      });
+
+          db.ref(`groups/${this.state.selectedGroupID}/chats`).once(
+            "value",
+            (snapshot) => {
+              let chats = [];
+              snapshot.forEach((snap) => {
+                chats.push(snap.val());
+              });
+
+              chats.sort(function (a, b) {
+                return a.timestamp - b.timestamp;
+              });
+
+              this.setState({ chats });
+            }
+          );
+          //db.ref(`groups/${this.state.selectedGroupID}/chats`).off("value");
+          this.setState({ loadingChats: false });
+        });
+      } catch (error) {
+        this.setState({ readError: error.message });
+      }
     } catch (error) {
       this.setState({ readError: error.message });
     }
@@ -147,7 +148,46 @@ class Chat extends Component {
     db.ref("users").off("value");
     db.ref("chats").off("value");
     db.ref(`users/${this.state.user.uid}/groups`).off("value");
-    db.ref(`groups`).off("value");
+    //db.ref(`groups`).off("value");
+  }
+
+  refreshGroups() {
+    try {
+      db.ref(`groups`).once("value", (snapshot) => {
+        let groups_temp = new Map();
+        snapshot.forEach((snap) => {
+          if (this.state.usrGroups.has(snap.key)) {
+            groups_temp.set(snap.key, snap.val());
+          }
+        });
+        this.setState({ groups: groups_temp });
+        if (this.state.selectedGroupID === "") {
+          this.setState({
+            selectedGroupID: this.state.groups.keys().next().value,
+          });
+        }
+
+        db.ref(`groups/${this.state.selectedGroupID}/chats`).once(
+          "value",
+          (snapshot) => {
+            let chats = [];
+            snapshot.forEach((snap) => {
+              chats.push(snap.val());
+            });
+
+            chats.sort(function (a, b) {
+              return a.timestamp - b.timestamp;
+            });
+
+            this.setState({ chats });
+          }
+        );
+        //db.ref(`groups/${this.state.selectedGroupID}/chats`).off("value");
+        this.setState({ loadingChats: false });
+      });
+    } catch (error) {
+      this.setState({ readError: error.message });
+    }
   }
 
   handleChange(event) {
@@ -163,7 +203,7 @@ class Chat extends Component {
         selectedGroupName: this.state.groups.get(event.target.id).name,
       });
 
-      db.ref(`groups/${event.target.id}/chats`).on("value", (snapshot) => {
+      db.ref(`groups/${event.target.id}/chats`).once("value", (snapshot) => {
         let chats = [];
         snapshot.forEach((snap) => {
           chats.push(snap.val());
@@ -175,7 +215,6 @@ class Chat extends Component {
 
         this.setState({ chats });
       });
-      db.ref(`groups/${this.state.selectedGroupID}/chats`).off("value");
     } else {
       this.setState({
         selectedGroupID: event.currentTarget.id,
@@ -272,7 +311,10 @@ class Chat extends Component {
                   </div>
                 </div>
               </div>
-              <div className="inbox_chat">
+              <div
+                className="inbox_chat"
+                style={{ overflowY: "auto", paddingBottom: "10%" }}
+              >
                 {Array.from(this.state.groups.values()).map((result, index) => {
                   return (
                     <div
@@ -315,6 +357,7 @@ class Chat extends Component {
                   className="fab"
                   users={this.state.users}
                   groups={this.state.groups}
+                  refreshGroups={this.refreshGroups}
                 />
               </div>
             </div>

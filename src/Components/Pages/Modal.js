@@ -252,6 +252,8 @@ export default function AnimatedModal(props) {
           }
         }
 
+        props.refreshGroups();
+
         setSavingGroup(false);
         setOpen(false);
         setParticipants([]);
