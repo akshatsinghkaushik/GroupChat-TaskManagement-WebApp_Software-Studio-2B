@@ -74,42 +74,42 @@ class Chat extends Component {
         });
         this.setState({ usrGroups: groupsList });
       });
+    } catch (error) {
+      this.setState({ readError: error.message });
+    }
 
-      try {
-        db.ref(`groups`).once("value", (snapshot) => {
-          const groupsTemp = new Map();
-          snapshot.forEach((snap) => {
-            if (this.state.usrGroups.has(snap.key)) {
-              groupsTemp.set(snap.key, snap.val());
-            }
-          });
-          this.setState({ groups: groupsTemp });
-          if (!this.state.selectedGroupID) {
-            this.setState({
-              selectedGroupID: this.state.groups.keys().next().value,
-            });
+    try {
+      db.ref(`groups`).on("value", (snapshot) => {
+        const groupsTemp = new Map();
+        snapshot.forEach((snap) => {
+          if (this.state.usrGroups.has(snap.key)) {
+            groupsTemp.set(snap.key, snap.val());
           }
-
-          db.ref(`groups/${this.state.selectedGroupID}/chats`).once(
-            "value",
-            (snapshot) => {
-              const chats = [];
-              snapshot.forEach((snap) => {
-                chats.push(snap.val());
-              });
-
-              chats.sort((a, b) => {
-                return a.timestamp - b.timestamp;
-              });
-
-              this.setState({ chats });
-            }
-          );
-          this.setState({ loadingChats: false });
         });
-      } catch (error) {
-        this.setState({ readError: error.message });
-      }
+        this.setState({ groups: groupsTemp });
+        if (!this.state.selectedGroupID) {
+          this.setState({
+            selectedGroupID: this.state.groups.keys().next().value,
+          });
+        }
+
+        db.ref(`groups/${this.state.selectedGroupID}/chats`).once(
+          "value",
+          (snapshot) => {
+            const chats = [];
+            snapshot.forEach((snap) => {
+              chats.push(snap.val());
+            });
+
+            chats.sort((a, b) => {
+              return a.timestamp - b.timestamp;
+            });
+
+            this.setState({ chats });
+          }
+        );
+        this.setState({ loadingChats: false });
+      });
     } catch (error) {
       this.setState({ readError: error.message });
     }
@@ -147,6 +147,7 @@ class Chat extends Component {
     db.ref("users").off("value");
     db.ref("chats").off("value");
     db.ref(`users/${this.state.user.uid}/groups`).off("value");
+    db.ref(`groups`).off("value");
   }
 
   refreshGroups() {
