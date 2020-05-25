@@ -1,14 +1,30 @@
 import React, { Component } from "react";
 import { db } from "../../services/firebase";
+import { createTaskboard } from "../../helpers/db";
 import { auth } from "../../services/firebase";
+import {
+  FormControl,
+  Select,
+  MenuItem,
+  withStyles,
+  Typography,
+} from "@material-ui/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPaperPlane,
   faSearch,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
+import { Link, withRouter } from "react-router-dom";
 import AnimatedModal from "./Modal";
 import "./Chat.scss";
+
+const useStyles = (theme) => ({
+  taskboardList: {
+    width: "11em",
+    marginLeft: "1em",
+  },
+});
 
 class Chat extends Component {
   constructor(props) {
@@ -17,6 +33,7 @@ class Chat extends Component {
       user: auth().currentUser,
       chats: [],
       usrGroups: new Map(),
+      boards: [],
       groups: new Map(),
       selectedGroupID: "",
       selectedGroupName: "",
@@ -96,12 +113,28 @@ class Chat extends Component {
     } catch (error) {
       this.setState({ readError: error.message });
     }
+    try {
+      db.ref("taskboards").on("value", (snapshot) => {
+        const boards = [];
+        snapshot.forEach((board) => {
+          const boardVal = board.val();
+          boards.push({
+            id: board.key,
+            ...boardVal,
+          });
+        });
+        this.setState({ boards });
+      });
+    } catch (error) {
+      this.setState({ readError: error.message });
+    }
   }
   async componentWillUnmount() {
     db.ref("users").off("value");
     db.ref("chats").off("value");
     db.ref(`users/${this.state.user.uid}/groups`).off("value");
     db.ref(`groups`).off("value");
+    db.ref("taskboards").off("value");
   }
 
   handleChange(event) {
@@ -151,7 +184,16 @@ class Chat extends Component {
           this.setState({ chats });
         }
       );
-      //db.ref(`groups/${this.state.selectedGroupID}/chats`).off("value");
+    }
+  };
+
+  handleCreateTaskboard = async () => {
+    try {
+      const taskboardResult = await createTaskboard(this.state.user.uid);
+      let boardId = taskboardResult.getKey();
+      this.props.history.push(`/taskboard?id=${boardId}`);
+    } catch (err) {
+      console.error(`An error occurred when creating a new taskboard`, err);
     }
   };
 
@@ -181,6 +223,7 @@ class Chat extends Component {
   }
 
   render() {
+    const { classes } = this.props;
     return (
       <div id="chat" className="">
         <div className="messaging">
@@ -263,14 +306,39 @@ class Chat extends Component {
                 <div className="msg-top">
                   {/* Logged in as:{" "}
                   <strong className="text-info">{this.state.user.email}</strong> */}
+
                   <div className="group_header">
                     <strong className="text-info">
                       {this.state.selectedGroupName
                         ? this.state.selectedGroupName
                         : "Group Name"}
                     </strong>
+                    <FormControl className={classes.taskboardList}>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value=""
+                        displayEmpty
+                      >
+                        <MenuItem value="" disabled>
+                          Select a taskboard
+                        </MenuItem>
+                        {this.state.boards.map((board) => {
+                          return (
+                            <MenuItem key={board.id} value={board.id}>
+                              <Link to={`/taskboard?id=${board.id}`}>
+                                {board.name}
+                              </Link>
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    </FormControl>
                   </div>
                   <div className="create_subgroup_btn">
+                    <button type="button" onClick={this.handleCreateTaskboard}>
+                      <Typography>Create new taskboard</Typography>
+                    </button>
                     <button type="button">
                       {" "}
                       <FontAwesomeIcon icon={faPlus} />{" "}
@@ -378,4 +446,4 @@ class Chat extends Component {
   }
 }
 
-export default Chat;
+export default withRouter(withStyles(useStyles)(Chat));

@@ -1,0 +1,15 @@
+.new-task-comment-lockup {
+  textarea {
+    display: inline-block;
+    width: 100%;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    padding: 0.5em;
+    resize: none;
+  }
+  button {
+    background-color: #5aac44;
+    color: white;
+    display: block;
+  }
+}
