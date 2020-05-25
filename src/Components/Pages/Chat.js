@@ -55,7 +55,7 @@ class Chat extends Component {
 
     try {
       db.ref("users").on("value", (snapshot) => {
-        let users = new Map();
+        const users = new Map();
         snapshot.forEach((snap) => {
           users.set(snap.key, snap.val());
         });
@@ -66,25 +66,25 @@ class Chat extends Component {
       this.setState({ readError: error.message });
     }
 
-    let groups_list = new Map();
+    const groupsList = new Map();
     try {
       db.ref(`users/${this.state.user.uid}/groups`).on("value", (snapshot) => {
         snapshot.forEach((snap) => {
-          groups_list.set(snap.key, snap.val());
+          groupsList.set(snap.key, snap.val());
         });
-        this.setState({ usrGroups: groups_list });
+        this.setState({ usrGroups: groupsList });
       });
 
       try {
         db.ref(`groups`).once("value", (snapshot) => {
-          let groups_temp = new Map();
+          const groupsTemp = new Map();
           snapshot.forEach((snap) => {
             if (this.state.usrGroups.has(snap.key)) {
-              groups_temp.set(snap.key, snap.val());
+              groupsTemp.set(snap.key, snap.val());
             }
           });
-          this.setState({ groups: groups_temp });
-          if (this.state.selectedGroupID === "") {
+          this.setState({ groups: groupsTemp });
+          if (!this.state.selectedGroupID) {
             this.setState({
               selectedGroupID: this.state.groups.keys().next().value,
             });
@@ -93,19 +93,18 @@ class Chat extends Component {
           db.ref(`groups/${this.state.selectedGroupID}/chats`).once(
             "value",
             (snapshot) => {
-              let chats = [];
+              const chats = [];
               snapshot.forEach((snap) => {
                 chats.push(snap.val());
               });
 
-              chats.sort(function (a, b) {
+              chats.sort((a, b) => {
                 return a.timestamp - b.timestamp;
               });
 
               this.setState({ chats });
             }
           );
-          //db.ref(`groups/${this.state.selectedGroupID}/chats`).off("value");
           this.setState({ loadingChats: false });
         });
       } catch (error) {
@@ -148,20 +147,19 @@ class Chat extends Component {
     db.ref("users").off("value");
     db.ref("chats").off("value");
     db.ref(`users/${this.state.user.uid}/groups`).off("value");
-    //db.ref(`groups`).off("value");
   }
 
   refreshGroups() {
     try {
       db.ref(`groups`).once("value", (snapshot) => {
-        let groups_temp = new Map();
+        const groupsTemp = new Map();
         snapshot.forEach((snap) => {
           if (this.state.usrGroups.has(snap.key)) {
-            groups_temp.set(snap.key, snap.val());
+            groupsTemp.set(snap.key, snap.val());
           }
         });
-        this.setState({ groups: groups_temp });
-        if (this.state.selectedGroupID === "") {
+        this.setState({ groups: groupsTemp });
+        if (!this.state.selectedGroupID) {
           this.setState({
             selectedGroupID: this.state.groups.keys().next().value,
           });
@@ -170,19 +168,18 @@ class Chat extends Component {
         db.ref(`groups/${this.state.selectedGroupID}/chats`).once(
           "value",
           (snapshot) => {
-            let chats = [];
+            const chats = [];
             snapshot.forEach((snap) => {
               chats.push(snap.val());
             });
 
-            chats.sort(function (a, b) {
+            chats.sort((a, b) => {
               return a.timestamp - b.timestamp;
             });
 
             this.setState({ chats });
           }
         );
-        //db.ref(`groups/${this.state.selectedGroupID}/chats`).off("value");
         this.setState({ loadingChats: false });
       });
     } catch (error) {
@@ -197,19 +194,19 @@ class Chat extends Component {
   }
 
   handleSelectGroup = (event) => {
-    if (event.target.id !== "") {
+    if (event.target.id) {
       this.setState({
         selectedGroupID: event.target.id,
         selectedGroupName: this.state.groups.get(event.target.id).name,
       });
 
       db.ref(`groups/${event.target.id}/chats`).once("value", (snapshot) => {
-        let chats = [];
+        const chats = [];
         snapshot.forEach((snap) => {
           chats.push(snap.val());
         });
 
-        chats.sort(function (a, b) {
+        chats.sort((a, b) => {
           return a.timestamp - b.timestamp;
         });
 
@@ -318,7 +315,7 @@ class Chat extends Component {
                 {Array.from(this.state.groups.values()).map((result, index) => {
                   return (
                     <div
-                      key={index}
+                      key={result.id}
                       id={result.id}
                       className={
                         result.id === this.state.selectedGroupID
@@ -372,9 +369,7 @@ class Chat extends Component {
 
                   <div className="group_header">
                     <strong className="text-info">
-                      {this.state.selectedGroupName
-                        ? this.state.selectedGroupName
-                        : "Group Name"}
+                      {this.state.selectedGroupName || "Group Name"}
                     </strong>
                     <FormControl className={classes.taskboardList}>
                       <Select
