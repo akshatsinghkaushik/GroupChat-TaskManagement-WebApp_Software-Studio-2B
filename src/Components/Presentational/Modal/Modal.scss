@@ -1,0 +1,34 @@
+#modal-container {
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.65);
+  pointer-events: none;
+}
+
+.modalContent {
+  background-color: #f4f5f7;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin-top: 5vh;
+  z-index: 10000;
+  overflow: auto;
+  padding: 1em;
+  margin: auto;
+  width: 768px; // See what this is in em or something...
+  height: 85%;
+  box-shadow: 0 5px 10px 2px;
+  pointer-events: auto;
+  border-radius: 5px;
+}
