@@ -18,13 +18,14 @@ export function writeChats(message) {
   });
 }
 
-export async function createTaskboard(userId) {
-  return db.ref("taskboards").push({
+export async function createTaskboard(userId, groupId) {
+  const taskboard = await db.ref(`taskboards/${groupId}`).push({
     name: "New Taskboard",
     description: "This is a new taskboard",
     createdBy: userId,
     createdTimestamp: Date.now(),
   });
+  return taskboard.getKey();
 }
 
 /**

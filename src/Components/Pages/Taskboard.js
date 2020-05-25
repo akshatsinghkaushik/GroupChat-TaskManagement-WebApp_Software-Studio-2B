@@ -36,8 +36,11 @@ const Taskboard = () => {
   useEffect(() => {
     const boardId = readUrlQueryParam("id");
     const getTaskboardData = async () => {
+      const groupId = localStorage.getItem("groupId");
       try {
-        const result = await db.ref(`/taskboards/${boardId}`).once("value");
+        const result = await db
+          .ref(`/taskboards/${groupId}/${boardId}`)
+          .once("value");
         if (!result.val()) {
           throw new Error("Taskboard does not exist");
         }

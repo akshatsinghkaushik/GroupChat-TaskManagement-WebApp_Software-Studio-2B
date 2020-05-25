@@ -44,6 +44,7 @@ const TaskColumn = ({ boardId, column, user }) => {
 
   const handleCreateTask = async (e) => {
     e.preventDefault();
+    if (!newTask) return; // Dont want to add tasks with empty names
     const task = {
       name: newTask,
       description: "",
