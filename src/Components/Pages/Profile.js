@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import "./Profile.scss";
+import TextField from "@material-ui/core/TextField";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { TextInput } from "react-native";
 
 import { db } from "../../services/firebase";
 import { auth } from "../../services/firebase";
 import { faTimes } from "@fortawesome/free-solid-svg-icons/faTimes";
 import { storage } from "../../services/firebase";
 
-class TextField extends Component {
+class Text extends Component {
   render() {
     var text = this.props.text || "";
     return <div>{text}</div>;
@@ -193,11 +193,6 @@ class Profile extends Component {
     });
   }
 
-  handleProfileChange(e) {
-    e.preventDefault();
-    console.log("The profile was clicked.");
-  }
-
   //Password Callback
   handlePasswordCancel(e) {
     e.preventDefault();
@@ -247,7 +242,7 @@ class Profile extends Component {
 
   //Store the value in a temp variable when textInput changes
   handleChange(evt, name) {
-    const { text } = evt.nativeEvent;
+    const text = evt.target.value;
     this.setState(() => ({ [name]: text }));
   }
   handlePhotoStateChange(e) {
@@ -296,14 +291,14 @@ class Profile extends Component {
       photo,
       photoRender;
     crossRender = <FontAwesomeIcon icon={faTimes} aria-hidden="true" />;
-    errorText = <TextField text={this.state.error} />;
+    errorText = <Text text={this.state.error} />;
     confirmPassword = "CONFIRM PASSWORD";
 
     //username
     if (this.state.usernameEditable) {
       usernameTextRender = (
         <div>
-          <TextInput
+          <TextField
             style={{
               fontSize: 16,
               height: 35,
@@ -319,7 +314,7 @@ class Profile extends Component {
     } else {
       usernameTextRender = (
         <div>
-          <TextField text={this.state.username} />
+          <Text text={this.state.username} />
         </div>
       );
     }
@@ -328,7 +323,7 @@ class Profile extends Component {
     if (this.state.emailEditable) {
       emailTextRender = (
         <div>
-          <TextInput
+          <TextField
             style={{
               fontSize: 16,
               height: 35,
@@ -344,7 +339,7 @@ class Profile extends Component {
     } else {
       emailTextRender = (
         <div>
-          <TextField text={this.state.email} />
+          <Text text={this.state.email} />
         </div>
       );
     }
@@ -353,7 +348,7 @@ class Profile extends Component {
     if (this.state.passwordEditable) {
       passwordTextRender = (
         <div>
-          <TextInput
+          <TextField
             style={{
               fontSize: 16,
               height: 35,
@@ -363,13 +358,14 @@ class Profile extends Component {
               marginTop: 5,
               width: "95%",
             }}
+            type="password"
             onChange={(event) => this.handleChange(event, "passwordTemp")}
           />
         </div>
       );
       passwordConfirmTextbox = (
         <div>
-          <TextInput
+          <TextField
             style={{
               fontSize: 16,
               height: 35,
@@ -379,6 +375,7 @@ class Profile extends Component {
               marginTop: 5,
               width: "95%",
             }}
+            type="password"
             onChange={(event) => this.handleChange(event, "confirmPassTemp")}
           />
         </div>
@@ -392,7 +389,7 @@ class Profile extends Component {
     } else {
       passwordTextRender = (
         <div>
-          <TextField
+          <Text
             style={{
               marginBottom: 5,
               marginTop: 5,
@@ -456,9 +453,7 @@ class Profile extends Component {
               <h3>PHOTO</h3>
               <div className="content">{photoRender}</div>
               <div className="icon" onClick={this.handlePhotoStateChange}>
-                {this.state.username != null
-                  ? this.state.username.charAt(0)
-                  : ""}
+                {photo}
                 <div className="photo">
                   <svg
                     data-v-d223ba98=""
@@ -549,21 +544,20 @@ class Profile extends Component {
               </div>
               <div className="popup" onClick={this.handlePasswordChange}>
                 <svg
-                  style={{ width: "20px", fontSize: "20px", height: "20px" }}
                   data-v-d223ba98=""
                   aria-hidden="true"
                   focusable="false"
                   data-prefix="fas"
-                  data-icon="arrow-right"
+                  data-icon="pen"
                   role="img"
                   xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 448 512"
-                  className="svg-inline--fa fa-arrow-right fa-w-14"
+                  viewBox="0 0 512 512"
+                  className="svg-inline--fa fa-pen fa-w-16"
                 >
                   <path
                     data-v-d223ba98=""
                     fill="currentColor"
-                    d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"
+                    d="M290.74 93.24l128.02 128.02-277.99 277.99-114.14 12.6C11.35 513.54-1.56 500.62.14 485.34l12.7-114.22 277.9-277.88zm207.2-19.06l-60.11-60.11c-18.75-18.75-49.16-18.75-67.91 0l-56.55 56.55 128.02 128.02 56.55-56.55c18.75-18.76 18.75-49.16 0-67.91z"
                     className=""
                   ></path>
                 </svg>
