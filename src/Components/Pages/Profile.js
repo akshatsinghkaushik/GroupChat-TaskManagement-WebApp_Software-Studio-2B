@@ -129,9 +129,9 @@ class Profile extends Component {
         // error function ....
         console.log(error);
       },
-      () => {
+      async () => {
         // complete function ....
-        storage
+        await storage
           .ref("ProfilePhoto")
           .child(this.state.user.uid)
           .getDownloadURL()
@@ -142,7 +142,7 @@ class Profile extends Component {
               error: "The profile image was uploaded successfully.",
             });
           });
-        db.ref(`users/${this.state.user.uid}`).update({
+        await db.ref(`users/${this.state.user.uid}`).update({
           profilePic: this.state.url,
         });
       }
