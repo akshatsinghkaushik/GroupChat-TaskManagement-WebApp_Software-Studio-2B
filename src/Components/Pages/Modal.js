@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Fab from "@material-ui/core/Fab";
 import Modal from "@material-ui/core/Modal";
@@ -153,6 +153,26 @@ export default function AnimatedModal(props) {
   const [participants, setParticipants] = useState([]);
   const [leaders, setLeaders] = useState([]);
 
+  const [groups, setGroups] = useState(new Map());
+
+  useEffect(() => {
+    try {
+      db.ref("groups").on("value", (snapshot) => {
+        let groups_temp = new Map();
+        snapshot.forEach((snap) => {
+          groups_temp.set(snap.key, snap.val());
+        });
+
+        setGroups(groups_temp);
+      });
+    } catch (error) {
+      setSaveError(error.message);
+    }
+    return () => {
+      db.ref("groups").off("value");
+    };
+  }, []);
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -176,10 +196,11 @@ export default function AnimatedModal(props) {
     try {
       let groupID = SHA1.hash(groupName);
 
-      if (!props.groups.has(groupID)) {
+      if (!groups.has(groupID)) {
         db.ref("groups/" + groupID).update({
           name: groupName,
           description: groupDesc,
+          id: groupID,
         });
 
         /* Template db call for storing chats to a group
@@ -226,10 +247,12 @@ export default function AnimatedModal(props) {
             });
             db.ref(`users/${leaders[i].uid}/groups/${groupID}`).update({
               displayName: displayName,
-              groupAccess: "member",
+              groupAccess: "leader",
             });
           }
         }
+
+        props.refreshGroups();
 
         setSavingGroup(false);
         setOpen(false);
