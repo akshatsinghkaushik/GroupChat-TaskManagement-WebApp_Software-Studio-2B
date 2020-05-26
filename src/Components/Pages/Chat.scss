@@ -20,6 +20,11 @@
     overflow-y: scroll;
   }
 
+  .task-select {
+    margin-left: 20px;
+    text-align: center;
+  }
+
   .chat-area .chat-bubble {
     background-color: #bbdefb;
     padding: 20px;
@@ -266,5 +271,30 @@
     right: 4px;
     top: 15px;
     width: 33px;
+  }
+  .group_header {
+    flex: auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .create_subgroup_btn {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: flex-end;
+    button {
+      display: flex;
+      flex: auto;
+      border: medium none;
+      color: #05728f;
+      font-size: 26px;
+    }
+  }
+  .fab button {
+    bottom: 18px;
+    left: 20px;
+    position: absolute;
+    background: #05728f none repeat scroll 0 0;
+    color: #fff;
   }
 }

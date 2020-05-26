@@ -1,0 +1,40 @@
+.task-activity {
+  display: block;
+  .title-lockup {
+    margin: 0.5em 0;
+    display: flex;
+    align-items: center;
+    h2 {
+      display: inline-block;
+      margin: 0;
+    }
+  }
+  .comment {
+    margin: 0.75em 0 0 0;
+    display: block;
+    position: relative;
+    .comment-username {
+      display: inline-block;
+    }
+    .comment-timestamp {
+      display: inline-block;
+      color: #172b4d;
+      margin: 0 0 0 0.5em;
+      font-size: 0.75em;
+    }
+    .comment-text {
+      display: block;
+      white-space: pre-wrap;
+      background-color: white;
+    }
+  }
+  .button-lockup {
+    p {
+      font-size: 0.75em;
+      margin-top: 0.25em;
+    }
+    p:hover {
+      cursor: pointer;
+    }
+  }
+}
