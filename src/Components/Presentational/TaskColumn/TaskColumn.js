@@ -128,7 +128,7 @@ const TaskColumn = ({ boardId, column, user }) => {
         </div>
         <div
           id={column.id}
-          className="task-list, drop-zone"
+          className="task-list drop-zone"
           onDrop={(e) => handleDrop(e)}
           onDragStart={(e) => handleDragStart(e)}
           onDragOver={(e) => handleDragOver(e)}
@@ -152,17 +152,19 @@ const TaskColumn = ({ boardId, column, user }) => {
                 </li>
               );
             })}
+            <li className="new-task-lockup">
+              <div>
+                <form onSubmit={handleCreateTask}>
+                  <input
+                    onChange={handleNewTaskChange}
+                    value={newTask}
+                    placeholder="Enter a title for this card..."
+                  />
+                  <Button type="submit">Add Task</Button>
+                </form>
+              </div>
+            </li>
           </ul>
-        </div>
-        <div className="new-task-lockup">
-          <form onSubmit={handleCreateTask}>
-            <input
-              onChange={handleNewTaskChange}
-              value={newTask}
-              placeholder="Enter a title for this card..."
-            />
-            <Button type="submit">Add Task</Button>
-          </form>
         </div>
       </div>
       {!!selectedTaskId && tasks.get(selectedTaskId) && (
