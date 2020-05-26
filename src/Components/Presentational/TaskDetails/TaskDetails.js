@@ -56,7 +56,7 @@ const TaskDetails = ({ columnId, taskDetails, close }) => {
             placeholder="Enter a title for this card..."
           />
         ) : (
-          <Typography variant="h5" component="h1" onClick={handleStartEditing}>
+          <Typography variant="h4" component="h1" onClick={handleStartEditing}>
             {taskDetails.name}
           </Typography>
         )}
@@ -70,9 +70,7 @@ const TaskDetails = ({ columnId, taskDetails, close }) => {
           <TaskDescription columnId={columnId} taskDetails={taskDetails} />
           <TaskActivity columnId={columnId} taskDetails={taskDetails} />
         </div>
-        <div className="sidebar">
-          <Typography>This is the sidebar</Typography>
-        </div>
+        <div className="sidebar"></div>
       </div>
     </div>
   );

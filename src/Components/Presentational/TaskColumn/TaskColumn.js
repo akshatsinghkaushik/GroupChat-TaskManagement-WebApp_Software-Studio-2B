@@ -11,7 +11,6 @@ import {
 import { db } from "../../../services/firebase";
 import TaskDetails from "../TaskDetails/TaskDetails";
 import Modal from "../Modal/Modal";
-import "jquery";
 
 const TaskColumn = ({ boardId, column, user }) => {
   const [tasks, setTasks] = React.useState(new Map());

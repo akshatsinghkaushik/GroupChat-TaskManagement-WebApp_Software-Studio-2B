@@ -28,6 +28,10 @@ export async function createTaskboard(userId, groupId) {
   return taskboard.getKey();
 }
 
+export function updateTaskboard(groupId, taskboardId, taskboard) {
+  return db.ref(`taskboards/${groupId}/${taskboardId}`).update(taskboard);
+}
+
 /**
  * Create a new column in the database.
  * The return value is void in all cases.

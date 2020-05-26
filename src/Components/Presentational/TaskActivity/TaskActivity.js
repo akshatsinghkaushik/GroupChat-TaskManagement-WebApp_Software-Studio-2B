@@ -11,7 +11,6 @@ const TaskActivity = ({ columnId, taskDetails }) => {
   const [usernameMap, setUsernameMap] = React.useState({});
 
   useEffect(() => {
-    getUserById("3wHGLaOci8gI9Mk1e3jVQ7HA8gD2");
     try {
       const columns = db.ref(`taskComments/${taskDetails.id}`);
       columns.on("value", async (snapshot) => {
