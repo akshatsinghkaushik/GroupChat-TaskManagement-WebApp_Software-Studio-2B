@@ -448,7 +448,11 @@ class Chat extends Component {
                             <div className="incoming_msg_img">
                               {" "}
                               <img
-                                src="https://ptetutorials.com/images/user-profile.png"
+                                src={
+                                  this.state.users.get(chat.uid).profilePic
+                                    ? this.state.users.get(chat.uid).profilePic
+                                    : "https://ptetutorials.com/images/user-profile.png"
+                                }
                                 alt="sunil"
                               />{" "}
                             </div>
@@ -465,8 +469,7 @@ class Chat extends Component {
                               <div className="received_withd_msg">
                                 <div className="name-header">
                                   {this.state.users.has(chat.uid)
-                                    ? this.state.users.get(chat.uid).name ===
-                                      undefined
+                                    ? !this.state.users.get(chat.uid).name
                                       ? this.state.users.get(chat.uid).email
                                       : this.state.users.get(chat.uid).name
                                     : "Anonymous"}

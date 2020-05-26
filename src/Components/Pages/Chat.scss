@@ -185,7 +185,12 @@
 
   .incoming_msg_img {
     display: inline-block;
-    width: 6%;
+    width: 40px;
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
   }
   .incoming_msg {
     padding-bottom: 0.5em;
