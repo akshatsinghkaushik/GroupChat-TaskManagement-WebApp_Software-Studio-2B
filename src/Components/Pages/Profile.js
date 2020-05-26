@@ -47,7 +47,7 @@ class Profile extends Component {
 
   async writeUserData(userId, name, email) {
     try {
-      await db.ref("users/" + userId).set({
+      await db.ref("users/" + userId).update({
         email: email,
         name: name,
       });
