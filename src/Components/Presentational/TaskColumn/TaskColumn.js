@@ -165,7 +165,7 @@ const TaskColumn = ({ boardId, column, user }) => {
           </form>
         </div>
       </div>
-      {!!selectedTaskId && (
+      {!!selectedTaskId && tasks.get(selectedTaskId) && (
         <Modal closeModal={handleCloseModal}>
           <TaskDetails
             columnId={column.id}

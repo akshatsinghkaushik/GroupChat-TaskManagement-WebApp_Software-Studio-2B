@@ -51,6 +51,12 @@ export function deleteTaskColumn(boardId, id) {
   });
 }
 
+export function deleteTask(columnId, taskId) {
+  return db.ref(`tasks/${columnId}/${taskId}`).update({
+    deletedTimestamp: Date.now(),
+  });
+}
+
 export function createTask(columnId, task) {
   return db.ref(`tasks/${columnId}`).push(task);
 }
