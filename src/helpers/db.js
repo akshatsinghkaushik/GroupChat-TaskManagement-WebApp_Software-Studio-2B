@@ -51,6 +51,17 @@ export function createTask(columnId, task) {
   return db.ref(`tasks/${columnId}`).push(task);
 }
 
+export async function updateTaskColumn(newColumnId, oldColumnId, taskId) {
+  try {
+    //TODO: Make this logic more sound when second operation fails need to undo first
+    let task = await db.ref(`tasks/${oldColumnId}/${taskId}`).once("value");
+    await db.ref(`tasks/${newColumnId}/${taskId}`).update(task.val());
+    await db.ref(`tasks/${oldColumnId}/${taskId}`).remove();
+  } catch (error) {
+    throw error;
+  }
+}
+
 export function updateTask(columnId, taskId, updatedFields) {
   return db.ref(`tasks/${columnId}/${taskId}`).update(updatedFields);
 }

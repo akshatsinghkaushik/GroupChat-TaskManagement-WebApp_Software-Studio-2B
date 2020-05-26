@@ -3,10 +3,15 @@ import "./TaskColumn.scss";
 import { Button, Card, CardContent, Typography } from "@material-ui/core";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { deleteTaskColumn, createTask } from "../../../helpers/db";
+import {
+  deleteTaskColumn,
+  createTask,
+  updateTaskColumn,
+} from "../../../helpers/db";
 import { db } from "../../../services/firebase";
 import TaskDetails from "../TaskDetails/TaskDetails";
 import Modal from "../Modal/Modal";
+import "jquery";
 
 const TaskColumn = ({ boardId, column, user }) => {
   const [tasks, setTasks] = React.useState(new Map());
@@ -61,12 +66,52 @@ const TaskColumn = ({ boardId, column, user }) => {
     }
   };
 
+  const handleMoveTask = async (targetListId, sourceListId, taskId) => {
+    try {
+      await updateTaskColumn(targetListId, sourceListId, taskId);
+    } catch (err) {
+      alert(`An error occurred when deleting column ${err.message}`);
+    }
+  };
+
   const handleNewTaskChange = (e) => {
     setNewTask(e.target.value);
   };
 
   const handleCloseModal = () => {
     setSelectedTaskId("");
+  };
+
+  const handleDragStart = (e) => {
+    e.dataTransfer.setData("text/plain", e.target.id);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+
+    const sourceId = e.dataTransfer.getData("text/plain");
+    const sourceEl = document.getElementById(sourceId);
+    const targetEl = document.getElementById(e.target.id);
+    if (!targetEl || !sourceEl) {
+      return;
+    }
+
+    // TODO: Fix this
+    const sourceTaskList = sourceEl.closest("div");
+    const sourceTaskListId = sourceTaskList.id;
+
+    const targetTaskList = targetEl.closest("div");
+    const targetTaskListId = targetTaskList.id;
+
+    if (sourceTaskListId !== targetTaskListId) {
+      handleMoveTask(targetTaskListId, sourceTaskListId, sourceId);
+    } else {
+      //TODO: Fix later
+    }
   };
 
   return (
@@ -82,13 +127,24 @@ const TaskColumn = ({ boardId, column, user }) => {
             size="1x"
           />
         </div>
-        <div className="task-list">
+        <div
+          id={column.id}
+          className="task-list, drop-zone"
+          onDrop={(e) => handleDrop(e)}
+          onDragStart={(e) => handleDragStart(e)}
+          onDragOver={(e) => handleDragOver(e)}
+        >
           <ul>
             {Array.from(tasks.values()).map((task) => {
               return (
-                <li key={task.id} onClick={(e) => setSelectedTaskId(task.id)}>
+                <li
+                  key={task.id}
+                  id={task.id}
+                  draggable="true"
+                  onClick={(e) => setSelectedTaskId(task.id)}
+                >
                   <Card variant="outlined">
-                    <CardContent>
+                    <CardContent className="dropzone" id={task.id}>
                       <Typography color="textPrimary" gutterBottom>
                         {task.name}
                       </Typography>

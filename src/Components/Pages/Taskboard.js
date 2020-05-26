@@ -106,6 +106,7 @@ const Taskboard = () => {
                   boardId={taskboardData.id}
                   column={column}
                   user={user}
+                  onDragOver={(e) => e.preventDefault()}
                 />
               );
             })}
