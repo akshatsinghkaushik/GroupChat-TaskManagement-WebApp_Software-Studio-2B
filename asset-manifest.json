@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/teams-ui/static/css/main.44d8a006.chunk.css",
-    "main.js": "/teams-ui/static/js/main.420146c6.chunk.js",
-    "main.js.map": "/teams-ui/static/js/main.420146c6.chunk.js.map",
-    "runtime-main.js": "/teams-ui/static/js/runtime-main.2d2fc203.js",
-    "runtime-main.js.map": "/teams-ui/static/js/runtime-main.2d2fc203.js.map",
-    "static/js/2.4439fe72.chunk.js": "/teams-ui/static/js/2.4439fe72.chunk.js",
-    "static/js/2.4439fe72.chunk.js.map": "/teams-ui/static/js/2.4439fe72.chunk.js.map",
+    "main.css": "/teams-ui/static/css/main.8dcdc326.chunk.css",
+    "main.js": "/teams-ui/static/js/main.ebb1548b.chunk.js",
+    "main.js.map": "/teams-ui/static/js/main.ebb1548b.chunk.js.map",
+    "runtime-main.js": "/teams-ui/static/js/runtime-main.ad7d9fd1.js",
+    "runtime-main.js.map": "/teams-ui/static/js/runtime-main.ad7d9fd1.js.map",
+    "static/js/2.5909de18.chunk.js": "/teams-ui/static/js/2.5909de18.chunk.js",
+    "static/js/2.5909de18.chunk.js.map": "/teams-ui/static/js/2.5909de18.chunk.js.map",
     "index.html": "/teams-ui/index.html",
-    "precache-manifest.7dabee63a62f3618dcb5f76d6882bf09.js": "/teams-ui/precache-manifest.7dabee63a62f3618dcb5f76d6882bf09.js",
+    "precache-manifest.a9ed22d238017dd67e597c49b4b331d3.js": "/teams-ui/precache-manifest.a9ed22d238017dd67e597c49b4b331d3.js",
     "service-worker.js": "/teams-ui/service-worker.js",
-    "static/css/main.44d8a006.chunk.css.map": "/teams-ui/static/css/main.44d8a006.chunk.css.map",
-    "static/js/2.4439fe72.chunk.js.LICENSE.txt": "/teams-ui/static/js/2.4439fe72.chunk.js.LICENSE.txt",
+    "static/css/main.8dcdc326.chunk.css.map": "/teams-ui/static/css/main.8dcdc326.chunk.css.map",
+    "static/js/2.5909de18.chunk.js.LICENSE.txt": "/teams-ui/static/js/2.5909de18.chunk.js.LICENSE.txt",
     "static/media/icon.png": "/teams-ui/static/media/icon.b5d56f8d.png",
     "static/media/Login.scss": "/teams-ui/static/media/wavey.54c7b653.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.2d2fc203.js",
-    "static/js/2.4439fe72.chunk.js",
-    "static/css/main.44d8a006.chunk.css",
-    "static/js/main.420146c6.chunk.js"
+    "static/js/runtime-main.ad7d9fd1.js",
+    "static/js/2.5909de18.chunk.js",
+    "static/css/main.8dcdc326.chunk.css",
+    "static/js/main.ebb1548b.chunk.js"
   ]
 }
