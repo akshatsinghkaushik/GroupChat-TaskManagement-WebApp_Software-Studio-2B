@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Switch,
   Route,
   Redirect,
@@ -81,7 +81,7 @@ class App extends Component {
       </div>
     ) : (
       <div className="App">
-        <Router basename={process.env.PUBLIC_URL}>
+        <Router basename="/">
           <Navbar authenticated={this.state.authenticated} />
           <Switch>
             <PrivateRoute
