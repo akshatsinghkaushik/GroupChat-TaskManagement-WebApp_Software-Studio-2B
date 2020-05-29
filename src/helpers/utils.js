@@ -1,5 +1,5 @@
 export const readUrlQueryParam = (key) => {
-  const params = new URLSearchParams(window.location.search);
+  const params = new URLSearchParams(window.location.hash.split("?")[1]);
   return params.get(key);
 };
 
