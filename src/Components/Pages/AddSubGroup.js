@@ -1,27 +1,81 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import "./AddSubGroup.scss";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+
+import SHA1 from "../../services/sha1";
+
 import {
   useInputValue,
   useParticipants,
 } from "../Participant-Components/Participants-custom-hooks";
 import AddParticipant from "../Participant-Components/AddParticipant";
 import ParticipantList from "../Participant-Components/ParticipantList";
-import { makeStyles } from "@material-ui/core/styles";
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faPlus } from "@fortawesome/free-solid-svg-icons";
+
+import { db } from "../../services/firebase";
+
 const AddGroupParticipant = memo((props) => {
   const { inputValue, changeInput, clearInput, keyInput } = useInputValue();
   const {
-    participants,
+    //participants,
     addParticipants,
     checkParticipants,
     removeParticipants,
-  } = useParticipants();
+  } = useParticipants(props);
+  const clearInputAndAddParticipant = (_) => {
+    /*const userExists = () => {
+      let userEx = false;
+
+      let uid = null;
+
+      for (let [k, v] of props.users) {
+        //console.log("Key: " + k);
+        //console.log("Value: " + v);
+        if (v.email === inputValue || v.name === inputValue) {
+          userEx = true;
+          uid = k;
+        }
+      }
+      return {
+        userExists: userEx,
+        userID: uid,
+      };
+    };*/
+
+    clearInput();
+    addParticipants(inputValue);
+  };
+  return (
+    <div>
+      <AddParticipant
+        inputValue={inputValue}
+        onInputChange={changeInput}
+        onButtonClick={clearInputAndAddParticipant}
+        onInputKeyPress={(event) =>
+          keyInput(event, clearInputAndAddParticipant)
+        }
+      />
+      <ParticipantList
+        items={props.participants}
+        onItemCheck={(idx) => checkParticipants(idx)}
+        onItemRemove={(idx) => removeParticipants(idx)}
+      />
+    </div>
+  );
+});
+
+const AddGroupLeader = memo((props) => {
+  const { inputValue, changeInput, clearInput, keyInput } = useInputValue();
+  const {
+    //participants,
+    addParticipants,
+    checkParticipants,
+    removeParticipants,
+  } = useParticipants(props);
   const clearInputAndAddParticipant = (_) => {
     clearInput();
     addParticipants(inputValue);
@@ -37,7 +91,7 @@ const AddGroupParticipant = memo((props) => {
         }
       />
       <ParticipantList
-        items={participants}
+        items={props.participants}
         onItemCheck={(idx) => checkParticipants(idx)}
         onItemRemove={(idx) => removeParticipants(idx)}
       />
@@ -53,10 +107,11 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     position: "absolute",
-    width: "40%",
+    width: "35%",
+    minWidth: "620px",
     height: "auto",
     backgroundColor: theme.palette.background.paper,
-    padding: "10px 5em 10px 5em",
+    padding: "0px, 0px 0px 0px",
     borderRadius: "10px",
     boxShadow:
       "0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22)",
@@ -65,9 +120,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AddSubGroup() {
+export default function SubGroup(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+
+  const [savingGroup, setSavingGroup] = useState(false);
+  const [saveError, setSaveError] = useState(null);
+
+  const [groupName, setGroupName] = useState("");
+  const [groupDesc, setGroupDesc] = useState("");
+
+  const [participants, setParticipants] = useState([]);
+  const [leaders, setLeaders] = useState([]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -77,10 +141,92 @@ export default function AddSubGroup() {
     setOpen(false);
   };
 
+  const handleNameChange = (event) => {
+    setGroupName(event.target.value);
+  };
+
+  const handleDescChange = (event) => {
+    setGroupDesc(event.target.value);
+  };
+
+  const handleSaveGroup = (event) => {
+    setSavingGroup(true);
+    setSaveError(null);
+
+    try {
+      let groupID = SHA1.hash(groupName);
+
+      if (!props.groups.has(groupID)) {
+        db.ref("groups" + groupID).update({
+          name: groupName,
+          description: groupDesc,
+        });
+
+        /* Template db call for storing chats to a group
+        db.ref("groups/6c48a6eadfed63a0af3e39eb36911e24b4e356de/chats/").push({
+          content: this.state.content,
+          timestamp: Date.now(),
+          uid: this.state.user.uid,
+        });*/
+
+        for (let i = 0; i < participants.length; ++i) {
+          if (
+            participants[i].registered === true &&
+            participants[i].checked === true
+          ) {
+            let displayName = props.users.get(participants[i].uid).name;
+
+            if (props.users.get(participants[i].uid).name === undefined) {
+              displayName = props.users.get(participants[i].uid).email;
+            }
+
+            db.ref(`groups/${groupID}/members/${participants[i].uid}`).update({
+              displayName: displayName,
+              groupAccess: "member",
+            });
+
+            db.ref(`users/${participants[i].uid}/groups/${groupID}`).update({
+              displayName: displayName,
+              groupAccess: "member",
+            });
+          }
+        }
+
+        for (let i = 0; i < leaders.length; ++i) {
+          if (leaders[i].registered === true && leaders[i].checked === true) {
+            let displayName = props.users.get(leaders[i].uid).name;
+
+            if (props.users.get(leaders[i].uid).name === undefined) {
+              displayName = props.users.get(leaders[i].uid).email;
+            }
+            db.ref(`/groups/${groupID}/members/${leaders[i].uid}`).update({
+              displayName: displayName,
+              groupAccess: "leader",
+            });
+            db.ref(`users/${leaders[i].uid}/groups/${groupID}`).update({
+              displayName: displayName,
+              groupAccess: "member",
+            });
+          }
+        }
+
+        setSavingGroup(false);
+        setOpen(false);
+        setParticipants([]);
+        setLeaders([]);
+      } else {
+        setSavingGroup(false);
+        setSaveError("Group exists");
+      }
+    } catch (error) {
+      setSaveError(error);
+    }
+  };
+
   return (
     <div>
       <div className="addSubGroup">
-        <button type="button" onClick={handleOpen} className="primary-button">
+        <button type="button" onClick={handleOpen} className="primary-">
           {"Add Sub Group"}
         </button>
       </div>
@@ -99,18 +245,31 @@ export default function AddSubGroup() {
       >
         <Fade in={open}>
           <form className={classes.paper}>
-            <div className="new_group_details">
-              <h6 style={{ color: "#05728f", marginTop: "46px" }}>
+            <div className="new_group_header" style={{ background: "#05728f" }}>
+              <h2
+                style={{
+                  color: "#fff",
+                  borderBottom: "1px solid #05728f",
+                  padding: "1em 4em 1em 4em",
+                }}
+              >
+                {" "}
+                Create Sub Group
+              </h2>
+            </div>
+            <div
+              className="new_group_details"
+              style={{ padding: "0px 100px 0px 100px" }}
+            >
+              <h6 style={{ color: "#05728f", marginTop: "50px" }}>
                 {" "}
                 Group Name{" "}
               </h6>
               <TextField
-                id="outlined-basic"
-                label="Group Name"
-                variant="outlined"
+                className="group_name"
                 inputProps={{ style: { fontSize: 20 } }}
-                InputLabelProps={{ style: { fontSize: 15 } }}
-                style={{}}
+                onChange={handleNameChange}
+                style={{ size: "small" }}
               >
                 {" "}
               </TextField>
@@ -119,60 +278,113 @@ export default function AddSubGroup() {
                 Group Description{" "}
               </h6>
               <TextField
-                id="outlined-basic"
-                label="Description"
-                variant="outlined"
-                fullWidth="true"
-                inputProps={{ style: { fontSize: 20 } }}
-                InputLabelProps={{ style: { fontSize: 15 } }}
-                style={{ marginBottom: "55px" }}
+                className="group_description"
+                fullWidth={true}
+                inputProps={{ style: { fontSize: 16 } }}
+                onChange={handleDescChange}
+                style={{ marginBottom: "55px", size: "small" }}
               >
                 {" "}
               </TextField>
             </div>
-            <div>
+            <div
+              className="add_group_leaders"
+              style={{ padding: "0px 100px 0px 100px" }}
+            >
               <h6 style={{ color: "#05728f" }}> Assign Group Leader(s) </h6>
-              <AddGroupParticipant />
-              <hr />
+              <AddGroupLeader
+                participants={leaders}
+                setParticipants={setLeaders}
+                users={props.users}
+              />
             </div>
-            <div>
+            <div
+              className="add_group_participant"
+              style={{ padding: "0px 100px 0px 100px", marginTop: "55px" }}
+            >
               <h6 style={{ color: "#05728f" }}> Invite People </h6>
-              <AddGroupParticipant />
+              <AddGroupParticipant
+                participants={participants}
+                setParticipants={setParticipants}
+                users={props.users}
+              />
             </div>
-            <div style={{ Display: "block" }}>
+            {savingGroup ? (
+              <div
+                className="spinner-border text-success"
+                role="status"
+                style={{
+                  display: "flex",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  marginTop: "1em",
+                  marginBottom: "1em",
+                }}
+              >
+                <span className="sr-only" style={{}}>
+                  Saving...
+                </span>
+              </div>
+            ) : (
+              ""
+            )}
+            {saveError !== null && saveError !== "null" ? (
+              <div
+                className=""
+                style={{ textAlign: "center", marginTop: "2em" }}
+              >
+                {saveError}
+              </div>
+            ) : (
+              ""
+            )}
+            <div
+              className="create_new_group_button"
+              style={{
+                display: "flex",
+                padding: "0px 95px 0px 95px",
+                flexDirection: "row",
+                alignItems: "center",
+                marginBottom: "1em",
+                marginTop: "2.5em",
+              }}
+            >
               <Button
-                className="secondary-button"
-                type="button"
                 variant="outlined"
                 color="inherit"
-                fullWidth="true"
+                onClick={handleSaveGroup}
+                //fullWidth={true}
                 style={{
-                  marginTop: "70px",
                   backgroundColor: "#05728f",
                   color: "#fff",
                   fontWeight: "bold",
-                  height: "50px",
+                  height: "45px",
+                  width: "10em",
                   border: "2px solid",
                   borderRadius: 20,
                   borderColor: "#05728f",
+                  marginLeft: "auto",
+                  marginRight: "auto",
                   justifyContent: "center",
                 }}
               >
-                {"Create New Sub Group"}
+                Save
               </Button>
               <Button
                 autoFocus
                 onClick={handleClose}
                 variant="outlined"
                 color="inherit"
-                fullWidth="true"
+                //fullWidth={true}
                 style={{
-                  marginTop: "30px",
                   color: "#05728f",
                   fontWeight: "bold",
-                  height: "50px",
+                  height: "45px",
+                  width: "10em",
                   border: "2px solid",
                   borderRadius: 20,
+                  marginLeft: "auto",
+                  marginRight: "auto",
                   justifyContent: "center",
                 }}
               >
@@ -185,5 +397,3 @@ export default function AddSubGroup() {
     </div>
   );
 }
-
-//export default AddSubGroup;
