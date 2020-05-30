@@ -9,7 +9,7 @@
   left: 0;
   height: 100%;
   width: 100%;
-  z-index: 1000;
+  z-index: 2;
   background-color: rgba(0, 0, 0, 0.65);
   pointer-events: none;
 }
@@ -22,7 +22,7 @@
   bottom: 0;
   left: 0;
   margin-top: 5vh;
-  z-index: 10000;
+  z-index: 3;
   overflow: auto;
   padding: 1em;
   margin: auto;
