@@ -24,7 +24,7 @@ const AddSubGroupParticipant = memo((props) => {
     checkParticipants,
     removeParticipants,
   } = useParticipants(props);
-  const clearInputAndAddParticipant = () => {
+  const clearInputAndAddParticipant = (_) => {
     const userExists = () => {
       let userEx = false;
       let uid = null;
