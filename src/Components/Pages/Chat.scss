@@ -20,6 +20,11 @@
     overflow-y: scroll;
   }
 
+  .task-select {
+    margin-left: 20px;
+    text-align: center;
+  }
+
   .chat-area .chat-bubble {
     background-color: #bbdefb;
     padding: 20px;
@@ -145,7 +150,7 @@
   .msg-top {
     border-bottom: 1px solid #c4c4c4;
     padding: 10px 0;
-    height: 80px;
+    height: 100px;
     display: flex;
     align-items: center;
     margin: 0 -15px 0 -25px;
@@ -180,7 +185,12 @@
 
   .incoming_msg_img {
     display: inline-block;
-    width: 6%;
+    width: 40px;
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
   }
   .incoming_msg {
     padding-bottom: 0.5em;
@@ -249,7 +259,7 @@
 
   .type_msg {
     position: relative;
-    padding: 10px 0;
+    padding: 10px 0 50px;
     display: flex;
     align-items: center;
     height: 80px;
@@ -271,19 +281,53 @@
     flex: auto;
     display: flex;
     justify-content: flex-start;
+    align-items: center;
   }
-  .create_subgroup_btn button {
-    flex: auto;
-    border: medium none;
-    color: #05728f;
-    font-size: 26px;
+  .create_taskboard_btn {
     display: flex;
+    flex-flow: column nowrap;
+    align-items: flex-end;
+    button {
+      display: flex;
+      flex: auto;
+      border: medium none;
+      color: #05728f;
+      font-size: 16px;
+    }
   }
-  .fab button {
+  .create_subgroup_btn {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: flex-end;
+    button {
+      display: flex;
+      flex: auto;
+      border: medium none;
+      color: #05728f;
+      font-size: 26px;
+    }
+  }
+  .create_group_btn button {
     bottom: 18px;
     left: 20px;
     position: absolute;
     background: #05728f none repeat scroll 0 0;
     color: #fff;
+  }
+  .create_group_fab button {
+    bottom: 18px;
+    left: 20px;
+    position: absolute;
+    background: #05728f none repeat scroll 0 0;
+    color: #fff;
+  }
+  .taskboard_menu {
+    display: flex;
+    flex-direction: column;
+    padding-right: 2em;
+  }
+  .subgroup_menu {
+    display: flex;
+    flex-direction: column;
   }
 }

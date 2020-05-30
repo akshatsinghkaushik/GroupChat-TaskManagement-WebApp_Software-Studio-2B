@@ -23,7 +23,7 @@ const ParticipantListItem = memo((props) => {
       <Checkbox
         onClick={props.onCheckBoxToggle}
         checked={props.checked}
-        disableRipple
+        style={{ color: "#05728f" }}
       />
       <PersonIcon style={{ color: "#05728f", paddingRight: 5 }} />
       <ListItemText primary={shortenedString} />

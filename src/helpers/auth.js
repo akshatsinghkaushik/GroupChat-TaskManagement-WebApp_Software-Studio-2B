@@ -38,8 +38,9 @@ export function signInWithGoogle() {
     .signInWithPopup(provider)
     .then(async function () {
       const user = auth().currentUser;
-      await db.ref("users/" + user.uid).set({
+      await db.ref("users/" + user.uid).update({
         email: user.email,
+        name: user.displayName,
       });
     });
 }
@@ -50,8 +51,9 @@ export function signInWithGitHub() {
     .signInWithPopup(provider)
     .then(async function () {
       const user = auth().currentUser;
-      await db.ref("users/" + user.uid).set({
+      await db.ref("users/" + user.uid).update({
         email: user.email,
+        name: user.displayName,
       });
     });
 }
