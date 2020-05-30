@@ -29,7 +29,7 @@ const AddSubGroupParticipant = memo((props) => {
       let userEx = false;
       let uid = null;
 
-      for (let [k, v] of props.members_test) {
+      for (let [k, v] of props.groupMembers) {
         if (
           v.displayName === inputValue ||
           props.users.get(k).email === inputValue
@@ -79,7 +79,7 @@ const AddSubGroupLeader = memo((props) => {
       let userEx = false;
       let uid = null;
 
-      for (let [k, v] of props.members_test) {
+      for (let [k, v] of props.groupMembers) {
         if (
           v.displayName === inputValue ||
           props.users.get(k).email === inputValue
@@ -391,7 +391,7 @@ export default function AddSubGroup(props) {
                 participants={participants}
                 setParticipants={setParticipants}
                 users={props.users}
-                members_test={props.members_test}
+                groupMembers={props.groupMembers}
                 participants_test={props.participants}
               />
             </div>

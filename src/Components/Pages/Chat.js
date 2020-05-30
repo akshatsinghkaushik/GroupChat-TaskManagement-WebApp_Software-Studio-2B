@@ -31,7 +31,7 @@ class Chat extends Component {
       chats: [],
       usrGroups: new Map(),
       boards: [],
-      members_test: new Map(),
+      groupMembers: new Map(),
       groups: new Map(),
       selectedGroupID: "",
       selectedGroupName: "",
@@ -98,7 +98,7 @@ class Chat extends Component {
             snapshot.forEach((snap) => {
               members_temp.set(snap.key, snap.val());
             });
-            this.setState({ members_test: members_temp });
+            this.setState({ groupMembers: members_temp });
           }
         );
 
@@ -431,7 +431,7 @@ class Chat extends Component {
                         groups={this.state.groups}
                         selectedGroupID={this.state.selectedGroupID}
                         selecteGroupName={this.state.selectedGroupName}
-                        members_test={this.state.members_test}
+                        groupMembers={this.state.groupMembers}
                         refreshGroups={this.refreshGroups}
                       />
                     </div>
