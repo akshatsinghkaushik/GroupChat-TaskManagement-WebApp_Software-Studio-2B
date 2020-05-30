@@ -6,7 +6,7 @@ import "./TaskDetails.scss";
 import TaskDescription from "../TaskDescription/TaskDescription";
 import TaskActivity from "../TaskActivity/TaskActivity";
 import { updateTask } from "../../../helpers/db";
-import TaskDelete from "../TaskDelete/TaskDelete";
+import TaskSidebar from "../TaskSidebar/TaskSidebar";
 
 const TaskDetails = ({ columnId, taskDetails, close }) => {
   const [newTaskName, setNewTaskName] = React.useState("");
@@ -71,13 +71,11 @@ const TaskDetails = ({ columnId, taskDetails, close }) => {
           <TaskDescription columnId={columnId} taskDetails={taskDetails} />
           <TaskActivity columnId={columnId} taskDetails={taskDetails} />
         </div>
-        <div className="sidebar">
-          <TaskDelete
-            columnId={columnId}
-            taskDetails={taskDetails}
-            close={close}
-          />
-        </div>
+        <TaskSidebar
+          columnId={columnId}
+          taskDetails={taskDetails}
+          close={close}
+        />
       </div>
     </div>
   );
