@@ -29,7 +29,7 @@ const ParticipantListItem = memo((props) => {
       <ListItemText primary={shortenedString} />
       {/*<ListItemText primary="Test" />*/}
       <ListItemText
-        primary={props.registered ? "Registered" : "UnRegistered"}
+        primary={props.registered ? "User Found" : "User Not Found"}
         style={props.registered ? { color: "green" } : { color: "red" }}
       />
       <ListItemSecondaryAction>

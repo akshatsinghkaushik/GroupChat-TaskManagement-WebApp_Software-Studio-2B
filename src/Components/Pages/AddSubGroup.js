@@ -25,14 +25,15 @@ const AddSubGroupParticipant = memo((props) => {
     removeParticipants,
   } = useParticipants(props);
   const clearInputAndAddParticipant = (_) => {
-    const userExists = () => {
+    const memberExists = () => {
       let userEx = false;
       let uid = null;
 
-      for (let [k, v] of props.users) {
-        //console.log("Key: " + k);
-        //console.log("Value: " + v);
-        if (v.email === inputValue || v.name === inputValue) {
+      for (let [k, v] of props.members_test) {
+        if (
+          v.displayName === inputValue ||
+          props.users.get(k).email === inputValue
+        ) {
           userEx = true;
           uid = k;
         }
@@ -44,7 +45,7 @@ const AddSubGroupParticipant = memo((props) => {
     };
 
     clearInput();
-    addParticipants(inputValue, userExists());
+    addParticipants(inputValue, memberExists());
   };
   return (
     <div>
@@ -74,14 +75,15 @@ const AddSubGroupLeader = memo((props) => {
     removeParticipants,
   } = useParticipants(props);
   const clearInputAndAddParticipant = (_) => {
-    const userExists = () => {
+    const memberExists = () => {
       let userEx = false;
       let uid = null;
 
-      for (let [k, v] of props.users) {
-        //console.log("Key: " + k);
-        //console.log("Value: " + v);
-        if (v.email === inputValue || v.name === inputValue) {
+      for (let [k, v] of props.members_test) {
+        if (
+          v.displayName === inputValue ||
+          props.users.get(k).email === inputValue
+        ) {
           userEx = true;
           uid = k;
         }
@@ -93,7 +95,7 @@ const AddSubGroupLeader = memo((props) => {
     };
 
     clearInput();
-    addParticipants(inputValue, userExists());
+    addParticipants(inputValue, memberExists());
   };
   return (
     <div>
@@ -378,8 +380,6 @@ export default function AddSubGroup(props) {
                 participants={leaders}
                 setParticipants={setLeaders}
                 users={props.users}
-                groups={props.groups}
-                selectedGroupID={props.selectedGroupID}
               />
             </div>
             <div
@@ -391,8 +391,8 @@ export default function AddSubGroup(props) {
                 participants={participants}
                 setParticipants={setParticipants}
                 users={props.users}
-                groups={props.groups}
-                selectedGroupID={props.selectedGroupID}
+                members_test={props.members_test}
+                participants_test={props.participants}
               />
             </div>
             {savingGroup ? (

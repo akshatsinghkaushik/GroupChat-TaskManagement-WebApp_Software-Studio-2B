@@ -31,7 +31,7 @@ class Chat extends Component {
       chats: [],
       usrGroups: new Map(),
       boards: [],
-      subGroups: [],
+      members_test: new Map(),
       groups: new Map(),
       selectedGroupID: "",
       selectedGroupName: "",
@@ -91,6 +91,17 @@ class Chat extends Component {
           });
         }
 
+        db.ref(`groups/${this.state.selectedGroupID}/members`).on(
+          "value",
+          (snapshot) => {
+            const members_temp = new Map();
+            snapshot.forEach((snap) => {
+              members_temp.set(snap.key, snap.val());
+            });
+            this.setState({ members_test: members_temp });
+          }
+        );
+
         db.ref(`groups/${this.state.selectedGroupID}/chats`).once(
           "value",
           (snapshot) => {
@@ -146,6 +157,7 @@ class Chat extends Component {
     db.ref("chats").off("value");
     db.ref(`users/${this.state.user.uid}/groups`).off("value");
     db.ref(`groups`).off("value");
+    db.ref("members").off("value");
   }
 
   refreshGroups() {
@@ -419,6 +431,7 @@ class Chat extends Component {
                         groups={this.state.groups}
                         selectedGroupID={this.state.selectedGroupID}
                         selecteGroupName={this.state.selectedGroupName}
+                        members_test={this.state.members_test}
                         refreshGroups={this.refreshGroups}
                       />
                     </div>
