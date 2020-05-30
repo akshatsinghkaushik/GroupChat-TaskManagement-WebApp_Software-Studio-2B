@@ -31,8 +31,8 @@ export const useParticipants = (props) => {
           participants.concat({
             text,
             checked: false,
-            registered: regist.userExists,
-            uid: regist.userID,
+            //registered: regist.userExists,
+            //uid: regist.userID,
           })
         );
       }
