@@ -1,0 +1,30 @@
+.taskboard-navbar-lockup {
+  background-color: rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  p {
+    margin: 0.5em;
+  }
+  input {
+    // width: 100%;
+    border-radius: 15px;
+    border: none;
+    box-shadow: inset 0 0 0 2px #0079bf;
+    padding: 0.25em 0.75em;
+  }
+  .button-lockup {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    padding: 0.25em 0.5em;
+    button:first-child {
+      background-color: #5aac44;
+      color: white;
+    }
+    button:nth-child(2) {
+      background-color: red;
+      color: white;
+    }
+  }
+}

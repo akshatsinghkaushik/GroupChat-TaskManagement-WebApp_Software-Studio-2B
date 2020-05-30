@@ -3,28 +3,11 @@ import { Link } from "react-router-dom";
 import "./Taskboard.scss";
 import TaskColumn from "../Presentational/TaskColumn/TaskColumn";
 import NewTaskColumn from "../Presentational/NewTaskColumn/NewTaskColumn";
+import TaskboardNavbar from "../Presentational/TaskboardNavbar/TaskboardNavbar";
 import { db } from "../../services/firebase";
 import { readUrlQueryParam, isEmptyObj } from "../../helpers/utils";
 import { Typography } from "@material-ui/core";
 import { auth } from "../../services/firebase";
-
-/*
-taskboard:
-  Name: string
-  Description: string
-  createdDate: Date
-  createdBy: string // userId
-  Columns: string[]
-  deletedDate: Date | null
-column:
-  Name: string
-  Tasks: string[]
-tasks:
-  name: string
-  description: string
-  createdDate: Date
-  assignees: string[] // User IDs
-*/
 
 const Taskboard = () => {
   const [taskboardData, setTaskboardData] = React.useState({});
@@ -32,15 +15,17 @@ const Taskboard = () => {
   const [columns, setColumns] = React.useState([]);
   const [readError, setReadError] = React.useState(false); // TODO: use this
   const [user, setUser] = React.useState(null);
+  const groupId = localStorage.getItem("groupId");
 
   useEffect(() => {
     const boardId = readUrlQueryParam("id");
     const getTaskboardData = async () => {
-      const groupId = localStorage.getItem("groupId");
       try {
+        // Note, because we use once here we do not have real time updates to taskboard details atm
         const result = await db
           .ref(`/taskboards/${groupId}/${boardId}`)
           .once("value");
+
         if (!result.val()) {
           throw new Error("Taskboard does not exist");
         }
@@ -55,7 +40,7 @@ const Taskboard = () => {
       setIsBoardLoaded(true);
     };
     getTaskboardData();
-  }, []);
+  }, [groupId]);
 
   useEffect(() => {
     if (isEmptyObj(taskboardData)) return;
@@ -93,9 +78,7 @@ const Taskboard = () => {
   }
   return (
     <div id="taskboard-container">
-      <div className="taskboard-navbar">
-        <p>Board Title Here</p>
-      </div>
+      <TaskboardNavbar groupId={groupId} taskboard={taskboardData} />
       <div className="taskboard-canvas">
         {isBoardLoaded ? (
           <div className="taskboard">
@@ -106,6 +89,7 @@ const Taskboard = () => {
                   boardId={taskboardData.id}
                   column={column}
                   user={user}
+                  onDragOver={(e) => e.preventDefault()}
                 />
               );
             })}

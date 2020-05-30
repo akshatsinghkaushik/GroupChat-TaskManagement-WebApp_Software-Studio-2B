@@ -6,6 +6,7 @@ import "./TaskDetails.scss";
 import TaskDescription from "../TaskDescription/TaskDescription";
 import TaskActivity from "../TaskActivity/TaskActivity";
 import { updateTask } from "../../../helpers/db";
+import TaskDelete from "../TaskDelete/TaskDelete";
 
 const TaskDetails = ({ columnId, taskDetails, close }) => {
   const [newTaskName, setNewTaskName] = React.useState("");
@@ -56,7 +57,7 @@ const TaskDetails = ({ columnId, taskDetails, close }) => {
             placeholder="Enter a title for this card..."
           />
         ) : (
-          <Typography variant="h5" component="h1" onClick={handleStartEditing}>
+          <Typography variant="h4" component="h1" onClick={handleStartEditing}>
             {taskDetails.name}
           </Typography>
         )}
@@ -71,7 +72,11 @@ const TaskDetails = ({ columnId, taskDetails, close }) => {
           <TaskActivity columnId={columnId} taskDetails={taskDetails} />
         </div>
         <div className="sidebar">
-          <Typography>This is the sidebar</Typography>
+          <TaskDelete
+            columnId={columnId}
+            taskDetails={taskDetails}
+            close={close}
+          />
         </div>
       </div>
     </div>
