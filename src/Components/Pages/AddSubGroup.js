@@ -380,6 +380,8 @@ export default function AddSubGroup(props) {
                 participants={leaders}
                 setParticipants={setLeaders}
                 users={props.users}
+                groupMembers={props.groupMembers}
+                participants_test={props.participants}
               />
             </div>
             <div
