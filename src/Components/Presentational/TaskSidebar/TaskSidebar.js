@@ -12,6 +12,7 @@ import {
 
 const TaskSidebar = ({ columnId, taskDetails, close }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
+  console.log("taskdetails is ", taskDetails);
   const handleDateChange = (date) => {
     console.log("date is ", date);
     setSelectedDate(date);
