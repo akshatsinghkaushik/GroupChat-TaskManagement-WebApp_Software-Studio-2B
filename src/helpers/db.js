@@ -61,6 +61,20 @@ export function createTask(columnId, task) {
   return db.ref(`tasks/${columnId}`).push(task);
 }
 
+export function createTaskTodo(columnId, taskId, todo) {
+  return db.ref(`tasks/${columnId}/${taskId}/todos`).push(todo);
+}
+
+export function updateTaskTodoStatus(columnId, taskId, todoId, isComplete) {
+  return db.ref(`tasks/${columnId}/${taskId}/todos/${todoId}`).update({
+    isComplete: isComplete,
+  });
+}
+
+export function deleteTaskTodo(columnId, taskId, todoId) {
+  return db.ref(`tasks/${columnId}/${taskId}/todos/${todoId}`).remove();
+}
+
 export async function updateTaskColumn(newColumnId, oldColumnId, taskId) {
   try {
     //TODO: Make this logic more sound when second operation fails need to undo first

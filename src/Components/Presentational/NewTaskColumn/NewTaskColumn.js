@@ -24,6 +24,9 @@ const NewTaskColumn = ({ boardId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (name === "") {
+      return;
+    }
     try {
       await createTaskColumn(boardId, name);
       handleCancelEditing();

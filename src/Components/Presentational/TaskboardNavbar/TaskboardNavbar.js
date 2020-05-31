@@ -24,7 +24,7 @@ const TaskboardNavbar = ({ groupId, taskboard }) => {
 
   const saveNewTitle = async (e) => {
     e.preventDefault();
-    if (!taskboard.id) return;
+    if (!taskboard.id || !newTitleText) return;
     try {
       await updateTaskboard(groupId, taskboard.id, {
         name: newTitleText,

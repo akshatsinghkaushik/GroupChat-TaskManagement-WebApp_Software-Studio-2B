@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./TaskDetails.scss";
 import TaskDescription from "../TaskDescription/TaskDescription";
 import TaskActivity from "../TaskActivity/TaskActivity";
+import TaskTodos from "../TaskTodos/TaskTodos";
 import { updateTask } from "../../../helpers/db";
 import TaskDelete from "../TaskDelete/TaskDelete";
 
@@ -67,8 +68,9 @@ const TaskDetails = ({ columnId, taskDetails, close }) => {
       </div>
       <div className="grid-lockup">
         <div className="main-col">
-          <div className="task-detail"></div>
+          {/* <div className="task-detail"></div> */}
           <TaskDescription columnId={columnId} taskDetails={taskDetails} />
+          <TaskTodos columnId={columnId} taskDetails={taskDetails} />
           <TaskActivity columnId={columnId} taskDetails={taskDetails} />
         </div>
         <div className="sidebar">

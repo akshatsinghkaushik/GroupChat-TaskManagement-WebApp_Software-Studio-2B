@@ -1,0 +1,64 @@
+.task-todos-lockup {
+  border-radius: 5px;
+  .title-lockup {
+    margin: 0.5em 0;
+    display: flex;
+    align-items: center;
+    h2 {
+      display: inline-block;
+      margin: 0;
+    }
+  }
+  .task-grid-lockup {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    .todo-list-lockup {
+      ul {
+        height: 10em;
+        width: 100%;
+        overflow-y: auto;
+
+        .todo-lockup {
+          margin: 0.25em 0;
+          width: 100%;
+          display: flex;
+          flex-flow: row nowrap;
+          align-items: center;
+
+          p {
+            margin-bottom: 0;
+            white-space: pre-wrap;
+          }
+          .button-lockup {
+            flex-grow: 2;
+            text-align: right;
+          }
+        }
+      }
+    }
+    .todo-progress-lockup {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+  .create-todo-lockup {
+    width: 100%;
+    form {
+      display: grid;
+      grid-template-columns: 1fr 5em;
+      input {
+        border-radius: 15px;
+        border: none;
+        box-shadow: inset 0 0 0 2px #0079bf;
+        padding: 0.25em 0.75em;
+      }
+      button {
+        border-radius: 5px;
+        background-color: #5aac44;
+        color: white;
+      }
+    }
+  }
+}
