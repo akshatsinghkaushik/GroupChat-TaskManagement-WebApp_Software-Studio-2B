@@ -432,7 +432,7 @@ class Chat extends Component {
                         selectedGroupID={this.state.selectedGroupID}
                         selecteGroupName={this.state.selectedGroupName}
                         groupMembers={this.state.groupMembers}
-                        refreshGroups={this.refreshGroups}
+                        //refreshGroups={this.refreshGroups}
                       />
                     </div>
                     <div>

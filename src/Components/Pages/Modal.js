@@ -28,7 +28,7 @@ const AddGroupParticipant = memo((props) => {
     checkParticipants,
     removeParticipants,
   } = useParticipants(props);
-  const clearInputAndAddParticipant = (_) => {
+  const clearInputAndAddParticipant = () => {
     const userExists = () => {
       let userEx = false;
 
