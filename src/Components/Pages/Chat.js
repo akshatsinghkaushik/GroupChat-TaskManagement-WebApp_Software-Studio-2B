@@ -91,17 +91,6 @@ class Chat extends Component {
           });
         }
 
-        db.ref(`groups/${this.state.selectedGroupID}/members`).on(
-          "value",
-          (snapshot) => {
-            const members_temp = new Map();
-            snapshot.forEach((snap) => {
-              members_temp.set(snap.key, snap.val());
-            });
-            this.setState({ groupMembers: members_temp });
-          }
-        );
-
         db.ref(`groups/${this.state.selectedGroupID}/chats`).once(
           "value",
           (snapshot) => {
@@ -144,6 +133,22 @@ class Chat extends Component {
               });
             });
             this.setState({ boards });
+          }
+        );
+      } catch (error) {
+        this.setState({ readError: error.message });
+      }
+
+      db.ref(`groups/${prevState.selectedGroupID}/members`).off("value");
+      try {
+        db.ref(`groups/${this.state.selectedGroupID}/members`).on(
+          "value",
+          (snapshot) => {
+            const members_temp = new Map();
+            snapshot.forEach((snap) => {
+              members_temp.set(snap.key, snap.val());
+            });
+            this.setState({ groupMembers: members_temp });
           }
         );
       } catch (error) {
