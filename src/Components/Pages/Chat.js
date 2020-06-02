@@ -188,6 +188,8 @@ class Chat extends Component {
     } catch (error) {
       this.setState({ readError: error.message });
     }
+    let container = document.querySelector(".msg-mid");
+    container.scrollTop = container.scrollHeight;
   }
 
   handleChange(event) {
@@ -271,6 +273,8 @@ class Chat extends Component {
     } catch (error) {
       this.setState({ writeError: error.message });
     }
+    let container = document.querySelector(".msg-mid");
+    container.scrollTop = container.scrollHeight;
   }
 
   formatTime(timestamp) {
