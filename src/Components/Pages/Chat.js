@@ -50,6 +50,7 @@ class Chat extends Component {
   }
 
   async componentDidMount() {
+    let container = document.querySelector(".msg-mid");
     this.setState({ readError: null, loadingChats: true });
     //const chatArea = this.myRef.current;
 
@@ -109,6 +110,7 @@ class Chat extends Component {
           }
         );
         this.setState({ loadingChats: false });
+        container.scrollTop = container.scrollHeight;
       });
     } catch (error) {
       this.setState({ readError: error.message });
