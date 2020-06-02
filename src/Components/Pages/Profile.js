@@ -244,8 +244,6 @@ class Profile extends Component {
   handleChange(evt, name) {
     const text = evt.target.value;
     this.setState(() => ({ [name]: text }));
-    console.log("usernameTemp: " + this.state.usernameTemp);
-    console.log("emailTemp: " + this.state.emailTemp);
   }
   handlePhotoStateChange(e) {
     e.preventDefault();
