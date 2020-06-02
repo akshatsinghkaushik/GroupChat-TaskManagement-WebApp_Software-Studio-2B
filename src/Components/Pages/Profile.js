@@ -72,7 +72,7 @@ class Profile extends Component {
     if (this.state.usernameEditable) {
       if (
         typeof this.state.usernameTemp !== "undefined" &&
-        this.state.emailTemp !== ""
+        this.state.usernameTemp !== ""
       ) {
         try {
           var success = await this.writeUserData(
@@ -244,6 +244,8 @@ class Profile extends Component {
   handleChange(evt, name) {
     const text = evt.target.value;
     this.setState(() => ({ [name]: text }));
+    console.log("usernameTemp: " + this.state.usernameTemp);
+    console.log("emailTemp: " + this.state.emailTemp);
   }
   handlePhotoStateChange(e) {
     e.preventDefault();
