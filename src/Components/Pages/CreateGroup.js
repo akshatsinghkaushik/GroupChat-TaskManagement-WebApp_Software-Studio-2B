@@ -2,7 +2,7 @@ import React, { memo, useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Fab from "@material-ui/core/Fab";
 import Modal from "@material-ui/core/Modal";
-import "./Modal.scss";
+import "./CreateGroup.scss";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import GroupAddIcon from "@material-ui/icons/GroupAdd";
@@ -65,6 +65,7 @@ const AddGroupParticipant = memo((props) => {
         items={props.participants}
         onItemCheck={(idx) => checkParticipants(idx)}
         onItemRemove={(idx) => removeParticipants(idx)}
+        source={"createGroup"}
       />
     </div>
   );
@@ -114,6 +115,7 @@ const AddGroupLeader = memo((props) => {
         items={props.participants}
         onItemCheck={(idx) => checkParticipants(idx)}
         onItemRemove={(idx) => removeParticipants(idx)}
+        source={"createGroup"}
       />
     </div>
   );
@@ -140,7 +142,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AnimatedModal(props) {
+export default function CreateGroup(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -179,6 +181,10 @@ export default function AnimatedModal(props) {
 
   const handleClose = () => {
     setOpen(false);
+    setGroupName(null);
+    setGroupDesc(null);
+    setParticipants([]);
+    setLeaders([]);
   };
 
   const handleNameChange = (event) => {

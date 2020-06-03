@@ -12,8 +12,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { Link, withRouter } from "react-router-dom";
-import AnimatedModal from "./Modal";
-import AddSubGroup from "./AddSubGroup";
+import CreateGroup from "./CreateGroup";
+import CreateSubGroup from "./CreateSubGroup";
 import "./Chat.scss";
 
 const useStyles = (theme) => ({
@@ -366,7 +366,7 @@ class Chat extends Component {
                 })}
               </div>
               <div className="create_group_fab">
-                <AnimatedModal
+                <CreateGroup
                   className="create_group_fab"
                   users={this.state.users}
                   groups={this.state.groups}
@@ -430,7 +430,7 @@ class Chat extends Component {
 
                   <div className="subgroup_menu">
                     <div className="create_subgroup_btn">
-                      <AddSubGroup
+                      <CreateSubGroup
                         className="addSubGroup"
                         users={this.state.users}
                         groups={this.state.groups}

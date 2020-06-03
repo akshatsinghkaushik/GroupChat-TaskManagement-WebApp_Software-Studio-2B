@@ -1,5 +1,5 @@
 import React, { memo, useState, useEffect } from "react";
-import "./AddSubGroup.scss";
+import "./CreateSubGroup.scss";
 import {
   useInputValue,
   useParticipants,
@@ -61,6 +61,7 @@ const AddSubGroupParticipant = memo((props) => {
         items={props.participants}
         onItemCheck={(idx) => checkParticipants(idx)}
         onItemRemove={(idx) => removeParticipants(idx)}
+        source={"createSubGroup"}
       />
     </div>
   );
@@ -74,7 +75,7 @@ const AddSubGroupLeader = memo((props) => {
     checkParticipants,
     removeParticipants,
   } = useParticipants(props);
-  const clearInputAndAddParticipant = (_) => {
+  const clearInputAndAddParticipant = () => {
     const memberExists = () => {
       let userEx = false;
       let uid = null;
@@ -111,6 +112,7 @@ const AddSubGroupLeader = memo((props) => {
         items={props.participants}
         onItemCheck={(idx) => checkParticipants(idx)}
         onItemRemove={(idx) => removeParticipants(idx)}
+        source={"createSubGroup"}
       />
     </div>
   );
@@ -137,7 +139,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AddSubGroup(props) {
+export default function CreateSubGroup(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -204,6 +206,10 @@ export default function AddSubGroup(props) {
 
   const handleClose = () => {
     setOpen(false);
+    setSubGroupName(null);
+    setSubGroupDesc(null);
+    setParticipants([]);
+    setLeaders([]);
   };
 
   const handleNameChange = (event) => {
@@ -297,7 +303,7 @@ export default function AddSubGroup(props) {
   };
 
   return (
-    <div>
+    <div id="create-subgroup-form">
       <div className="addSubGroup">
         <button type="button" onClick={handleOpen} className="primary-button">
           <Typography>Create new subgroup</Typography>
@@ -381,7 +387,6 @@ export default function AddSubGroup(props) {
                 setParticipants={setLeaders}
                 users={props.users}
                 groupMembers={props.groupMembers}
-                participants_test={props.participants}
               />
             </div>
             <div
@@ -394,7 +399,6 @@ export default function AddSubGroup(props) {
                 setParticipants={setParticipants}
                 users={props.users}
                 groupMembers={props.groupMembers}
-                participants_test={props.participants}
               />
             </div>
             {savingGroup ? (
@@ -485,4 +489,4 @@ export default function AddSubGroup(props) {
   );
 }
 
-//export default AddSubGroup;
+//export default CreateSubGroup;
