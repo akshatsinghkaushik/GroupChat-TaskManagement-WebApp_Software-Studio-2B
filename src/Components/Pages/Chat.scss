@@ -150,7 +150,7 @@
   .msg-top {
     border-bottom: 1px solid #c4c4c4;
     padding: 10px 0;
-    height: 80px;
+    height: 100px;
     display: flex;
     align-items: center;
     margin: 0 -15px 0 -25px;
@@ -259,7 +259,7 @@
 
   .type_msg {
     position: relative;
-    padding: 10px 0;
+    padding: 10px 0 50px;
     display: flex;
     align-items: center;
     height: 80px;
@@ -283,6 +283,19 @@
     justify-content: flex-start;
     align-items: center;
   }
+  .create_taskboard_btn {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: flex-end;
+    button {
+      display: flex;
+      flex: auto;
+      border: medium none;
+      color: #05728f;
+      font-size: 16px;
+      background: #fff;
+    }
+  }
   .create_subgroup_btn {
     display: flex;
     flex-flow: column nowrap;
@@ -293,13 +306,30 @@
       border: medium none;
       color: #05728f;
       font-size: 26px;
+      background: #fff;
     }
   }
-  .fab button {
+  .create_group_btn button {
     bottom: 18px;
     left: 20px;
     position: absolute;
     background: #05728f none repeat scroll 0 0;
     color: #fff;
+  }
+  .create_group_fab button {
+    bottom: 18px;
+    left: 20px;
+    position: absolute;
+    background: #05728f none repeat scroll 0 0;
+    color: #fff;
+  }
+  .taskboard_menu {
+    display: flex;
+    flex-direction: column;
+    padding-right: 2em;
+  }
+  .subgroup_menu {
+    display: flex;
+    flex-direction: column;
   }
 }

@@ -1,0 +1,57 @@
+$primary-color: #0048aa;
+$accent-color: #eee;
+
+$contrasted-primary-text: #fff; // contrast-color($primary-color, lighten($accent-color, 10), darken($accent-color, 10));
+$contrasted-accent-text: #111; // contrast-color($accent-color, lighten($primary-color, 10), darken($primary-color, 10));
+
+$primary-dark: darken($primary-color, 8%);
+$shadow-box-color: #000000bf;
+$search-background-image-color: #ffffff4d;
+$light-grey-border: #ddd;
+$accent-text-color: darken($accent-color, 86.67);
+$button-text: lighten($accent-color, 65%);
+$sky-dark-blue: #246fa8;
+$button-disabled-background: lighten(
+  desaturate(adjust-hue($primary-color, 1), 74.07),
+  24.31
+);
+$button-disabled-border: lighten(
+  desaturate(adjust-hue($primary-color, 5), 89.24),
+  17.45
+);
+
+.primary-button {
+  color: #05728f;
+  padding: 0px;
+  border-radius: 20px;
+  cursor: pointer;
+  outline: none;
+  font-size: 15px;
+
+  &:disabled {
+    background: $button-disabled-background;
+    border: 1px solid $button-disabled-border;
+  }
+}
+
+.secondary-button {
+  flex: 0 0 auto;
+  background: $sky-dark-blue;
+  border: 1px solid $sky-dark-blue;
+  color: $button-text;
+  padding: 12px;
+  border-radius: 20px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  outline: none;
+  margin-top: 90px;
+  font-weight: bold;
+  height: 50px;
+  border: 2px solid;
+  justify-content: center;
+
+  &:disabled {
+    background: $button-disabled-background;
+    border: 1px solid $button-disabled-border;
+  }
+}

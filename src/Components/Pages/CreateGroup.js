@@ -2,7 +2,7 @@ import React, { memo, useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Fab from "@material-ui/core/Fab";
 import Modal from "@material-ui/core/Modal";
-import "./Modal.scss";
+import "./CreateGroup.scss";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import GroupAddIcon from "@material-ui/icons/GroupAdd";
@@ -28,7 +28,7 @@ const AddGroupParticipant = memo((props) => {
     checkParticipants,
     removeParticipants,
   } = useParticipants(props);
-  const clearInputAndAddParticipant = (_) => {
+  const clearInputAndAddParticipant = () => {
     const userExists = () => {
       let userEx = false;
 
@@ -65,6 +65,7 @@ const AddGroupParticipant = memo((props) => {
         items={props.participants}
         onItemCheck={(idx) => checkParticipants(idx)}
         onItemRemove={(idx) => removeParticipants(idx)}
+        source={"createGroup"}
       />
     </div>
   );
@@ -114,6 +115,7 @@ const AddGroupLeader = memo((props) => {
         items={props.participants}
         onItemCheck={(idx) => checkParticipants(idx)}
         onItemRemove={(idx) => removeParticipants(idx)}
+        source={"createGroup"}
       />
     </div>
   );
@@ -140,7 +142,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AnimatedModal(props) {
+export default function CreateGroup(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -179,6 +181,10 @@ export default function AnimatedModal(props) {
 
   const handleClose = () => {
     setOpen(false);
+    setGroupName(null);
+    setGroupDesc(null);
+    setParticipants([]);
+    setLeaders([]);
   };
 
   const handleNameChange = (event) => {
@@ -251,7 +257,6 @@ export default function AnimatedModal(props) {
             });
           }
         }
-
         props.refreshGroups();
 
         setSavingGroup(false);
@@ -294,7 +299,7 @@ export default function AnimatedModal(props) {
                 style={{
                   color: "#fff",
                   borderBottom: "1px solid #05728f",
-                  padding: "1em 4em 1em 4em",
+                  padding: "1em 3.1em 1em 3.1em",
                 }}
               >
                 {" "}
@@ -375,7 +380,7 @@ export default function AnimatedModal(props) {
             {saveError !== null && saveError !== "null" ? (
               <div
                 className=""
-                style={{ textAlign: "center", marginTop: "2em" }}
+                style={{ textAlign: "center", marginTop: "2em", color: "red" }}
               >
                 {saveError}
               </div>
@@ -389,7 +394,7 @@ export default function AnimatedModal(props) {
                 padding: "0px 95px 0px 95px",
                 flexDirection: "row",
                 alignItems: "center",
-                marginBottom: "1em",
+                marginBottom: "3em",
                 marginTop: "2.5em",
               }}
             >

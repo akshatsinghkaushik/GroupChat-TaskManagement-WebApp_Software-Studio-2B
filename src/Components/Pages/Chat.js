@@ -10,17 +10,14 @@ import {
   Typography,
 } from "@material-ui/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPaperPlane,
-  faSearch,
-  faPlus,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPaperPlane, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { Link, withRouter } from "react-router-dom";
-import AnimatedModal from "./Modal";
+import CreateGroup from "./CreateGroup";
+import CreateSubGroup from "./CreateSubGroup";
 import "./Chat.scss";
 
 const useStyles = (theme) => ({
-  taskboardList: {
+  List: {
     width: "11em",
     marginLeft: "1em",
   },
@@ -34,6 +31,7 @@ class Chat extends Component {
       chats: [],
       usrGroups: new Map(),
       boards: [],
+      groupMembers: new Map(),
       groups: new Map(),
       selectedGroupID: "",
       selectedGroupName: "",
@@ -142,6 +140,22 @@ class Chat extends Component {
       } catch (error) {
         this.setState({ readError: error.message });
       }
+
+      db.ref(`groups/${prevState.selectedGroupID}/members`).off("value");
+      try {
+        db.ref(`groups/${this.state.selectedGroupID}/members`).on(
+          "value",
+          (snapshot) => {
+            const members_temp = new Map();
+            snapshot.forEach((snap) => {
+              members_temp.set(snap.key, snap.val());
+            });
+            this.setState({ groupMembers: members_temp });
+          }
+        );
+      } catch (error) {
+        this.setState({ readError: error.message });
+      }
     }
   }
 
@@ -150,6 +164,7 @@ class Chat extends Component {
     db.ref("chats").off("value");
     db.ref(`users/${this.state.user.uid}/groups`).off("value");
     db.ref(`groups`).off("value");
+    db.ref("members").off("value");
   }
 
   refreshGroups() {
@@ -356,9 +371,9 @@ class Chat extends Component {
                   );
                 })}
               </div>
-              <div className="fab">
-                <AnimatedModal
-                  className="fab"
+              <div className="create_group_fab">
+                <CreateGroup
+                  className="create_group_fab"
                   users={this.state.users}
                   groups={this.state.groups}
                   refreshGroups={this.refreshGroups}
@@ -371,51 +386,80 @@ class Chat extends Component {
               {/* chat area */}
               <div className="msg_history">
                 <div className="msg-top">
-                  {/* Logged in as:{" "}
-                  <strong className="text-info">{this.state.user.email}</strong> */}
-
                   <div className="group_header">
                     <strong className="text-info">
                       {this.state.selectedGroupName || "Group Name"}
                     </strong>
-                    <FormControl className={classes.taskboardList}>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value=""
-                        displayEmpty
-                      >
-                        <MenuItem value="" disabled>
-                          Select a taskboard
-                        </MenuItem>
-                        {this.state.boards.map((board) => {
-                          return (
-                            <MenuItem key={board.id} value={board.id}>
-                              <Link
-                                to={`/taskboard?id=${board.id}`}
-                                onClick={() =>
-                                  localStorage.setItem(
-                                    "groupId",
-                                    this.state.selectedGroupID
-                                  )
-                                }
-                              >
-                                {board.name}
-                              </Link>
-                            </MenuItem>
-                          );
-                        })}
-                      </Select>
-                    </FormControl>
                   </div>
-                  <div className="create_subgroup_btn">
-                    <button type="button" onClick={this.handleCreateTaskboard}>
-                      <Typography>Create new taskboard</Typography>
-                    </button>
-                    <button type="button">
-                      {" "}
-                      <FontAwesomeIcon icon={faPlus} />{" "}
-                    </button>
+
+                  <div className="taskboard_menu">
+                    <div className="create_taskboard_btn">
+                      <button
+                        type="button"
+                        onClick={this.handleCreateTaskboard}
+                      >
+                        <Typography>Create new taskboard</Typography>
+                      </button>
+                    </div>
+                    <div>
+                      <FormControl className={classes.list}>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          value=""
+                          displayEmpty
+                        >
+                          <MenuItem value="" disabled>
+                            Select a taskboard
+                          </MenuItem>
+                          {this.state.boards.map((board) => {
+                            return (
+                              <MenuItem key={board.id} value={board.id}>
+                                <Link
+                                  to={`/taskboard?id=${board.id}`}
+                                  onClick={() =>
+                                    localStorage.setItem(
+                                      "groupId",
+                                      this.state.selectedGroupID
+                                    )
+                                  }
+                                >
+                                  {board.name}
+                                </Link>
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                      </FormControl>
+                    </div>
+                  </div>
+
+                  <div className="subgroup_menu">
+                    <div className="create_subgroup_btn">
+                      <CreateSubGroup
+                        className="addSubGroup"
+                        users={this.state.users}
+                        groups={this.state.groups}
+                        selectedGroupID={this.state.selectedGroupID}
+                        selecteGroupName={this.state.selectedGroupName}
+                        groupMembers={this.state.groupMembers}
+                        //refreshGroups={this.refreshGroups}
+                      />
+                    </div>
+                    <div>
+                      <FormControl className={classes.list}>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          value=""
+                          displayEmpty
+                        >
+                          <MenuItem value="" disabled>
+                            Select a subgroup
+                          </MenuItem>
+                        </Select>
+                      </FormControl>
+                    </div>
                   </div>
                 </div>
 

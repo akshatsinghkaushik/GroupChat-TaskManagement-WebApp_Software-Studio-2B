@@ -37,6 +37,18 @@ export const useParticipants = (props) => {
         );
       }
     },
+    addMembers: (text, regist) => {
+      if (text !== "") {
+        props.setParticipants(
+          participants.concat({
+            text,
+            checked: false,
+            isMember: regist.userExists,
+            uid: regist.userID,
+          })
+        );
+      }
+    },
     checkParticipants: (idx) => {
       props.setParticipants(
         participants.map((participant, index) => {
