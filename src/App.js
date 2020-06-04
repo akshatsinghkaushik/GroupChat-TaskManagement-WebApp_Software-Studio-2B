@@ -76,7 +76,15 @@ class App extends Component {
 
   render() {
     return this.state.loading === true ? (
-      <div className="spinner-border text-success" role="status">
+      <div
+        className="spinner-border text-success"
+        role="status"
+        style={{
+          position: "absolute",
+          left: "50%",
+          top: "50%",
+        }}
+      >
         <span className="sr-only">Loading...</span>
       </div>
     ) : (
