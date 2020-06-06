@@ -31,6 +31,7 @@ class Chat extends Component {
       chats: [],
       usrGroups: new Map(),
       boards: [],
+      subGroups: [],
       groupMembers: new Map(),
       groups: new Map(),
       selectedGroupID: "",
@@ -105,6 +106,16 @@ class Chat extends Component {
             });
 
             this.setState({ chats });
+          }
+        );
+        db.ref(`groups/${this.state.selectedGroupID}/subGroups`).on(
+          "value",
+          (snapshot) => {
+            const subGroups = [];
+            snapshot.forEach((snap) => {
+              subGroups.push(snap.val());
+            });
+            this.setState({ subGroups });
           }
         );
         this.setState({ loadingChats: false });
@@ -457,6 +468,13 @@ class Chat extends Component {
                           <MenuItem value="" disabled>
                             Select a subgroup
                           </MenuItem>
+                          {this.state.subGroups.map((subGroup) => {
+                            return (
+                              <MenuItem key={subGroup.id} value={subGroup.id}>
+                                {subGroup.name}
+                              </MenuItem>
+                            );
+                          })}
                         </Select>
                       </FormControl>
                     </div>
