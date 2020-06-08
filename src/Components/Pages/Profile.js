@@ -136,7 +136,6 @@ class Profile extends Component {
           .child(this.state.user.uid)
           .getDownloadURL()
           .then((url) => {
-            console.log(url);
             this.setState({
               url: url,
               error: "The profile image was uploaded successfully.",
