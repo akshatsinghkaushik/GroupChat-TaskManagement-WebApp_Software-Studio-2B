@@ -72,7 +72,7 @@ class Profile extends Component {
     if (this.state.usernameEditable) {
       if (
         typeof this.state.usernameTemp !== "undefined" &&
-        this.state.emailTemp !== ""
+        this.state.usernameTemp !== ""
       ) {
         try {
           var success = await this.writeUserData(
@@ -136,7 +136,6 @@ class Profile extends Component {
           .child(this.state.user.uid)
           .getDownloadURL()
           .then((url) => {
-            console.log(url);
             this.setState({
               url: url,
               error: "The profile image was uploaded successfully.",
