@@ -30,12 +30,15 @@ class Chat extends Component {
       user: auth().currentUser,
       chats: [],
       usrGroups: new Map(),
+      usrSubGroups: new Map(),
       boards: [],
-      subGroups: [],
       groupMembers: new Map(),
       groups: new Map(),
       selectedGroupID: "",
       selectedGroupName: "",
+      subGroups: new Map(),
+      selectedSubGroupID: "-1",
+      selectedSubGroupName: "Main Group",
       users: new Map(),
       content: "",
       readError: null,
@@ -93,9 +96,28 @@ class Chat extends Component {
           });
         }
 
-        db.ref(`groups/${this.state.selectedGroupID}/chats`).once(
-          "value",
-          (snapshot) => {
+        if (this.state.selectedSubGroupID === "-1") {
+          db.ref(`groups/${this.state.selectedGroupID}/chats`).once(
+            "value",
+            (snapshot) => {
+              const chats = [];
+              snapshot.forEach((snap) => {
+                chats.push(snap.val());
+              });
+
+              chats.sort((a, b) => {
+                return a.timestamp - b.timestamp;
+              });
+
+              this.setState({ chats });
+            }
+          );
+          this.setState({ loadingChats: false });
+          container.scrollTop = container.scrollHeight;
+        } else {
+          db.ref(
+            `groups/${this.state.selectedGroupID}/subGroups/${this.state.selectedSubGroupID}/chats`
+          ).once("value", (snapshot) => {
             const chats = [];
             snapshot.forEach((snap) => {
               chats.push(snap.val());
@@ -106,20 +128,10 @@ class Chat extends Component {
             });
 
             this.setState({ chats });
-          }
-        );
-        db.ref(`groups/${this.state.selectedGroupID}/subGroups`).on(
-          "value",
-          (snapshot) => {
-            const subGroups = [];
-            snapshot.forEach((snap) => {
-              subGroups.push(snap.val());
-            });
-            this.setState({ subGroups });
-          }
-        );
-        this.setState({ loadingChats: false });
-        container.scrollTop = container.scrollHeight;
+          });
+          this.setState({ loadingChats: false });
+          container.scrollTop = container.scrollHeight;
+        }
       });
     } catch (error) {
       this.setState({ readError: error.message });
@@ -152,6 +164,42 @@ class Chat extends Component {
         this.setState({ readError: error.message });
       }
 
+      const subGroupsList = new Map();
+      try {
+        db.ref(
+          `users/${this.state.user.uid}/groups/${this.state.selectedGroupID}/subGroups`
+        ).on("value", (snapshot) => {
+          snapshot.forEach((snap) => {
+            subGroupsList.set(snap.key, snap.val());
+          });
+          this.setState({ usrSubGroups: subGroupsList });
+        });
+      } catch (error) {
+        this.setState({ readError: error.message });
+      }
+
+      db.ref(`groups/${prevState.selectedGroupID}/subGroups`).off("value");
+      try {
+        db.ref(`groups/${this.state.selectedGroupID}/subGroups`).on(
+          "value",
+          (snapshot) => {
+            const subGroups_temp = new Map();
+            subGroups_temp.set(
+              this.state.selectedGroupID,
+              this.state.groups.get(this.state.selectedGroupID)
+            );
+            snapshot.forEach((snap) => {
+              if (subGroupsList.has(snap.key)) {
+                subGroups_temp.set(snap.key, snap.val());
+              }
+            });
+            this.setState({ subGroups: subGroups_temp });
+          }
+        );
+      } catch (error) {
+        this.setState({ readError: error.message });
+      }
+
       db.ref(`groups/${prevState.selectedGroupID}/members`).off("value");
       try {
         db.ref(`groups/${this.state.selectedGroupID}/members`).on(
@@ -176,6 +224,7 @@ class Chat extends Component {
     db.ref(`users/${this.state.user.uid}/groups`).off("value");
     db.ref(`groups`).off("value");
     db.ref("members").off("value");
+    db.ref("subGroups").off("value");
   }
 
   refreshGroups() {
@@ -193,6 +242,37 @@ class Chat extends Component {
             selectedGroupID: this.state.groups.keys().next().value,
           });
         }
+
+        const subGroupsList = new Map();
+        try {
+          db.ref(
+            `users/${this.state.user.uid}/groups/${this.state.selectedGroupID}/subGroups`
+          ).on("value", (snapshot) => {
+            snapshot.forEach((snap) => {
+              subGroupsList.set(snap.key, snap.val());
+            });
+            this.setState({ usrSubGroups: subGroupsList });
+          });
+        } catch (error) {
+          this.setState({ readError: error.message });
+        }
+
+        db.ref(`groups/${this.state.selectedGroupID}/subGroups`).once(
+          "value",
+          (snapshot) => {
+            const subGroups_temp = new Map();
+            subGroups_temp.set(
+              this.state.selectedGroupID,
+              this.state.groups.get(this.state.selectedGroupID)
+            );
+            snapshot.forEach((snap) => {
+              if (subGroupsList.has(snap.key)) {
+                subGroups_temp.set(snap.key, snap.val());
+              }
+            });
+            this.setState({ subGroups: subGroups_temp });
+          }
+        );
 
         db.ref(`groups/${this.state.selectedGroupID}/chats`).once(
           "value",
@@ -229,6 +309,7 @@ class Chat extends Component {
       this.setState({
         selectedGroupID: event.target.id,
         selectedGroupName: this.state.groups.get(event.target.id).name,
+        selectedSubGroupName: this.state.groups.get(event.target.id).name,
       });
 
       db.ref(`groups/${event.target.id}/chats`).once("value", (snapshot) => {
@@ -247,6 +328,7 @@ class Chat extends Component {
       this.setState({
         selectedGroupID: event.currentTarget.id,
         selectedGroupName: this.state.groups.get(event.currentTarget.id).name,
+        selectedSubGroupName: "Main Group",
       });
 
       db.ref(`groups/${event.currentTarget.id}/chats`).once(
@@ -264,6 +346,49 @@ class Chat extends Component {
           this.setState({ chats });
         }
       );
+    }
+  };
+
+  handleSelectSubGroup = (event) => {
+    if (event.target.id === this.state.selectedGroupID) {
+      this.setState({
+        selectedGroupID: event.target.id,
+        selectedGroupName: this.state.groups.get(event.target.id).name,
+        selectedSubGroupID: "-1",
+        selectedSubGroupName: "Main Group",
+      });
+
+      db.ref(`groups/${event.target.id}/chats`).once("value", (snapshot) => {
+        const chats = [];
+        snapshot.forEach((snap) => {
+          chats.push(snap.val());
+        });
+
+        chats.sort((a, b) => {
+          return a.timestamp - b.timestamp;
+        });
+
+        this.setState({ chats });
+      });
+    } else {
+      this.setState({
+        selectedSubGroupID: event.target.id,
+        selectedSubGroupName: this.state.subGroups.get(event.target.id).name,
+      });
+
+      db.ref(
+        `groups/${this.state.selectedGroupID}/subGroups/${event.target.id}/chats`
+      ).once("value", (snapshot) => {
+        const chats = [];
+        snapshot.forEach((snap) => {
+          chats.push(snap.val());
+        });
+
+        chats.sort((a, b) => {
+          return a.timestamp - b.timestamp;
+        });
+        this.setState({ chats });
+      });
     }
   };
 
@@ -288,19 +413,40 @@ class Chat extends Component {
     event.preventDefault();
     this.setState({ writeError: null });
     //const chatArea = this.myRef.current;
-    try {
-      await db.ref(`groups/${this.state.selectedGroupID}/chats`).push({
-        content: this.state.content,
-        timestamp: Date.now(),
-        uid: this.state.user.uid,
-      });
-      this.setState({ content: "" });
-      //chatArea.scrollBy(0, chatArea.scrollHeight);
-    } catch (error) {
-      this.setState({ writeError: error.message });
+
+    if (!(this.state.selectedSubGroupID === "-1")) {
+      try {
+        await db
+          .ref(
+            `groups/${this.state.selectedGroupID}/subGroups/${this.state.selectedSubGroupID}/chats`
+          )
+          .push({
+            content: this.state.content,
+            timestamp: Date.now(),
+            uid: this.state.user.uid,
+          });
+        this.setState({ content: "" });
+        //chatArea.scrollBy(0, chatArea.scrollHeight);
+      } catch (error) {
+        this.setState({ writeError: error.message });
+      }
+      let container = document.querySelector(".msg-mid");
+      container.scrollTop = container.scrollHeight;
+    } else {
+      try {
+        await db.ref(`groups/${this.state.selectedGroupID}/chats`).push({
+          content: this.state.content,
+          timestamp: Date.now(),
+          uid: this.state.user.uid,
+        });
+        this.setState({ content: "" });
+        //chatArea.scrollBy(0, chatArea.scrollHeight);
+      } catch (error) {
+        this.setState({ writeError: error.message });
+      }
+      let container = document.querySelector(".msg-mid");
+      container.scrollTop = container.scrollHeight;
     }
-    let container = document.querySelector(".msg-mid");
-    container.scrollTop = container.scrollHeight;
   }
 
   formatTime(timestamp) {
@@ -398,9 +544,14 @@ class Chat extends Component {
               <div className="msg_history">
                 <div className="msg-top">
                   <div className="group_header">
-                    <strong className="text-info">
-                      {this.state.selectedGroupName || "Group Name"}
-                    </strong>
+                    <div className="group_labels">
+                      <strong className="grp-label">
+                        {this.state.selectedGroupName || "Group Name"}
+                      </strong>
+                      <strong className="sub-grp-label">
+                        {this.state.selectedSubGroupName}
+                      </strong>
+                    </div>
                   </div>
 
                   <div className="taskboard_menu">
@@ -409,7 +560,7 @@ class Chat extends Component {
                         type="button"
                         onClick={this.handleCreateTaskboard}
                       >
-                        <Typography>Create new taskboard</Typography>
+                        <Typography>Create New Taskboard</Typography>
                       </button>
                     </div>
                     <div>
@@ -421,7 +572,7 @@ class Chat extends Component {
                           displayEmpty
                         >
                           <MenuItem value="" disabled>
-                            Select a taskboard
+                            Select a Taskboard
                           </MenuItem>
                           {this.state.boards.map((board) => {
                             return (
@@ -454,7 +605,7 @@ class Chat extends Component {
                         selectedGroupID={this.state.selectedGroupID}
                         selecteGroupName={this.state.selectedGroupName}
                         groupMembers={this.state.groupMembers}
-                        //refreshGroups={this.refreshGroups}
+                        refreshGroups={this.refreshGroups}
                       />
                     </div>
                     <div>
@@ -466,15 +617,22 @@ class Chat extends Component {
                           displayEmpty
                         >
                           <MenuItem value="" disabled>
-                            Select a subgroup
+                            Select a Subgroup
                           </MenuItem>
-                          {this.state.subGroups.map((subGroup) => {
-                            return (
-                              <MenuItem key={subGroup.id} value={subGroup.id}>
-                                {subGroup.name}
-                              </MenuItem>
-                            );
-                          })}
+                          {Array.from(this.state.subGroups.values()).map(
+                            (result, index) => {
+                              return (
+                                <MenuItem
+                                  key={result.id}
+                                  id={result.id}
+                                  value={result.id}
+                                  onClick={this.handleSelectSubGroup}
+                                >
+                                  {result.name}
+                                </MenuItem>
+                              );
+                            }
+                          )}
                         </Select>
                       </FormControl>
                     </div>

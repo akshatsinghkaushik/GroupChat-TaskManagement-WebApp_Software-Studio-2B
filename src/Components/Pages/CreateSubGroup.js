@@ -284,6 +284,7 @@ export default function CreateSubGroup(props) {
               });
             }
           }
+          props.refreshGroups();
 
           setSavingGroup(false);
           setOpen(false);
@@ -306,7 +307,7 @@ export default function CreateSubGroup(props) {
     <div id="create-subgroup-form">
       <div className="addSubGroup">
         <button type="button" onClick={handleOpen} className="primary-button">
-          <Typography>Create new subgroup</Typography>
+          <Typography>Create New Subgroup</Typography>
         </button>
       </div>
 
