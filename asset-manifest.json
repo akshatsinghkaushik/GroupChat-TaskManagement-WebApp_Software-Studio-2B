@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/teams-ui/static/css/main.3f40cb08.chunk.css",
-    "main.js": "/teams-ui/static/js/main.91460db8.chunk.js",
-    "main.js.map": "/teams-ui/static/js/main.91460db8.chunk.js.map",
+    "main.css": "/teams-ui/static/css/main.f0e6371b.chunk.css",
+    "main.js": "/teams-ui/static/js/main.e0be8909.chunk.js",
+    "main.js.map": "/teams-ui/static/js/main.e0be8909.chunk.js.map",
     "runtime-main.js": "/teams-ui/static/js/runtime-main.ad7d9fd1.js",
     "runtime-main.js.map": "/teams-ui/static/js/runtime-main.ad7d9fd1.js.map",
     "static/js/2.1dcbb999.chunk.js": "/teams-ui/static/js/2.1dcbb999.chunk.js",
     "static/js/2.1dcbb999.chunk.js.map": "/teams-ui/static/js/2.1dcbb999.chunk.js.map",
     "index.html": "/teams-ui/index.html",
-    "precache-manifest.731043e3ba4e49eb350c88198688a707.js": "/teams-ui/precache-manifest.731043e3ba4e49eb350c88198688a707.js",
+    "precache-manifest.e2df1eab9530cd1502d50990f8ef4b37.js": "/teams-ui/precache-manifest.e2df1eab9530cd1502d50990f8ef4b37.js",
     "service-worker.js": "/teams-ui/service-worker.js",
-    "static/css/main.3f40cb08.chunk.css.map": "/teams-ui/static/css/main.3f40cb08.chunk.css.map",
+    "static/css/main.f0e6371b.chunk.css.map": "/teams-ui/static/css/main.f0e6371b.chunk.css.map",
     "static/js/2.1dcbb999.chunk.js.LICENSE.txt": "/teams-ui/static/js/2.1dcbb999.chunk.js.LICENSE.txt",
     "static/media/icon.png": "/teams-ui/static/media/icon.b5d56f8d.png",
     "static/media/Login.scss": "/teams-ui/static/media/wavey.54c7b653.png"
@@ -18,7 +18,7 @@
   "entrypoints": [
     "static/js/runtime-main.ad7d9fd1.js",
     "static/js/2.1dcbb999.chunk.js",
-    "static/css/main.3f40cb08.chunk.css",
-    "static/js/main.91460db8.chunk.js"
+    "static/css/main.f0e6371b.chunk.css",
+    "static/js/main.e0be8909.chunk.js"
   ]
 }
