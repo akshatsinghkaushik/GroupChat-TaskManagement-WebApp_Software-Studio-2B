@@ -28,6 +28,10 @@ export async function createTaskboard(userId, groupId) {
   return taskboard.getKey();
 }
 
+export function deleteTaskboard(groupId, taskboardId) {
+  return db.ref(`taskboards/${groupId}/${taskboardId}`).remove();
+}
+
 export function updateTaskboard(groupId, taskboardId, taskboard) {
   return db.ref(`taskboards/${groupId}/${taskboardId}`).update(taskboard);
 }

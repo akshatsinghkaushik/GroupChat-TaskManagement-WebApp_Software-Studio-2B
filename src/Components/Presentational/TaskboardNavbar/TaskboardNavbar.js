@@ -7,7 +7,7 @@ import {
   faTimesCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { updateTaskboard } from "../../../helpers/db";
+import { deleteTaskboard, updateTaskboard } from "../../../helpers/db";
 
 const TaskboardNavbar = ({ groupId, taskboard }) => {
   const [isEditingTitle, setIsEditingTitle] = React.useState(false);
@@ -20,6 +20,14 @@ const TaskboardNavbar = ({ groupId, taskboard }) => {
 
   const handleTitleChange = (e) => {
     setNewTitleText(e.target.value);
+  };
+
+  const handleDeleteTaskboard = async () => {
+    try {
+      await deleteTaskboard(groupId, taskboard.id);
+    } catch (err) {
+      console.log("An error occured when deleting the taskboard", err);
+    }
   };
 
   const saveNewTitle = async (e) => {
@@ -68,6 +76,9 @@ const TaskboardNavbar = ({ groupId, taskboard }) => {
           </div>
         </>
       )}
+      <div className="right-lockup">
+        <Button onClick={handleDeleteTaskboard}>Delete Taskboard</Button>
+      </div>
     </div>
   );
 };

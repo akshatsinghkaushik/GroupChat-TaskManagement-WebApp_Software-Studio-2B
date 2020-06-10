@@ -19,35 +19,34 @@ const Taskboard = () => {
 
   useEffect(() => {
     const boardId = readUrlQueryParam("id");
-    const getTaskboardData = async () => {
-      try {
-        // Note, because we use once here we do not have real time updates to taskboard details atm
-        const result = await db
-          .ref(`/taskboards/${groupId}/${boardId}`)
-          .once("value");
-
-        if (!result.val()) {
-          throw new Error("Taskboard does not exist");
+    try {
+      db.ref(`/taskboards/${groupId}/${boardId}`).on("value", (snapshot) => {
+        const result = snapshot.val();
+        if (!result) {
+          setTaskboardData({});
+          setIsBoardLoaded(true);
+          return;
         }
         setTaskboardData({
-          id: result.key,
-          ...result.val(),
+          id: snapshot.key,
+          ...result,
         });
-      } catch (err) {
-        console.log("An error occurred when getting taskboard data", err);
-        setTaskboardData({});
-      }
+        setIsBoardLoaded(true);
+      });
+    } catch (err) {
+      console.log("An error occurred when getting taskboard data", err);
+      setTaskboardData({});
       setIsBoardLoaded(true);
-    };
-    getTaskboardData();
+    }
+
+    return () => db.ref(`/taskboards/${groupId}/${boardId}`).off("value");
   }, [groupId]);
 
   useEffect(() => {
     if (isEmptyObj(taskboardData)) return;
     setUser(auth().currentUser);
     try {
-      const columns = db.ref(`columns/${taskboardData.id}`);
-      columns.on("value", (snapshot) => {
+      db.ref(`columns/${taskboardData.id}`).on("value", (snapshot) => {
         const tmpCols = [];
         snapshot.forEach((col) => {
           const val = col.val();
