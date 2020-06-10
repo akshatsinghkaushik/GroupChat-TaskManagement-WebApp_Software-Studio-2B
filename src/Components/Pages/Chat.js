@@ -15,6 +15,7 @@ import { Link, withRouter } from "react-router-dom";
 import CreateGroup from "./CreateGroup";
 import CreateSubGroup from "./CreateSubGroup";
 import "./Chat.scss";
+import ChatSettings from "./ChatSettings";
 
 const useStyles = (theme) => ({
   List: {
@@ -93,6 +94,11 @@ class Chat extends Component {
         if (!this.state.selectedGroupID) {
           this.setState({
             selectedGroupID: this.state.groups.keys().next().value,
+            selectedGroupName: this.state.groups.has(
+              this.state.groups.keys().next().value
+            )
+              ? this.state.groups.values().next().value.name
+              : undefined,
           });
         }
 
@@ -551,6 +557,19 @@ class Chat extends Component {
                       <strong className="sub-grp-label">
                         {this.state.selectedSubGroupName}
                       </strong>
+                    </div>
+                    <div className="chat-settings">
+                      {this.state.selectedGroupName !== "" ? (
+                        <ChatSettings
+                          className="chat-settings"
+                          users={this.state.users}
+                          groups={this.state.groups}
+                          groupId={this.state.selectedGroupID}
+                          refreshGroups={this.refreshGroups}
+                        />
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </div>
 
