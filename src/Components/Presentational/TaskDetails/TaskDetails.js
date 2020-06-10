@@ -8,6 +8,7 @@ import TaskActivity from "../TaskActivity/TaskActivity";
 import TaskTodos from "../TaskTodos/TaskTodos";
 import { updateTask } from "../../../helpers/db";
 import TaskDelete from "../TaskDelete/TaskDelete";
+import TaskAssign from "../TaskAssign/TaskAssign";
 
 const TaskDetails = ({ columnId, taskDetails, close }) => {
   const [newTaskName, setNewTaskName] = React.useState("");
@@ -72,6 +73,7 @@ const TaskDetails = ({ columnId, taskDetails, close }) => {
           <TaskDescription columnId={columnId} taskDetails={taskDetails} />
           <TaskTodos columnId={columnId} taskDetails={taskDetails} />
           <TaskActivity columnId={columnId} taskDetails={taskDetails} />
+          <TaskAssign columnId={columnId} taskDetails={taskDetails} />
         </div>
         <div className="sidebar">
           <TaskDelete
