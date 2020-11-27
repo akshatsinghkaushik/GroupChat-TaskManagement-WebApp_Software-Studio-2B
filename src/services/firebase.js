@@ -4,12 +4,11 @@ import "firebase/database";
 import "firebase/storage";
 
 const config = {
-  apiKey: 'AIzaSyCV6XKmMUDv9PR5MGPIYIRoneeKk1JFqyQ',
-  authDomain: 'groupchat-4f7a9.firebaseapp.com',
-  databaseURL: 'https://groupchat-4f7a9.firebaseio.com',
-  storageBucket: 'ses2b-group2.appspot.com',
-  projectId: 'groupchat-4f7a9',
-  storageBucket: 'groupchat-4f7a9.appspot.com',
+  apiKey: "AIzaSyCV6XKmMUDv9PR5MGPIYIRoneeKk1JFqyQ",
+  authDomain: "groupchat-4f7a9.firebaseapp.com",
+  databaseURL: "https://groupchat-4f7a9.firebaseio.com",
+  projectId: "groupchat-4f7a9",
+  storageBucket: "groupchat-4f7a9.appspot.com"
 };
 
 firebase.initializeApp(config);
