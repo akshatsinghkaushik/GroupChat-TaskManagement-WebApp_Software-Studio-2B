@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/GroupChat-TaskManagement-WebApp_Software-Studio-2B/static/css/main.9cc11122.chunk.css",
-    "main.js": "/GroupChat-TaskManagement-WebApp_Software-Studio-2B/static/js/main.692ed703.chunk.js",
-    "main.js.map": "/GroupChat-TaskManagement-WebApp_Software-Studio-2B/static/js/main.692ed703.chunk.js.map",
+    "main.js": "/GroupChat-TaskManagement-WebApp_Software-Studio-2B/static/js/main.e236c0e4.chunk.js",
+    "main.js.map": "/GroupChat-TaskManagement-WebApp_Software-Studio-2B/static/js/main.e236c0e4.chunk.js.map",
     "runtime-main.js": "/GroupChat-TaskManagement-WebApp_Software-Studio-2B/static/js/runtime-main.0943cd29.js",
     "runtime-main.js.map": "/GroupChat-TaskManagement-WebApp_Software-Studio-2B/static/js/runtime-main.0943cd29.js.map",
     "static/js/2.6861be87.chunk.js": "/GroupChat-TaskManagement-WebApp_Software-Studio-2B/static/js/2.6861be87.chunk.js",
     "static/js/2.6861be87.chunk.js.map": "/GroupChat-TaskManagement-WebApp_Software-Studio-2B/static/js/2.6861be87.chunk.js.map",
     "index.html": "/GroupChat-TaskManagement-WebApp_Software-Studio-2B/index.html",
-    "precache-manifest.8abe1a45dcdf14f5ad69c80542558108.js": "/GroupChat-TaskManagement-WebApp_Software-Studio-2B/precache-manifest.8abe1a45dcdf14f5ad69c80542558108.js",
+    "precache-manifest.ffad84ad10599e82e787799b964ce74d.js": "/GroupChat-TaskManagement-WebApp_Software-Studio-2B/precache-manifest.ffad84ad10599e82e787799b964ce74d.js",
     "service-worker.js": "/GroupChat-TaskManagement-WebApp_Software-Studio-2B/service-worker.js",
     "static/css/main.9cc11122.chunk.css.map": "/GroupChat-TaskManagement-WebApp_Software-Studio-2B/static/css/main.9cc11122.chunk.css.map",
     "static/js/2.6861be87.chunk.js.LICENSE.txt": "/GroupChat-TaskManagement-WebApp_Software-Studio-2B/static/js/2.6861be87.chunk.js.LICENSE.txt",
@@ -19,6 +19,6 @@
     "static/js/runtime-main.0943cd29.js",
     "static/js/2.6861be87.chunk.js",
     "static/css/main.9cc11122.chunk.css",
-    "static/js/main.692ed703.chunk.js"
+    "static/js/main.e236c0e4.chunk.js"
   ]
 }
